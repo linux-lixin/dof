@@ -31,13 +31,14 @@ docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-p
 全新服务器从这里开始：[完整部署步骤：Git 拉取、服务器构建、自建 MySQL、登录器与更新](docs/fresh-server-deployment.md)。
 
 可选 Ubuntu 24.04 版使用独立的 [Ubuntu 构建和四角色部署说明](deploy/ubuntu/README.md)，
-仅连接外部 MySQL，不包含 NetBird/Tailscale。原 CentOS 入口仍是默认；
+仅连接外部 MySQL，不包含 NetBird/Tailscale。Ubuntu ALL/GAME 启动前必须自行放入
+`deploy/ubuntu/runtime/game/data/Script.pvf`，不再自动使用内置 PVF。原 CentOS 入口仍是默认；
 兼容性与实测边界见 [Ubuntu 依赖审计](docs/ubuntu-compatibility.md) 和 [Ubuntu 验收结果](docs/ubuntu-validation.md)。
 
 
 使用 [自建镜像部署说明](deploy/local-images/README.md) 和 `deploy/local-images/compose.yaml`。将 `.env.example` 复制为 `.env` 后填写地址和密码，先启动 game，确认数据库及频道启动，再启动 admin。
 
-数据库由用户独立部署；MySQL 5.6.50 曾在服务器验证，5.6.51 用于本地隔离测试。管理员账号按 `bootstrap-admin.sql.example` 注释单独初始化。后台 SSL 初始化选项为 `MYSQL_INIT_SSL_MODE=disabled`，与 JDBC 的 `useSSL=false` 分开配置。
+数据库由用户独立部署；MySQL 5.6.50 曾在服务器验证，5.6.51 用于本地隔离测试。管理员账号 `admin` 按 `bootstrap-admin.sql.example` 注释单独初始化，密码自行设置。当前后台的默认推荐人也为 `admin`；已有 `123123` 的改名步骤见 Ubuntu 部署文档，更新代码不会自动改动已有账号。后台 SSL 初始化选项为 `MYSQL_INIT_SSL_MODE=disabled`，与 JDBC 的 `useSSL=false` 分开配置。
 
 旧官方镜像的补丁挂载方案保留在 `deploy/external-mysql`、`deploy/test`，供已有部署参考。**自建镜像流程不要混用旧补丁挂载。** 已有数据卷里的启动脚本和配对密钥需核对后迁移，不能直接把新镜像当旧镜像的无差别替换。
 

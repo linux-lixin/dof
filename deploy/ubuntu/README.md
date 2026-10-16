@@ -44,7 +44,19 @@ MySQL 监听、防火墙、用户 host 授权必须允许所有游戏节点与�
 ## 2. ALL 单机启动
 
 始终使用新的 `deploy/ubuntu/runtime/`，不要复制整个旧 CentOS `/data` 进来。
-首次可预放 `Script.pvf` 和配对公钥；其余初始化由镜像完成。
+ALL/GAME 首次启动前必须自行上传与客户端匹配的 `Script.pvf`，文件名大小写必须一致。
+镜像不再自动提供默认 PVF；缺少文件、文件为空或误建成目录时，会在连接和修改数据库之前退出。
+CORE/P2P 不需要该文件。现有数据目录中的 PVF 会保留，不自动覆盖。
+
+```bash
+mkdir -p runtime/game/data
+# 将你自己的 Script.pvf 上传到当前目录下的 runtime/game/data/Script.pvf
+test -s runtime/game/data/Script.pvf
+```
+
+挂载关系为 `./runtime/game/data:/data`，无需另外增加单文件挂载。公钥可预放配对版本。
+替换已有 PVF 时先执行 `docker compose stop game`，上传完成后再 `docker compose up -d game`。
+文件检查只能确认存在且非空，版本是否匹配仍需实际启动和客户端验证。
 
 ```bash
 docker compose config --quiet
@@ -81,7 +93,25 @@ mysql -h 你的数据库内网IP -P 3306 -uroot -p < bootstrap-admin.sql
 rm bootstrap-admin.sql
 ```
 
+初始化账号为 `admin`，普通玩家未填写推荐人时也默认使用 `admin`。管理员密码由你填写，没有固定默认密码。
 先修改 SQL 中两个占位密码，按注释核对已有账号，避免重复创建。不要提交编辑后的 SQL 或把密码粘贴到日志。
+
+已有库升级不会自动改名。如果之前创建了 `123123`，先查询：
+
+```sql
+SELECT UID, accountname, admin FROM d_taiwan.accounts
+WHERE accountname IN ('123123', 'admin');
+```
+
+仅当 `admin` 不存在且 `123123` 确为需要改名的管理员时，执行：
+
+```sql
+UPDATE d_taiwan.accounts SET accountname = 'admin'
+WHERE accountname = '123123' AND admin = 1;
+```
+
+这会保留 UID、密码和基于 UID 的推荐关系；若 `admin` 已存在，应先核对其身份，不能覆盖或重复插入。
+重建并更新后台镜像后，玩家未填推荐人才会使用新的默认值。已有库不要重放后台初始化 SQL。
 后台生成自己的 RSA 密钥对后，将公钥同步给游戏端：
 
 ```bash

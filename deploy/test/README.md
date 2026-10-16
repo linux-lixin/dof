@@ -8,6 +8,7 @@ external-mysql 使用自建外部数据库，本次实际服务器版本为 MySQ
 
 按 .env.example 填写地址和独立密码。MYSQL_INIT_SSL_MODE=disabled 用于当前无 TLS 的专用旧 MySQL 测试实例。先启动 game 并检查频道，再启动 admin。
 
-bootstrap-admin.sql.example 需替换占位密码并分步执行；123123 是后台管理员/默认推荐人，不是完整游戏账号。已有服务器不要重复初始化数据库或覆盖密钥。
+bootstrap-admin.sql.example 需替换占位密码并分步执行；admin 是后台管理员/默认推荐人，不是完整游戏账号。已有服务器不要重复初始化数据库或覆盖密钥。
+默认推荐人改为 admin 需要使用当前源码重建的后台镜像；旧上游镜像仍可能默认使用 123123，此时注册时须显式填写推荐人 admin。
 
 游戏启动、后台数据库与 HTTP 接口已在现有服务器验证；玩家进服和更新功能仍需实际客户端验证。源码和部署回归测试见 ../../tests/。

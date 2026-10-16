@@ -350,7 +350,7 @@ sudo docker compose stop admin
 
 ## 9. 不改代码时，创建测试管理员和推荐人
 
-普通注册不填推荐人会默认找 `123123`。为绕过这个测试阻断点，在**新测试库**创建一个名为 123123 的后台管理员，用于管理和推荐关系。这只是测试数据准备，不是长期修复。
+普通注册不填推荐人会默认找 `admin`。为绕过这个测试阻断点，在**新测试库**创建一个名为 admin 的后台管理员，用于管理和推荐关系。这只是测试数据准备，不是长期修复。
 
 ~~~bash
 sudo docker compose exec game mysql -uroot -p
@@ -361,7 +361,7 @@ sudo docker compose exec game mysql -uroot -p
 ~~~sql
 SHOW COLUMNS FROM d_taiwan.accounts;
 SELECT UID, accountname, admin, parent_uid
-FROM d_taiwan.accounts WHERE accountname='123123';
+FROM d_taiwan.accounts WHERE accountname='admin';
 ~~~
 
 若已有记录，停止创建，核对来源和权限；不要插入重复账号或直接覆盖密码。
@@ -372,7 +372,7 @@ FROM d_taiwan.accounts WHERE accountname='123123';
 INSERT INTO d_taiwan.accounts
 (accountname, password, qq, VIP, admin, parent_uid, isRobot)
 VALUES
-('123123', MD5('CHANGE_ME_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
+('admin', MD5('CHANGE_ME_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
 ~~~
 
 选用独立随机 ASCII 字母数字密码。MD5 仅为了匹配当前应用，不是建议新系统采用这种密码设计。附件 SQL 示例需编辑并分步执行，不能原样整文件导入。
@@ -388,7 +388,7 @@ EXIT;
 
 **这个管理员不要用于进游戏**：手工插入没有创建全部游戏关联行。真正的游戏账号在第 12 步由登录器注册。
 
-Windows 浏览器打开 `http://服务器公网IP:18080/login`，账号为 123123，密码为刚设置的管理员密码。原统一网关的 GM_ACCOUNT/GM_PASSWORD 不是这个后台的账号。
+Windows 浏览器打开 `http://服务器公网IP:18080/login`，账号为 admin，密码为刚设置的管理员密码。原统一网关的 GM_ACCOUNT/GM_PASSWORD 不是这个后台的账号。
 
 ## 10. 后台配置好之后再开登录器
 
@@ -469,7 +469,7 @@ sha256sum /opt/dnf-test/runtime/game/data/Script.pvf
 1. 运行 DNFLogin.exe，完成资源检查，进入登录页。
 2. 注册一个新的普通测试账号，不拿后台管理员进游戏。
 3. 验证码字母按小写输入，例如图片 AB12 输入 ab12，这是现有大小写问题的临时绕行方式。
-4. 推荐人可留空，默认对应已建立的 123123；也可显式填写 123123。
+4. 推荐人可留空，默认对应已建立的 admin；也可显式填写 admin。
 5. 注册成功后登录，登录器会获取凭据、写 DNF.toml、启动 DNF.exe。
 6. 依次验证：角色列表 → 创建/选择角色 → 频道 → 副本 → 退出重登。
 7. 然后再用第二台测试电脑验证连接和组队。
@@ -490,7 +490,7 @@ API 返回 token 仅证明后台生成了凭据，不代表游戏端已经接受
 | 首页正常，API 404 | 镜像功能与源码不一致或代理路径错误；停在 API 核验步骤 |
 | duplicate column | 初始化重复执行；不要删标记重试 |
 | 缺 taiwan_cain 相关表 | SERVER_GROUP_DB 是否在首次初始化前设为 cain；旧数据不等于改环境变量就自动迁移 |
-| 推荐人不存在 | 123123 是否创建成功，显式推荐人是否拼错 |
+| 推荐人不存在 | admin 是否创建成功，显式推荐人是否拼错 |
 | 验证码总不通过 | 小写输入、刷新验证码，核对实际镜像接口 |
 | 无法更新配置文件 | config-text 接口能否读到文本、游戏目录是否可写 |
 | 登录成功，游戏没启动 | 配套 DNF.exe、运行依赖、目录权限、DNF.toml |

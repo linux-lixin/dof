@@ -279,7 +279,7 @@ docker compose exec game sh -c \
 SHOW COLUMNS FROM d_taiwan.accounts;
 SELECT UID, accountname, admin, parent_uid
 FROM d_taiwan.accounts
-WHERE accountname = '123123';
+WHERE accountname = 'admin';
 ```
 
 **只有查询没有记录时才执行下面的插入。** 若已有账号，停止创建并核对来源，不覆盖原账号或重复插入。将两个密码占位符换成不同的私密 ASCII 字母数字值：
@@ -288,7 +288,7 @@ WHERE accountname = '123123';
 INSERT INTO d_taiwan.accounts
 (accountname, password, qq, VIP, admin, parent_uid, isRobot)
 VALUES
-('123123', MD5('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
+('admin', MD5('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
 
 INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD (id, PASSWORD)
 VALUES (1, 'CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET')
@@ -299,7 +299,7 @@ EXIT;
 
 对应文件为 [bootstrap-admin.sql.example](../deploy/local-images/bootstrap-admin.sql.example)。管理员初始化是后台自动初始化完成后的独立操作，不要原样导入带占位符的示例。
 
-`123123` 用于后台管理及当前默认推荐关系，不能直接用于进游戏：手工插入没有创建全部游戏关联数据。MD5 是为了匹配现有应用，并非新系统的密码设计建议。
+`admin` 用于后台管理及当前默认推荐关系，不能直接用于进游戏：手工插入没有创建全部游戏关联数据。MD5 是为了匹配现有应用，并非新系统的密码设计建议。
 
 ## 11. 同步登录公钥
 
@@ -324,7 +324,7 @@ docker compose restart game
 
 Docker 发布端口的流量可能绕过 UFW 的常规规则，公网来源限制应同时在云安全组或适当的 Docker 防火墙规则中落实，参见 [Docker 防火墙说明](https://docs.docker.com/engine/install/ubuntu/#firewall-limitations)。
 
-浏览器访问 `http://服务器公网IP:18080/login`，账号为 `123123`，密码是第 10 步设置的管理员密码。
+浏览器访问 `http://服务器公网IP:18080/login`，账号为 `admin`，密码是第 10 步设置的管理员密码。
 
 登录后：
 
@@ -404,7 +404,7 @@ sha256sum /opt/dof/deploy/local-images/runtime/game/data/Script.pvf
 运行 `DNFLogin.exe`：
 
 1. 注册一个新的普通测试账号，不使用后台管理员进游戏。
-2. 推荐人填写 `123123`，或留空使用当前默认推荐人。
+2. 推荐人填写 `admin`，或留空使用当前默认推荐人。
 3. 当前验证码有大小写问题，字母先按小写输入。
 4. 注册成功后登录。
 5. 依次测试创建角色、进入频道、进入副本、退出重登。

@@ -199,13 +199,13 @@ try:
     bootstrap=bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD',secrets.token_hex(12))
     bootstrap=bootstrap.replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET',secrets.token_hex(12))
     sql(bootstrap)
-    assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='123123';").stdout.strip()=='1'
+    assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='admin';").stdout.strip()=='1'
     assert sql('SELECT COUNT(*) FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1;').stdout.strip()=='1'
     report['checks'].append('Separate bootstrap-admin.sql.example creates test administrator and authorization row')
     docker('restart',state['admin'])
     wait_for('Backend restart HTTP 200',lambda: http('/api/v1/client/version/1.0.0')[0]==200,90)
     assert 'DB already initialized.' in docker('logs',state['admin']).stdout
-    assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='123123';").stdout.strip()=='1'
+    assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin';").stdout.strip()=='1'
     report['checks'].append('Backend restart skips destructive SQL and preserves administrator')
     # Require identical channel supervisor PIDs over multiple original crash cycles.
     def channels():

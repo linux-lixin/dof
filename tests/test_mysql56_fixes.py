@@ -93,7 +93,7 @@ try:
     bootstrap=(ROOT/'deploy/external-mysql/bootstrap-admin.sql.example').read_text(encoding='utf8')
     bootstrap=bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD','localtestonly').replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET','testsecretone')
     sql(bootstrap)
-    assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='123123' AND admin=1;").stdout.strip()=='1'
+    assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin' AND admin=1;").stdout.strip()=='1'
     assert sql('SELECT COUNT(*) FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1;').stdout.strip()=='1'
     upsert=bootstrap[bootstrap.index('INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD'):]
     sql(upsert.replace('testsecretone','testsecrettwo'))

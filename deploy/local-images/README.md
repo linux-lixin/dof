@@ -23,7 +23,7 @@ docker load -i dnf-admin-local-fix-20261015.tar
 2. 给数据库账号配置容器网段访问权限。使用专用游戏数据库实例。首次启动会建立整套游戏库，不能把任意已有业务数据库当空库初始化。
 3. 执行 `docker compose up -d game`，查看 `docker compose logs --tail=100 game`。数据库健康检查通过只代表库可查询，还需检查频道进程及游戏日志。
 4. 执行 `docker compose up -d admin`，查看 `docker compose logs --tail=100 admin`。首次成功初始化后，`runtime/admin/data/.db_initialized` 会生成。网页默认端口为 18080。
-5. 在数据库里先检查账号 `123123` 是否已存在，再按照 `bootstrap-admin.sql.example` 的注释填写新密码并执行。它是独立的管理员初始化步骤，不会把固定管理员密码烘焙进镜像，也不要在已有账号上整份重复执行。
+5. 在数据库里先检查账号 `admin` 是否已存在，再按照 `bootstrap-admin.sql.example` 的注释填写新密码并执行。它是独立的管理员初始化步骤，不会把固定管理员密码烘焙进镜像，也不要在已有账号上整份重复执行。
 6. 首次使用 onlyGuo 登录认证时，保证后台与游戏公钥匹配：
 
 ```bash

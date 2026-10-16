@@ -114,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (!isAdmin){
             if (StringUtils.isEmpty(accountVO.getRecommender())){
-                accountVO.setRecommender("123123");
+                accountVO.setRecommender("admin");
             }
         }
         if (isAdmin){

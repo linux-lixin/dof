@@ -3,6 +3,7 @@ set -e
 umask 077
 python3 /opt/dnf/ubuntu/config.py
 source /run/dnf/env.sh
+python3 /opt/dnf/ubuntu/pvf.py
 python3 /opt/dnf/ubuntu/managed.py
 source /opt/dnf/ubuntu/wait.sh
 if [ "$SERVER_TYPE" != P2P ]; then

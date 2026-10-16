@@ -127,6 +127,10 @@ def main(options):
         docker('run','--rm','--network','none','--entrypoint','sh','-v',adminvol+':/app/data','-v',gamevol+':/game-data',options.admin_image,'-c',
                'openssl genpkey -algorithm RSA -out /app/data/private.key -pkeyopt rsa_keygen_bits:2048 && chmod 600 /app/data/private.key && '
                'openssl rsa -pubout -in /app/data/private.key -out /app/data/publickey.pem && cp /app/data/publickey.pem /game-data/publickey.pem')
+        # Explicit test fixture upload; production startup never supplies a PVF.
+        archive=ROOT/'dnf-game/build/dnf_data/home/template/init/Script.tgz'
+        docker('run','--rm','--network','none','--entrypoint','sh','-v',gamevol+':/data',
+               '-v',str(archive)+':/fixture.tgz:ro',options.game_image,'-c','tar -xzf /fixture.tgz -C /data Script.pvf')
         env=dict(SERVER_GROUP='3',SERVER_GROUP_DB='cain',OPEN_CHANNEL='11,52',CLIENT_POOL_SIZE='3',P2P_RELAY_INDEX='1',
                  PUBLIC_IP=advertised_core,CORE_PUBLIC_IP='127.0.0.1',MAIN_BRIDGE_IP='127.0.0.1',P2P_PUBLIC_IP=advertised_core,
                  MAIN_MYSQL_HOST=dbip,MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD=state['password'],MAIN_MYSQL_GAME_ALLOW_IP='%',
@@ -136,7 +140,7 @@ def main(options):
         badenv=dict(env,SERVER_TYPE='ALL',MAIN_MYSQL_ROOT_PASSWORD='WrongPassword')
         args=[]
         for key,value in badenv.items(): args+=['-e',key+'='+value]
-        bad=docker('run','--rm','--network',state['network'],*args,options.game_image,check=False)
+        bad=docker('run','--rm','--network',state['network'],'-v',gamevol+':/data',*args,options.game_image,check=False)
         assert bad.returncode and 'Access denied' in bad.stdout+bad.stderr
         assert sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='d_taiwan'").stdout.strip()=='0'
         report['checks'].append('Wrong password fails before creating game schemas')
@@ -171,11 +175,11 @@ def main(options):
         wait('backend API',api,180)
         bootstrap=(ROOT/'deploy/external-mysql/bootstrap-admin.sql.example').read_text()
         sql(bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD',secrets.token_hex(12)).replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET',secrets.token_hex(12)))
-        assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='123123'").stdout.strip()=='1'
+        assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
         fingerprints={name:docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0] for name in ('private.key','publickey.pem')}
         pids=wait('real channels, five countries and role health',evidence)
         # Preserve a real valid PVF override and a harmless user script customization.
-        docker('exec',state['game'],'bash','-c','cp /home/neople/game/Script.pvf /data/Script.pvf; '
+        docker('exec',state['game'],'bash','-c','test -s /data/Script.pvf; '
                'if test -f /data/daily_job/user_daily_script.sh; then printf "\\n# acceptance customization\\n" >> /data/daily_job/user_daily_script.sh; fi')
         persistent=persistent_hashes()
         assert 'Script.pvf' in persistent and 'publickey.pem' in persistent and 'libhook.so' in persistent
@@ -218,7 +222,7 @@ def main(options):
             for name in state['nodes']: docker('start',name)
             docker('restart',state['admin'])
             wait('restart cycle '+str(cycle+1),lambda:evidence() and api())
-            assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='123123'").stdout.strip()=='1'
+            assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
             assert sql("SELECT COUNT(*) FROM taiwan_login.log_query_ref WHERE query_hash='ubuntuacceptance'").stdout.strip()=='1'
             for name,expected in fingerprints.items():
                 assert docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0]==expected

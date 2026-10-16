@@ -22,6 +22,31 @@ def module(name, directory=ADAPTER):
     return result
 
 class UbuntuRuntime(unittest.TestCase):
+    def test_pvf_required_only_for_game_roles(self):
+        pvf=module('pvf')
+        with tempfile.TemporaryDirectory() as td:
+            path=Path(td)/'Script.pvf'
+            for role in ('CORE','P2P'):
+                pvf.validate(role,path)
+            for role in ('ALL','GAME'):
+                with self.assertRaisesRegex(ValueError,'Script.pvf'):
+                    pvf.validate(role,path)
+            path.mkdir()
+            with self.assertRaises(ValueError): pvf.validate('ALL',path)
+            path.rmdir(); path.touch()
+            with self.assertRaises(ValueError): pvf.validate('GAME',path)
+            path.write_bytes(b'user supplied pvf')
+            pvf.validate('ALL',path)
+            self.assertEqual(path.read_bytes(),b'user supplied pvf')
+
+    def test_ubuntu_init_cannot_restore_bundled_pvf(self):
+        prepare=module('prepare_image')
+        source=(ROOT/'dnf-game/build/dnf_data/home/template/init/init.sh').read_text(encoding='utf8')
+        adapted=prepare.require_user_pvf(source)
+        self.assertNotIn('Script.tgz',adapted)
+        self.assertNotIn('cp /home/template/init/Script.pvf',adapted)
+        self.assertIn('publickey.pem',adapted)
+
     def test_game_password_is_never_silently_truncated(self):
         config=module('config')
         env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',GM_PASSWORD='testgate',

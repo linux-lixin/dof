@@ -2,7 +2,7 @@
 -- First inspect the columns and confirm this account does NOT already exist.
 SHOW COLUMNS FROM d_taiwan.accounts;
 SELECT UID, accountname, admin, parent_uid
-FROM d_taiwan.accounts WHERE accountname = '123123';
+FROM d_taiwan.accounts WHERE accountname = 'admin';
 
 -- If the SELECT above returns any row, STOP; do not insert another account.
 -- Replace the password below with a new, private ASCII alphanumeric password.
@@ -11,7 +11,7 @@ FROM d_taiwan.accounts WHERE accountname = '123123';
 INSERT INTO d_taiwan.accounts
   (accountname, password, qq, VIP, admin, parent_uid, isRobot)
 VALUES
-  ('123123', MD5('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
+  ('admin', MD5('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD'), '', '', 1, 0, 0);
 
 -- Remove the upstream well-known temporary authorization secret by changing it.
 INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD (id, PASSWORD)

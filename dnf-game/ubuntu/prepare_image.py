@@ -17,6 +17,11 @@ def replace(text, old, new, count=1):
 def write(path,text):
     path.write_text(text); path.chmod(0o755)
 
+def require_user_pvf(text):
+    start = text.index('  if [ ! -f "/data/Script.pvf" ];then')
+    end = text.index('\n  fi', start) + len('\n  fi')
+    return text[:start] + '  python3 /opt/dnf/ubuntu/pvf.py || exit 1' + text[end:]
+
 def main():
     for path in BASE.rglob('*'):
         if path.is_file() and path.suffix in ('.sh','.py'):
@@ -44,7 +49,9 @@ def main():
     start=init.index('  # 初始化本地数据库')
     end=init.index('  # 初始化主数据库',start)
     init=init[:start]+init[end:]
-    write(INIT/'init.sh',init)
+    write(INIT/'init.sh',require_user_pvf(init))
+    (INIT/'Script.tgz').unlink(missing_ok=True)
+    (INIT/'Script.pvf').unlink(missing_ok=True)
     (INIT/'init_local_db.sh').unlink()
     for filename in ('init_main_db.sh','init_server_group_db.sh'):
         path=INIT/filename
