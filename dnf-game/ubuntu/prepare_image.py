@@ -42,6 +42,7 @@ def main():
     write(BASE/'mysql',(BASE/'mysql').read_text())
     shutil.copyfile(BASE/'mysql','/usr/local/bin/mysql')
     Path('/usr/local/bin/mysql').chmod(0o755)
+    shutil.copyfile(BASE/'startup_notice.conf','/etc/supervisor/conf.d/startup_notice.conf')
     # These two daemons actually bind this_ip; advertised public/NAT addresses
     # do not belong to a bridge-network container. Game routes use CORE_PUBLIC_IP.
     for service in ('auction','point'):

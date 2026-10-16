@@ -178,6 +178,11 @@ def main(options):
         assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
         fingerprints={name:docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0] for name in ('private.key','publickey.pem')}
         pids=wait('real channels, five countries and role health',evidence)
+        startup_message='[启动完成] 游戏服务已全部就绪'
+        def startup_count():
+            return docker('logs',state['game']).stdout.count(startup_message)
+        wait('one overall startup-complete log',lambda:startup_count()==1)
+        report['checks'].append('One overall startup-complete log after role health and current five countries')
         for node in state['nodes']:
             status=docker('exec',node,'supervisorctl','status',check=False).stdout
             assert 'tongyi_gate' not in status
@@ -231,6 +236,7 @@ def main(options):
             for name in state['nodes']: docker('start',name)
             docker('restart',state['admin'])
             wait('restart cycle '+str(cycle+1),lambda:evidence() and api())
+            wait('one fresh completion log for restart '+str(cycle+1),lambda:startup_count()==cycle+2)
             assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
             assert sql("SELECT COUNT(*) FROM taiwan_login.log_query_ref WHERE query_hash='ubuntuacceptance'").stdout.strip()=='1'
             for name,expected in fingerprints.items():

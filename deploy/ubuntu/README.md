@@ -97,7 +97,20 @@ docker compose up -d game
 docker compose logs -f --tail 100 game
 ```
 
-`Ctrl+C` 只退出日志跟随。另一个终端验证：
+`Ctrl+C` 只退出日志跟随。
+
+当游戏容器所需进程、端口、数据库连接及角色对应的 P2P 检查通过，并且所有启用频道的本次“五国”日志齐全后，
+连续三次检查成功会在 `docker compose logs -f game` 中打印一条明确提示：
+
+```text
+[启动完成] 游戏服务已全部就绪（ALL；频道：siroco11、siroco52）
+```
+
+每次容器启动只打印一次，不逐条转发“五国”，也不回放历史初始化日志。等待超过 `STARTUP_TIMEOUT`（默认 600 秒）
+会打印 `[启动未完成]` 和具体失败原因。这表示游戏容器在该时刻就绪，后台仍按第 3 节单独启动；
+后续运行状态看 Docker health。`startup_notice` 是一次性通知进程，成功后显示 EXITED 属于正常情况。
+
+另一个终端验证：
 
 ```bash
 docker compose ps

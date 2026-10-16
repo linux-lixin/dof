@@ -22,6 +22,40 @@ def module(name, directory=ADAPTER):
     return result
 
 class UbuntuRuntime(unittest.TestCase):
+    def test_startup_notice_requires_consecutive_ready_checks(self):
+        notice=module('startup_notice')
+        output=[]
+        results=iter([None,ValueError('database unavailable'),None,None,None])
+        def check():
+            value=next(results)
+            if value: raise value
+        with patch.object(notice.time,'sleep'), patch.object(notice.time,'monotonic',side_effect=[0,0,1,2,3,4]):
+            self.assertEqual(notice.wait_ready(check,'READY',600,output.append),0)
+        self.assertEqual(output,['READY'])
+
+    def test_startup_timeout_does_not_claim_ready(self):
+        notice=module('startup_notice')
+        output=[]
+        def check(): raise ValueError('MAIN_MYSQL connection failed')
+        with patch.object(notice.time,'sleep'), patch.object(notice.time,'monotonic',side_effect=[0,0,601]):
+            self.assertEqual(notice.wait_ready(check,'READY',600,output.append),1)
+        self.assertEqual(len(output),1)
+        self.assertIn('MAIN_MYSQL connection failed',output[0])
+        self.assertNotIn('READY',output[0])
+
+    def test_startup_country_check_ignores_previous_logs(self):
+        notice=module('startup_notice')
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td); folder=root/'siroco11'; folder.mkdir()
+            content='\n'.join('GeoIP Allow Country Code : '+x for x in ('CN','HK','KR','MO','TW'))
+            (folder/'Log-old.init.previous').write_text(content)
+            env={'SERVER_TYPE':'ALL','SERVER_GROUP':'3','OPEN_CHANNEL':'11'}
+            with self.assertRaisesRegex(ValueError,'siroco11'):
+                notice.check_countries(root,env)
+            (folder/'Log-new.init').write_text(content)
+            notice.check_countries(root,env)
+            notice.check_countries(root,{'SERVER_TYPE':'CORE'})
+
     def test_onlyguo_runtime_has_no_legacy_gateway(self):
         prepare=module('prepare_image')
         base=ROOT/'dnf-game/build/dnf_data'
