@@ -60,6 +60,9 @@ def main():
         text=re.sub(r'(?m)^LD_PRELOAD=(\S+) (\./\S+)',r'DNF_GAME_PRELOAD=\1 /opt/dnf/ubuntu/run-game \2',text)
         text=re.sub(r'(?m)^(\./(?:df_\w+|gunnersvr|zergsvr|secagent)\b)',r'/opt/dnf/ubuntu/run-game \1',text)
         if path.name=='start_game.sh':
+            # Flush only the patched executable. Global sync can block on
+            # unrelated host/FUSE mounts (observed during clean-clone builds).
+            text=replace(text,'    sync\n','    timeout 30 sync df_game_r || exit 1\n')
             text=replace(text,'DNF_GAME_PRELOAD=/dp2/libhook.so',
                          'python3 /opt/dnf/ubuntu/channel_logs.py "$channel_name" || exit 1\nDNF_GAME_PRELOAD=/dp2/libhook.so')
         if 'grep succeeded' in text or 'while [ -z' in text:
