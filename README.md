@@ -28,6 +28,9 @@ docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-p
 
 ## 部署
 
+全新服务器从这里开始：[完整部署步骤：Git 拉取、服务器构建、自建 MySQL、登录器与更新](docs/fresh-server-deployment.md)。
+
+
 使用 [自建镜像部署说明](deploy/local-images/README.md) 和 `deploy/local-images/compose.yaml`。将 `.env.example` 复制为 `.env` 后填写地址和密码，先启动 game，确认数据库及频道启动，再启动 admin。
 
 数据库由用户独立部署；MySQL 5.6.50 曾在服务器验证，5.6.51 用于本地隔离测试。管理员账号按 `bootstrap-admin.sql.example` 注释单独初始化。后台 SSL 初始化选项为 `MYSQL_INIT_SSL_MODE=disabled`，与 JDBC 的 `useSSL=false` 分开配置。

@@ -2,6 +2,8 @@
 
 这套镜像从 `dnf-game` 和 `dnf-server-public` 当前工作区构建，包含本地修复。它不是旧的 `centos7-2.1.9.fix1` 官方镜像改标签；当前游戏源码的 Supervisor 分组、启动脚本和 P2P 配置与旧镜像有区别。
 
+全新服务器直接拉取 Git、在服务器构建镜像，请按[完整部署步骤](../../docs/fresh-server-deployment.md)操作。下面的 tar 加载方式仅适用于已有镜像包的情况。
+
 ## 文件与加载
 
 把 `dist` 中两个 tar 文件传到 Linux 服务器，执行：
