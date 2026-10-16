@@ -1,6 +1,6 @@
 # 部署修复回归测试
 
-在 dof 根目录先执行 `python scripts/fetch_game_assets.py`，再运行：
+游戏资源已随仓库提供。在 dof 根目录直接运行：
 
 ```text
 python tests/test_deployment_fixes.py

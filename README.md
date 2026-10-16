@@ -17,16 +17,14 @@
 ```bash
 git clone https://github.com/linux-lixin/dof.git
 cd dof
-python scripts/fetch_game_assets.py
-python scripts/fetch_game_assets.py --verify
 
 docker build --platform linux/amd64 -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
 docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-public
 ```
 
-需要 Python 3.9+、Docker 和到上游依赖源的网络连接。构建还会从基础镜像仓库、CentOS 归档、Maven/npm 等源获取依赖；`source-lock.json` 固定的是集成源码基线，不表示整个依赖链已完全可重现。
+构建需要 Docker 和到基础镜像、软件包依赖源的网络连接，不需要先运行 Python 下载脚本。Python 3.9+ 仅用于运行仓库测试。构建还会从基础镜像仓库、CentOS 归档、Maven/npm 等源获取依赖；`source-lock.json` 固定的是集成源码基线，不表示整个依赖链已完全可重现。
 
-游戏运行所需的 PVF、原始 SQL 压缩包、游戏程序和库没有重复提交。`scripts/game-assets.lock.json` 固定其上游 commit、路径、大小和 SHA256；下载脚本校验后才写入。已有文件不同会停止，避免覆盖自定义 PVF。这里恢复的模板密钥是上游公开示例，不能当作生产私密凭据；实际部署应使用自己的密钥，并保持后台私钥与游戏公钥配对。
+游戏构建所需的 400 个运行资源已直接纳入 Git，包括 PVF、原始 SQL 压缩包、游戏程序、库和旧配置。普通 `git clone` 后即可构建，无需 Git LFS 或额外资源下载步骤；仓库会比纯源码版本大约增加 410 MiB 未压缩文件。`scripts/game-assets.lock.json` 保留上游固定 commit、路径、大小、SHA256 和可执行权限记录，便于审计。仓库中的模板密钥是上游公开示例，不能当作生产私密凭据；实际部署应使用自己的密钥，并保持后台私钥与游戏公钥配对。
 
 ## 部署
 
@@ -57,7 +55,7 @@ python tests/test_built_images.py --cleanup
 | `deploy` | 自建镜像主流程与旧镜像兼容部署附件 |
 | `docs` | 部署指南、兼容性分析、修复记录和验证摘要 |
 | `tests` | 可重复的初始化、数据库及镜像运行验证 |
-| `scripts` | 固定版本运行依赖下载与校验 |
+| `scripts` | 已纳入仓库的运行资源来源、校验和权限清单 |
 
 不提交镜像 tar、构建输出、运行目录、实际 `.env`、生产密钥、数据库数据、原始运行日志、临时测试凭据、私人运维记录、原项目备用插件及等级/登录器补丁集合。
 

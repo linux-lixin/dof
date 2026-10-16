@@ -47,7 +47,7 @@ docker compose restart game
 
 ## 重新构建与测试
 
-在仓库根目录执行（首次构建先运行 `python scripts/fetch_game_assets.py`）：
+游戏构建所需资源已随 Git 仓库提供，无需额外下载脚本。在仓库根目录直接执行：
 
 ```bash
 docker build --platform linux/amd64 -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
