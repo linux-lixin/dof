@@ -15,6 +15,7 @@ import sys
 import time
 import urllib.request
 import uuid
+import argparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
@@ -22,6 +23,26 @@ STATE = DIST / 'image-test-state.json'
 GAME = 'dnf-game:local-fix-20261015'
 ADMIN = 'dnf-admin:local-fix-20261015'
 MYSQL = 'mysql:5.6@sha256:20575ecebe6216036d25dab5903808211f1e9ba63dc7825ac20cb975e34cfcae'
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--game-image', default=GAME)
+parser.add_argument('--admin-image', default=ADMIN)
+parser.add_argument('--state-file', type=Path, default=STATE)
+parser.add_argument('--stable-seconds', type=int, default=300)
+parser.add_argument('--mode', choices=['all','split'], default='all')
+parser.add_argument('--ubuntu', action='store_true')
+parser.add_argument('--cleanup', action='store_true')
+options = parser.parse_args()
+GAME, ADMIN, STATE = options.game_image, options.admin_image, options.state_file.resolve()
+if options.stable_seconds < 1:
+    parser.error('--stable-seconds must be positive')
+if options.ubuntu:
+    from test_ubuntu_images import main
+    sys.exit(main(options))
+if options.mode != 'all':
+    parser.error('Split acceptance is implemented for --ubuntu only')
+REPORT_DIR=STATE.parent/(STATE.stem+'-evidence')
+REPORT_DIR.mkdir(parents=True,exist_ok=True)
 
 def docker(*args, data=None, check=True):
     r = subprocess.run(['docker', *args], input=data, capture_output=True,
@@ -60,7 +81,14 @@ def verify_files(image, mapping):
         digest, target = line.split(None, 1)
         target = target.strip()
         actual = hashlib.sha256((ROOT / mapping[target]).read_bytes()).hexdigest()
-        assert digest == actual, target + ': image differs from source'
+        if digest != actual and mapping[target].endswith('.sql'):
+            # The pre-Git Windows backend build retained CRLF in SQL. Compare the
+            # content after newline normalization only; never waive other changes.
+            embedded=docker('run','--rm','--network','none','--entrypoint','cat',image,target).stdout
+            assert embedded.replace('\r\n','\n') == (ROOT/mapping[target]).read_text(encoding='utf8').replace('\r\n','\n'), target+': SQL content differs'
+            report.setdefault('newline_normalized_files',[]).append(target)
+        else:
+            assert digest == actual, target + ': image differs from source'
     report['file_hashes'][image] = result.splitlines()
     say(image + ': embedded source hashes match')
 
@@ -79,6 +107,7 @@ def cleanup():
     save()
 
 DIST.mkdir(exist_ok=True)
+STATE.parent.mkdir(parents=True, exist_ok=True)
 if '--cleanup' in sys.argv:
     state = json.loads(STATE.read_text(encoding='utf8'))
     cleanup()
@@ -88,7 +117,7 @@ if '--cleanup' in sys.argv:
 assert not STATE.exists() or json.loads(STATE.read_text(encoding='utf8')).get('cleaned_up'), 'Previous test resources need inspection/cleanup first'
 prefix = 'dnf-image-test-' + uuid.uuid4().hex[:8]
 state = {'network': prefix, 'db': prefix + '-mysql', 'game': prefix + '-game',
-         'admin': prefix + '-admin', 'password': secrets.token_hex(16),
+         'admin': prefix + '-admin', 'password': secrets.token_hex(16), 'game_password': secrets.token_hex(4),
          'volumes': [prefix + '-game-data', prefix + '-admin-data']}
 save()
 report = {'started_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'file_hashes': {}, 'checks': []}
@@ -129,7 +158,7 @@ try:
            'MAIN_MYSQL_HOST':dbip, 'MAIN_MYSQL_PORT':'3306', 'MAIN_MYSQL_ROOT_PASSWORD':state['password'],
            'MAIN_MYSQL_GAME_ALLOW_IP':'%', 'MYSQL_HOST':dbip, 'MYSQL_PORT':'3306',
            'MYSQL_GAME_ALLOW_IP':'%', 'DNF_DB_ROOT_PASSWORD':state['password'],
-           'DNF_DB_GAME_PASSWORD':secrets.token_hex(4), 'WEB_PASS':secrets.token_hex(12),
+           'DNF_DB_GAME_PASSWORD':state['game_password'], 'WEB_PASS':secrets.token_hex(12),
            'GM_PASSWORD':secrets.token_hex(12)}
     args=[]
     for k,v in env.items(): args.extend(['-e',k+'='+v])
@@ -190,13 +219,16 @@ try:
         return processes if len(processes)==2 and {30011,30052}.issubset(ports) else None
     actual_pids=wait_for('Actual game processes and both TCP ports ready',actual_game_ready,600)
     pids=wait_for('Both game channel wrappers RUNNING',channels,240)
-    say('Observing channel PIDs for 300 seconds: '+str(pids))
-    for step in range(30):
-        time.sleep(10)
+    say('Observing channel PIDs for '+str(options.stable_seconds)+' seconds: '+str(pids))
+    elapsed=0
+    while elapsed < options.stable_seconds:
+        interval=min(10,options.stable_seconds-elapsed)
+        time.sleep(interval)
+        elapsed+=interval
         assert channels()==pids, 'Channel restarted during stability observation'
         assert actual_game_ready()==actual_pids, 'Actual game PID or listening port changed'
-        if step%6==5: say('Stable channel observation: '+str((step+1)*10)+' seconds')
-    report['checks'].append('Both channel supervisor PIDs stable for 300 seconds')
+        if elapsed%60==0: say('Stable channel observation: '+str(elapsed)+' seconds')
+    report['checks'].append('Both channel supervisor PIDs stable for '+str(options.stable_seconds)+' seconds')
     report['supervisor_status']=docker('exec',state['game'],'supervisorctl','status',check=False).stdout
     report['game_processes']=docker('exec',state['game'],'sh','-c',"ps -eo pid,etime,args | grep '[d]f_game_r'").stdout
     assert len([l for l in report['game_processes'].splitlines() if './df_game_r ' in l])>=2
@@ -211,5 +243,8 @@ finally:
     report['finished_at']=time.strftime('%Y-%m-%d %H:%M:%S')
     for key in ('game','admin','db'):
         result=docker('logs',state[key],check=False)
-        (DIST/('test-'+key+'.log')).write_text(result.stdout+result.stderr,encoding='utf8')
-    (DIST/'image-test-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding='utf8')
+        text=result.stdout+result.stderr
+        for value in (state.get('password',''),state.get('game_password','')):
+            if value: text=text.replace(value,'[REDACTED]')
+        (REPORT_DIR/('test-'+key+'.log')).write_text(text,encoding='utf8')
+    (REPORT_DIR/'report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding='utf8')

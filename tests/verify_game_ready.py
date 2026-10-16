@@ -3,9 +3,15 @@ import json
 from pathlib import Path
 import subprocess
 import time
+import argparse
 
 DIST=Path(__file__).resolve().parents[1]/'dist'
-state=json.loads((DIST/'image-test-state.json').read_text(encoding='utf8'))
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--state-file',type=Path,default=DIST/'image-test-state.json')
+parser.add_argument('--stable-seconds',type=int,default=300)
+parser.add_argument('--report-file',type=Path,default=DIST/'game-readiness-report.json')
+options=parser.parse_args()
+state=json.loads(options.state_file.read_text(encoding='utf8'))
 game=state['game']
 
 def cmd(*args):
@@ -31,12 +37,15 @@ try:
     print('Actual game ready, PIDs:',pids,flush=True)
     result['pids']=pids
     result['ready_at']=time.strftime('%Y-%m-%d %H:%M:%S')
-    for i in range(30):
-        time.sleep(10)
+    elapsed=0
+    while elapsed<options.stable_seconds:
+        interval=min(10,options.stable_seconds-elapsed)
+        time.sleep(interval)
+        elapsed+=interval
         assert snapshot()==pids,'Actual game PID or listening port changed'
-        if i%6==5: print('Actual game processes and both listening ports stable:',(i+1)*10,'seconds',flush=True)
+        if elapsed%60==0: print('Actual game processes and both listening ports stable:',elapsed,'seconds',flush=True)
     result['status']='passed'
-    result['stable_seconds']=300
+    result['stable_seconds']=options.stable_seconds
     result['processes']=cmd('ps','-eo','pid,etime,comm')
     result['listening_ports']=cmd('cat','/proc/net/tcp')
     result['game_log_files']=cmd('find','/home/neople/game/log','-type','f')
@@ -46,4 +55,5 @@ except Exception as e:
     raise
 finally:
     result['finished_at']=time.strftime('%Y-%m-%d %H:%M:%S')
-    (DIST/'game-readiness-report.json').write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding='utf8')
+    options.report_file.parent.mkdir(parents=True,exist_ok=True)
+    options.report_file.write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding='utf8')

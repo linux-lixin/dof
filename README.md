@@ -30,6 +30,10 @@ docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-p
 
 全新服务器从这里开始：[完整部署步骤：Git 拉取、服务器构建、自建 MySQL、登录器与更新](docs/fresh-server-deployment.md)。
 
+可选 Ubuntu 24.04 版使用独立的 [Ubuntu 构建和四角色部署说明](deploy/ubuntu/README.md)，
+仅连接外部 MySQL，不包含 NetBird/Tailscale。原 CentOS 入口仍是默认；
+兼容性与实测边界见 [Ubuntu 依赖审计](docs/ubuntu-compatibility.md) 和 [Ubuntu 验收结果](docs/ubuntu-validation.md)。
+
 
 使用 [自建镜像部署说明](deploy/local-images/README.md) 和 `deploy/local-images/compose.yaml`。将 `.env.example` 复制为 `.env` 后填写地址和密码，先启动 game，确认数据库及频道启动，再启动 admin。
 
@@ -52,7 +56,7 @@ python tests/test_built_images.py --cleanup
 
 | 目录 | 内容 |
 |---|---|
-| `dnf-game` | 本次使用的 CentOS 7 Dockerfile、游戏配置模板、启动和修复脚本 |
+| `dnf-game` | 默认 CentOS 7、可选 Ubuntu 24.04 Dockerfile，共享模板与独立平台适配层 |
 | `dnf-server-public` | 后台 Java/Vue 源码及修复后的镜像入口 |
 | `DNFLogin` | 上游 Windows 登录器源码，尚未修改业务逻辑 |
 | `deploy` | 自建镜像主流程与旧镜像兼容部署附件 |

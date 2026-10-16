@@ -1,0 +1,6 @@
+{
+  "probe": "packed gateway eager binding, intentionally absent Config.ini",
+  "exit_code": -6,
+  "output": "terminate called after throwing an instance of 'std::invalid_argument'\n  what():  invalid ini file:Config.ini\n",
+  "passed": true
+}

@@ -1,0 +1,49 @@
+{
+  "image_id": "sha256:7d0193826a0557bc8465052d79d92cb742900808129e01d7d63d25e52cce696a",
+  "method": "docker create; docker cp /opt/dnf/audit; SHA256 byte comparison; docker rm (no container start)",
+  "refreshed_report": "image-elf-report.json differed only in ASLR hexadecimal addresses; normalized contents matched before refresh",
+  "files": [
+    {
+      "image_path": "/opt/dnf/audit/elf-report.json",
+      "saved_path": "image-elf-report.json",
+      "sha256": "2104f5fdf851734414b61d8210f6c5ccbbab314cc805b8787bec5fd6bf2da915",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/compat-report.json",
+      "saved_path": "image-compat-report.json",
+      "sha256": "ad94dc9250445701a02b1e4c8dcb133c76c3c1d3259ad33686ea95c3ca7bad61",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/gate-start-proof.json",
+      "saved_path": "image-gate-start-proof.json",
+      "sha256": "4754fd6fedb1fcc6e4e95760dc7f3b22bb684074ea8f0d7ed42ec5a859aaa5cc",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/packages.tsv",
+      "saved_path": "image-packages.tsv",
+      "sha256": "bb78e1bd9333d42473090c0366b0e16be17b283bbd5927b610ed6ae137803c00",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/geoip-start-proof.txt",
+      "saved_path": "image-geoip-start-proof.txt",
+      "sha256": "7dd7cd9a18744eea5a3d0e4485a51c46841766329cc982282b29186e609104ae",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/shm-start-proof.txt",
+      "saved_path": "image-shm-start-proof.txt",
+      "sha256": "6882718bfb252c74a8768c5fe4fbdcbf7d8528baf8b0f64305f8c287621f81a4",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/compat-lock.json",
+      "saved_path": "../compat-lock.json",
+      "sha256": "36ded4d0f02f21f9b4e637a19f3be31b457527784728e81b25bd2c433cac252a",
+      "exact_match": true
+    }
+  ]
+}

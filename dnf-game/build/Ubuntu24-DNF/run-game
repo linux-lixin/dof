@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+"""Execute a trusted game ELF with compatibility libraries scoped to this process."""
+import os
+from pathlib import Path
+import sys
+
+if len(sys.argv) < 2:
+    raise SystemExit('usage: run-game ELF [arguments...]')
+binary = Path(sys.argv[1]).resolve(strict=True)
+with binary.open('rb') as stream:
+    head = stream.read(20)
+if head[:4] != b'\x7fELF' or head[4] not in (1, 2):
+    raise SystemExit(f'not a supported ELF: {binary}')
+arch = 'i386' if head[4] == 1 else 'amd64'
+environment = dict(os.environ)
+environment['LD_LIBRARY_PATH'] = f'/opt/dnf/compat/{arch}'
+# The adapter passes preloads through a neutral name so Python itself never loads them.
+preload = environment.pop('DNF_GAME_PRELOAD', '')
+environment.pop('LD_PRELOAD', None)
+if arch == 'i386':
+    shim = '/opt/dnf/compat/i386/liblegacy-shm.so'
+    preload = ':'.join([shim, *([preload] if preload else [])])
+if preload:
+    for name in preload.split(':'):
+        with open(name, 'rb') as stream:
+            hook = stream.read(5)
+        if hook[:4] != b'\x7fELF' or hook[4] != head[4]:
+            raise SystemExit(f'incompatible preload architecture: {name}')
+    environment['LD_PRELOAD'] = preload
+os.execve(str(binary), [str(binary), *sys.argv[2:]], environment)

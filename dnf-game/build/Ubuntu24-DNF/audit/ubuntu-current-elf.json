@@ -1,0 +1,909 @@
+{
+  "compatibility_path": "/opt/dnf/compat",
+  "files": [
+    {
+      "architecture": "amd64",
+      "interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "path": "/TeaEncrypt",
+      "resolution": "linux-vdso.so.1 (0x00007ffd6c0f8000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f5290142000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5290059000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f529002b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f528fe18000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f52903c5000)",
+      "resolved_library_paths": [
+        "/lib/x86_64-linux-gnu/libc.so.6",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/lib/x86_64-linux-gnu/libm.so.6",
+        "/lib/x86_64-linux-gnu/libstdc++.so.6",
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "sha256": "97713ee8f75e172cbdee796acae54b2c760362c8ec9df4b0c5cbff755053ab7a",
+      "symbol_versions": [
+        "GLIBC_2.2.5"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "libgcc_s.so.1",
+        "librt.so.1",
+        "libpthread.so.0",
+        "libdl.so.2",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/init/bridge_hook.so",
+      "resolution": "linux-gate.so.1 (0xf7f47000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7eb5000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7eb0000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7eab000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7ea6000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c6b000)\n\t/lib/ld-linux.so.2 (0xf7f49000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "6e64b056c3e4dc374998dffff86a984a8b25377d69326ad271dd20d65f21b61f",
+      "symbol_versions": [
+        "GCC_3.0",
+        "GCC_3.3",
+        "GCC_4.2.0",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "libgcc_s.so.1",
+        "librt.so.1",
+        "libpthread.so.0",
+        "libdl.so.2",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/init/channel_hook.so",
+      "resolution": "linux-gate.so.1 (0xf7fa2000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7f10000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f0b000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f06000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f01000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7cc6000)\n\t/lib/ld-linux.so.2 (0xf7fa4000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "3a2405104f8ed44200947025802142e619265a3709a471b4b4df196287c7965b",
+      "symbol_versions": [
+        "GCC_3.0",
+        "GCC_3.3",
+        "GCC_4.2.0",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libnxencryption.so",
+        "libGeoIP.so.1",
+        "libdl.so.2",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/init/df_game_r",
+      "resolution": "linux-gate.so.1 (0xf7f08000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7efa000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7ef5000)\n\tlibnxencryption.so => /opt/dnf/compat/i386/libnxencryption.so (0xf7ef2000)\n\tlibGeoIP.so.1 => /opt/dnf/compat/i386/libGeoIP.so.1 (0xf7eb1000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7eac000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7da2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7b67000)\n\t/lib/ld-linux.so.2 (0xf7f0a000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf78e8000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b0000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2",
+        "/opt/dnf/compat/i386/libGeoIP.so.1",
+        "/opt/dnf/compat/i386/libnxencryption.so"
+      ],
+      "sha256": "dd0ae672b1dce3ff9c6c403beaec71b3ef666b14deb567d4cab0da99d8711f9e",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "libdl.so.2",
+        "libc.so.6"
+      ],
+      "path": "/home/template/init/libhook.so",
+      "resolution": "linux-gate.so.1 (0xf7fa8000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f98000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d5d000)\n\t/lib/ld-linux.so.2 (0xf7faa000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "9c599ecd6d40b3983018e4338acecff6f20d53e5bc58728679d7c6703fbe4706",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1.3"
+      ]
+    },
+    {
+      "architecture": "amd64",
+      "interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "needed": [
+        "libresolv.so.2",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/init/mysql_proxy/forward",
+      "resolution": "linux-vdso.so.1 (0x00007ffe9b35b000)\n\tlibresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x00007731121be000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007731121b9000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000773111fa6000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007731121d5000)",
+      "resolved_library_paths": [
+        "/lib/x86_64-linux-gnu/libc.so.6",
+        "/lib/x86_64-linux-gnu/libpthread.so.0",
+        "/lib/x86_64-linux-gnu/libresolv.so.2",
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "sha256": "0b50b209dce40716b19aa27a821aa6a5230e6789da2a466c01c3b48bd4c0694e",
+      "symbol_versions": [
+        "GLIBC_2.2.5",
+        "GLIBC_2.3.2"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libstdc++.so.6",
+        "libpthread.so.0",
+        "librt.so.1",
+        "libz.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/auction/df_auction_r",
+      "resolution": "linux-gate.so.1 (0xf7fc6000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d3e000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7d39000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7d34000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7d18000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7c0e000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79d3000)\n\t/lib/ld-linux.so.2 (0xf7fc8000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf799b000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/i386-linux-gnu/libz.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "b31eafd5068b450929133365f071fc2d0dedc7a8a5b80f9c81da44ce4008290c",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBCXX_3.4.5",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "libdl.so.2",
+        "libstdc++.so.6",
+        "libz.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/bridge/df_bridge_r",
+      "resolution": "linux-gate.so.1 (0xf7ede000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ed0000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7ecb000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c4c000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7c30000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b26000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf78eb000)\n\t/lib/ld-linux.so.2 (0xf7ee0000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b3000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/i386-linux-gnu/libz.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "30a5741015b3701cee2d9b388140ac1711345bbe8d879b6f152e74a9334ea6b0",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "libdl.so.2",
+        "libstdc++.so.6",
+        "libz.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/channel/df_channel_r",
+      "resolution": "linux-gate.so.1 (0xf7f6a000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f5c000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f57000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cd8000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7cbc000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7bb2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7977000)\n\t/lib/ld-linux.so.2 (0xf7f6c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf793f000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libdl.so.2",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/i386-linux-gnu/libz.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "7f7f6bd9eea6452dc463bca2f2e33f07eec7675e9f37e280e92739cfb87747bd",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/community/df_community_r",
+      "resolution": "linux-gate.so.1 (0xf7f65000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f57000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f52000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e48000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c0d000)\n\t/lib/ld-linux.so.2 (0xf7f67000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "fe1b06e880218fc0ed89c011506aef59b46e0322b999e54a3ebd741c238b8a1e",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/coserver/df_coserver_r",
+      "resolution": "linux-gate.so.1 (0xf7f49000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f3b000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f36000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e2c000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bf1000)\n\t/lib/ld-linux.so.2 (0xf7f4b000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "1a626560bcf4d5272a92931cf14b09663aa45ae4f7d1f8a3b19f067aaf6c2f75",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/dbmw_guild/df_dbmw_r",
+      "resolution": "linux-gate.so.1 (0xf7f71000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f63000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f5e000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e54000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c19000)\n\t/lib/ld-linux.so.2 (0xf7f73000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/dbmw_mnt/df_dbmw_r",
+      "resolution": "linux-gate.so.1 (0xf7f38000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f2a000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f25000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e1b000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7be0000)\n\t/lib/ld-linux.so.2 (0xf7f3a000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/dbmw_stat/df_dbmw_r",
+      "resolution": "linux-gate.so.1 (0xf7f96000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f88000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f83000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e79000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c3e000)\n\t/lib/ld-linux.so.2 (0xf7f98000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/game/libantisvrimport.so",
+      "resolution": "linux-gate.so.1 (0xf7fad000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c78000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf79f9000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf78ef000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b7000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf78b2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7677000)\n\t/lib/ld-linux.so.2 (0xf7faf000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "8f6263dae6fcd1eb19baece6f7c9408d2161abd1a05bd492d398d5cb7783d2a7",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GCC_3.0",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.3.2",
+        "GLIBC_2.3.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/game/libnxencryption.so",
+      "resolution": "linux-gate.so.1 (0xf7f47000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cbc000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7bb2000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b7a000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf793f000)\n\t/lib/ld-linux.so.2 (0xf7f49000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1.3"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": null,
+      "needed": [
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/game/libtss_sdk.so.1.0.394",
+      "resolution": "linux-gate.so.1 (0xf7f97000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c62000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf79e3000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf78d9000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78a1000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf789c000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7661000)\n\t/lib/ld-linux.so.2 (0xf7f99000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "8f6263dae6fcd1eb19baece6f7c9408d2161abd1a05bd492d398d5cb7783d2a7",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GCC_3.0",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.3.2",
+        "GLIBC_2.3.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/guild/df_guild_r",
+      "resolution": "linux-gate.so.1 (0xf7f73000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f65000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f60000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e56000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c1b000)\n\t/lib/ld-linux.so.2 (0xf7f75000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "51eae69e23a92df3a429881436d8ee41dad28450094a60b649f08f93f6084069",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/manager/df_manager_r",
+      "resolution": "linux-gate.so.1 (0xf7eca000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ebc000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7eb7000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7dad000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7b72000)\n\t/lib/ld-linux.so.2 (0xf7ecc000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "74b3adba3c2d376547ee65c53940129bd20af9e48926be3f4facc7d729dd65e3",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/monitor/df_monitor_r",
+      "resolution": "linux-gate.so.1 (0xf7f2c000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f1e000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f19000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e0f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bd4000)\n\t/lib/ld-linux.so.2 (0xf7f2e000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "a099d2b3ebc77bfe1393bec3543a41ba8c20c99d0abc26619241d31964dea6d7",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libstdc++.so.6",
+        "libpthread.so.0",
+        "librt.so.1",
+        "libz.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/point/df_point_r",
+      "resolution": "linux-gate.so.1 (0xf7efd000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c75000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7c70000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c6b000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7c4f000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b45000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf790a000)\n\t/lib/ld-linux.so.2 (0xf7eff000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78d2000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/i386-linux-gnu/libz.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "0339aa6cc51f32c4b50fe9e55f3fd8b00d4b495fcad46871c59a5eda345c9256",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBCXX_3.4.5",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/relay/df_relay_r",
+      "resolution": "linux-gate.so.1 (0xf7f4c000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f3e000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f39000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e2f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bf4000)\n\t/lib/ld-linux.so.2 (0xf7f4e000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "39c87b68408a82f840808c09c520b911c01176349af9eaa3bf071cce2295c3eb",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.3.2",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/secsvr/gunnersvr/gunnersvr",
+      "resolution": "linux-gate.so.1 (0xf7fc0000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fb2000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d33000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7c29000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7bf1000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7bec000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79b1000)\n\t/lib/ld-linux.so.2 (0xf7fc2000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "ce26717f3fd8c69c2b079c120f00d3f93e0cd6cc53dcc24aa2d5639fec2b8a8b",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GCC_3.0",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.3.2"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/secsvr/zergsvr/secagent",
+      "resolution": "linux-gate.so.1 (0xf7f33000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f25000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7ca6000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b9c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b64000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b5f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7924000)\n\t/lib/ld-linux.so.2 (0xf7f35000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "4416aeffccc8b2064c5548d3867638789bb10912d6ce8ea50289b13bbcee2b5b",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GCC_3.0",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.3.2"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/secsvr/zergsvr/zergsvr",
+      "resolution": "linux-gate.so.1 (0xf7f1d000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f0f000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c90000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b86000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b4e000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b49000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf790e000)\n\t/lib/ld-linux.so.2 (0xf7f1f000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libgcc_s.so.1",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/i386-linux-gnu/libstdc++.so.6",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "c2def44c445d372c544fd49f79dc79ac62a72750a04035818f3eceb407f26c17",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GCC_3.0",
+        "GLIBCXX_3.4",
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.3.2"
+      ]
+    },
+    {
+      "architecture": "i386",
+      "interpreter": "/lib/ld-linux.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "librt.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux.so.2"
+      ],
+      "path": "/home/template/neople/statics/df_statics_r",
+      "resolution": "linux-gate.so.1 (0xf7fc4000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7fb6000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fb1000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7ea7000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c6c000)\n\t/lib/ld-linux.so.2 (0xf7fc6000)",
+      "resolved_library_paths": [
+        "/lib/i386-linux-gnu/libc.so.6",
+        "/lib/i386-linux-gnu/libm.so.6",
+        "/lib/i386-linux-gnu/libpthread.so.0",
+        "/lib/i386-linux-gnu/librt.so.1",
+        "/lib/ld-linux.so.2"
+      ],
+      "sha256": "37c3ba4e5fd87bb6eaac598c6eac8c726c5b4602122cfdc22a59590f8903be79",
+      "symbol_versions": [
+        "GLIBC_2.0",
+        "GLIBC_2.1",
+        "GLIBC_2.1.3",
+        "GLIBC_2.2",
+        "GLIBC_2.2.4",
+        "GLIBC_2.3",
+        "GLIBC_2.4"
+      ]
+    },
+    {
+      "architecture": "amd64",
+      "interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "needed": [
+        "libpthread.so.0",
+        "libcrypt.so.1",
+        "libz.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/stun/df_stun_r",
+      "resolution": "linux-vdso.so.1 (0x00007ffcd9a73000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fdbb8296000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007fdbb825c000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fdbb8240000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fdbb7fc2000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fdbb7ed9000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fdbb7ea9000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fdbb7c96000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fdbb82a0000)",
+      "resolved_library_paths": [
+        "/lib/x86_64-linux-gnu/libc.so.6",
+        "/lib/x86_64-linux-gnu/libcrypt.so.1",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/lib/x86_64-linux-gnu/libm.so.6",
+        "/lib/x86_64-linux-gnu/libpthread.so.0",
+        "/lib/x86_64-linux-gnu/libstdc++.so.6",
+        "/lib/x86_64-linux-gnu/libz.so.1",
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "sha256": "63d94ee108d3f0b2f0f6aa433a2b97c96438da66447117b66d106750efb97528",
+      "symbol_versions": [
+        "CXXABI_1.3",
+        "GLIBCXX_3.4",
+        "GLIBC_2.2.5"
+      ]
+    },
+    {
+      "architecture": "amd64",
+      "interpreter": null,
+      "needed": [
+        "libc.so.6"
+      ],
+      "path": "/home/template/neople/stun/stun_hook.so",
+      "resolution": "linux-vdso.so.1 (0x00007ffd44f54000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000728f8471b000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000728f84938000)",
+      "resolved_library_paths": [
+        "/lib/x86_64-linux-gnu/libc.so.6",
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "sha256": "3a8141f29cfdbf4a008b4c1407c9d0fcff7653c518896df44e019237d18d09b1",
+      "symbol_versions": [
+        "GLIBC_2.2.5",
+        "GLIBC_2.3.4",
+        "GLIBC_2.34",
+        "GLIBC_2.38"
+      ]
+    },
+    {
+      "architecture": "amd64",
+      "interpreter": null,
+      "needed": [],
+      "packed_gateway_loader_trace": "linux-vdso.so.1 (0x00007ffef7f82000)\n\tlibssl.so.6 => /opt/dnf/compat/amd64/libssl.so.6 (0x0000733b9d52b000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x0000733b9d38e000)\n\tlibmysqlclient.so.15 => /opt/dnf/compat/amd64/libmysqlclient.so.15 (0x0000733b9ce00000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x0000733b9d386000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000733b9d29d000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000733b9cbed000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000733b9d580000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x0000733b9d261000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x0000733b9d245000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000733b9d229000)",
+      "path": "/home/template/root/DnfGateServer",
+      "resolution": "not a dynamic executable",
+      "resolved_library_paths": [
+        "/lib/x86_64-linux-gnu/libc.so.6",
+        "/lib/x86_64-linux-gnu/libcrypt.so.1",
+        "/lib/x86_64-linux-gnu/libm.so.6",
+        "/lib/x86_64-linux-gnu/libnsl.so.1",
+        "/lib/x86_64-linux-gnu/libpthread.so.0",
+        "/lib/x86_64-linux-gnu/libz.so.1",
+        "/lib64/ld-linux-x86-64.so.2",
+        "/opt/dnf/compat/amd64/libcrypto.so.6",
+        "/opt/dnf/compat/amd64/libmysqlclient.so.15",
+        "/opt/dnf/compat/amd64/libssl.so.6"
+      ],
+      "sha256": "088c6f284b092cde60f118260ce0e1129c0e38ef2d32958bafaf55cf89feb1f5",
+      "symbol_versions": []
+    }
+  ],
+  "image_id": "sha256:7d0193826a0557bc8465052d79d92cb742900808129e01d7d63d25e52cce696a",
+  "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n"
+}
