@@ -29,8 +29,6 @@ services:
       MYSQL_INIT_SSL_MODE: ${MYSQL_INIT_SSL_MODE:-disabled}
       WEB_USER: admin
       WEB_PASS: ${SUPERVISOR_PASSWORD:?Set SUPERVISOR_PASSWORD}
-      GM_ACCOUNT: gate
-      GM_PASSWORD: ${GATE_PASSWORD:?Set GATE_PASSWORD}
     volumes:
       - ./runtime/game/data:/data
       - ./runtime/game/log:/home/neople/game/log

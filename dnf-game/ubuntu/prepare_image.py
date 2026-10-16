@@ -22,6 +22,19 @@ def require_user_pvf(text):
     end = text.index('\n  fi', start) + len('\n  fi')
     return text[:start] + '  python3 /opt/dnf/ubuntu/pvf.py || exit 1' + text[end:]
 
+def remove_legacy_gateway(entry, init, starter):
+    def cut(text, first, after):
+        start=text.index(first)
+        end=text.index(after,start)
+        return text[:start]+text[end:]
+    entry=cut(entry,'# 清理root下文件','# 复制待使用文件')
+    entry=cut(entry,'# 重置root目录','# 重设supervisor web网页密码')
+    init=cut(init,'  # 判断Config.ini文件是否初始化过','  # 判断每日脚本是否初始化')
+    init=cut(init,'  # 入口在其他大区CORE服务','  # 拷贝core服务supervisor配置文件')
+    starter=replace(starter,'    echo "starting tongyi_gate ..."\n    supervisorctl restart tongyi_gate\n','')
+    starter=starter.replace('bridge、Gate以及channel','bridge以及channel')
+    return entry,init,starter
+
 def main():
     for path in BASE.rglob('*'):
         if path.is_file() and path.suffix in ('.sh','.py'):
@@ -35,6 +48,11 @@ def main():
         path=Path('/home/template/neople')/service/'cfg/server.cfg'
         write(path,replace(path.read_text(),'this_ip = PUBLIC_IP','this_ip = 0.0.0.0'))
     legacy=(BASE/'legacy-entrypoint.sh').read_text()
+    legacy,init,starter=remove_legacy_gateway(legacy,(INIT/'init.sh').read_text(),(INIT/'starter/start_program.sh').read_text())
+    for filename in ('Config.ini','privatekey.pem'):
+        (INIT/filename).unlink(missing_ok=True)
+    for filename in ('gate.conf.template','gate.conf'):
+        (Path('/etc/supervisor/conf.d')/filename).unlink(missing_ok=True)
     entry='#!/bin/bash\n'+legacy[legacy.index('# 清除MONITOR_PUBLIC_IP文件'):]
     entry=replace(entry,'mkdir -p /data/log/netbird\n','')
     entry=replace(entry,'mkdir -p /data/log/tailscale\n','')
@@ -45,7 +63,6 @@ def main():
     entry=entry.replace('# 初始化数据','date +%s > /run/dnf/started-at\n# 初始化数据',1)
     write(BASE/'generated-entrypoint.sh',entry)
     (BASE/'legacy-entrypoint.sh').unlink()
-    init=(INIT/'init.sh').read_text()
     start=init.index('  # 初始化本地数据库')
     end=init.index('  # 初始化主数据库',start)
     init=init[:start]+init[end:]
@@ -83,7 +100,6 @@ def main():
     for name in ('start_mysql_proxy.sh','start_main_mysql_proxy.sh'):
         path=INIT/'mysql_proxy'/name
         write(path,path.read_text().replace('TCP-LISTEN:3306,','TCP-LISTEN:3306,bind=127.0.0.1,').replace('TCP-LISTEN:3307,','TCP-LISTEN:3307,bind=127.0.0.1,'))
-    starter=(INIT/'starter/start_program.sh').read_text()
     starter='#!/bin/bash\nset -e\nsource /opt/dnf/ubuntu/wait.sh\n'+starter[starter.index('# 启动monitor_ip'):]
     a=starter.index('while true; do'); b=starter.index('\ndone',a)+len('\ndone')
     starter=starter[:a]+'wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1'+starter[b:]
@@ -98,13 +114,11 @@ def main():
         (Path('/etc/supervisor/conf.d')/name).unlink(missing_ok=True)
     # Legacy daemon wrappers return 0 after their child exits. Every long-lived
     # role service must restart even after that status (e.g. DB outage auction).
-    for name in ('core.conf.template','p2p.conf.template','tss.conf.template','gate.conf.template'):
+    for name in ('core.conf.template','p2p.conf.template','tss.conf.template'):
         path=Path('/etc/supervisor/conf.d')/name
         write(path,path.read_text().replace('autorestart=unexpected','autorestart=true'))
     monitor=Path('/etc/supervisor/conf.d/monitor_ip.conf')
     write(monitor,replace(monitor.read_text(),'autostart=true','autostart=false\nstartsecs=0'))
-    gate=Path('/etc/supervisor/conf.d/gate.conf.template')
-    write(gate,replace(gate.read_text(),'./DnfGateServer','/opt/dnf/ubuntu/run-game ./DnfGateServer'))
     supervisor=Path('/etc/supervisord.conf')
     text=supervisor.read_text().replace('environment=ENVIRONMENT','')
     text=text.replace('port=0.0.0.0:180','port=127.0.0.1:180')

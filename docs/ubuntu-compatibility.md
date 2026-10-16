@@ -1,5 +1,9 @@
 # Ubuntu 24.04 游戏运行时 ABI 审计
 
+后续 onlyGuo 清理已从 Ubuntu 运行镜像移除 `DnfGateServer` 及其启动配置；当前构建检查为
+28 个游戏/模板/工具 ELF、6 个兼容库，均无未解析依赖。下文涉及旧网关的审计是历史兼容性证据，
+不表示当前 Ubuntu 仍运行该组件。CentOS 兼容入口保留。
+
 日期：2026-10-16；平台：`linux/amd64`。Ubuntu 基础镜像固定为
 `ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55`。
 

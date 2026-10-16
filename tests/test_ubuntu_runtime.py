@@ -22,6 +22,31 @@ def module(name, directory=ADAPTER):
     return result
 
 class UbuntuRuntime(unittest.TestCase):
+    def test_onlyguo_runtime_has_no_legacy_gateway(self):
+        prepare=module('prepare_image')
+        base=ROOT/'dnf-game/build/dnf_data'
+        entry,init,starter=prepare.remove_legacy_gateway(
+            (base/'docker-entrypoint.sh').read_text(encoding='utf8'),
+            (base/'home/template/init/init.sh').read_text(encoding='utf8'),
+            (base/'home/template/init/starter/start_program.sh').read_text(encoding='utf8'))
+        # Ubuntu only uses the legacy entry after address monitor initialization.
+        entry=entry[entry.index('# 清除MONITOR_PUBLIC_IP文件'):]
+        for text in (entry,init,starter):
+            for obsolete in ('tongyi_gate','DnfGateServer','Config.ini','privatekey.pem','GM_PASSWORD'):
+                self.assertNotIn(obsolete,text)
+        self.assertIn('core:bridge',starter)
+        self.assertIn('core:channel',starter)
+        self.assertIn('publickey.pem',entry)
+
+    def test_onlyguo_config_does_not_require_gate_password(self):
+        config=module('config')
+        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',
+                 MAIN_MYSQL_HOST='192.0.2.20',MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD='RootTest',
+                 MYSQL_HOST='192.0.2.20',MYSQL_PORT='3306',DNF_DB_ROOT_PASSWORD='RootTest',DNF_DB_GAME_PASSWORD='Demo1234')
+        result=config.validate(env)
+        self.assertFalse(any(k.startswith('GM_') for k in config.DEFAULTS))
+        self.assertEqual(result['SERVER_TYPE'],'ALL')
+
     def test_pvf_required_only_for_game_roles(self):
         pvf=module('pvf')
         with tempfile.TemporaryDirectory() as td:
@@ -49,7 +74,7 @@ class UbuntuRuntime(unittest.TestCase):
 
     def test_game_password_is_never_silently_truncated(self):
         config=module('config')
-        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',GM_PASSWORD='testgate',
+        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',
                  MAIN_MYSQL_HOST='192.0.2.20',MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD='RootTest',
                  MYSQL_HOST='192.0.2.20',MYSQL_PORT='3306',DNF_DB_ROOT_PASSWORD='RootTest')
         for password in ('Short77','Long99999','BadPass!'):
@@ -126,7 +151,7 @@ class UbuntuRuntime(unittest.TestCase):
 
     def test_encoder_failure_does_not_log_password(self):
         config=module('config')
-        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',GM_PASSWORD='testgate',
+        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',
                  MAIN_MYSQL_HOST='127.0.0.1',MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD='RootTest',
                  MYSQL_HOST='127.0.0.1',MYSQL_PORT='3306',DNF_DB_ROOT_PASSWORD='RootTest',DNF_DB_GAME_PASSWORD='Demo1234')
         error=subprocess.CalledProcessError(1,['/TeaEncrypt','Demo1234'])

@@ -59,9 +59,9 @@ COPY build/Ubuntu24-DNF/MYSQL-COPYING /opt/dnf/licenses/MySQL-COPYING
 COPY build/Ubuntu24-DNF/compat-lock.json /opt/dnf/audit/compat-lock.json
 COPY build/Ubuntu24-DNF/run-game /opt/dnf/ubuntu/run-game
 COPY build/Ubuntu24-DNF/audit/elf-audit.py /opt/dnf/audit/elf-audit.py
-COPY build/Ubuntu24-DNF/audit/gate-probe.py /opt/dnf/audit/gate-probe.py
 RUN mkdir -p /opt/dnf/compat/i386 /opt/dnf/compat/amd64 \
  && rm -rf /home/template/init/netbird /home/template/init/tailscale \
+ && rm -rf /home/template/root \
  && cp /home/template/neople/game/libnxencryption.so /opt/dnf/compat/i386/ \
  && echo 'cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76  /opt/dnf/compat/i386/libnxencryption.so' | sha256sum -c - \
  && echo 'c9fc03966602b5072775cfba906a141565e48c9baf1c531db6669fcc5695de0f  /opt/dnf/compat/amd64/libmysqlclient.so.15' | sha256sum -c - \
@@ -72,7 +72,6 @@ RUN mkdir -p /opt/dnf/compat/i386 /opt/dnf/compat/amd64 \
  && find /home/template -type f -exec chmod u+x {} + \
  && python3 /opt/dnf/audit/elf-audit.py /home/template --extra /TeaEncrypt --output /opt/dnf/audit/elf-report.json \
  && python3 /opt/dnf/audit/elf-audit.py /opt/dnf/compat --output /opt/dnf/audit/compat-report.json \
- && python3 /opt/dnf/audit/gate-probe.py \
  && LD_LIBRARY_PATH=/opt/dnf/compat/i386 /opt/dnf/audit/geoip-probe > /opt/dnf/audit/geoip-start-proof.txt \
  && /opt/dnf/ubuntu/run-game /opt/dnf/audit/shm-probe > /opt/dnf/audit/shm-start-proof.txt \
  && DNF_GAME_PRELOAD=/home/template/init/libhook.so /opt/dnf/ubuntu/run-game /opt/dnf/audit/shm-probe >> /opt/dnf/audit/shm-start-proof.txt \

@@ -39,7 +39,8 @@ nano .env
 `GAME_DB_PASSWORD` 恰好 8 位字母/数字，可用 `openssl rand -hex 4` 生成。
 其余密码使用独立随机字母/数字值，例如 `openssl rand -hex 16`。
 本套旧 SQL/配置模板不支持任意标点密码，入口会明确拒绝不符合要求的值，不会静默截断。
-`DB_ROOT_PASSWORD` 填数据库现有 root 密码，不能随意另填一个随机值；`SUPERVISOR_PASSWORD`、`GATE_PASSWORD` 分别设置独立值。
+`DB_ROOT_PASSWORD` 填数据库现有 root 密码，不能随意另填一个随机值；`SUPERVISOR_PASSWORD` 设置独立值。
+Ubuntu 使用 onlyGuo 后台登录流程，已移除旧统一登录器网关 `tongyi_gate` / `DnfGateServer`，无需 `GATE_PASSWORD` 或 `GM_*` 参数。
 ALL 模式不用修改 `.env` 末尾标记为 Split deployment 的示例地址，默认 Compose 会覆盖相应节点地址。
 
 数据库必须是专用测试实例，或专用测试副本；初始化会管理多个 schema 和 `game` 用户。
@@ -173,7 +174,7 @@ docker compose restart game
 
 重启后等待游戏重新变为 healthy，再执行 `docker compose exec game python3 /opt/dnf/ubuntu/health.py`。
 后台 `/app/data/private.key` 保持私密。所有 GAME 节点都需要与后台私钥对应的公钥。
-内置旧网关私钥是另一套配置，不能把后台私钥随意复制到旧网关路径。
+旧统一登录器的 `privatekey.pem` 不再使用；后台的 `private.key` 和游戏的 `publickey.pem` 仍必须配对。
 
 浏览器打开 `http://服务器公网IP:18080/login`，使用 `admin` 和 SQL 中自行设置的管理员密码登录。
 确保云安全组和主机防火墙允许 TCP 18080；游戏所需端口见下文端口表。
@@ -297,7 +298,6 @@ CORE 和 P2P 互通使用内网实际 IP；Docker 服务名不能用于不同主
 | CORE | 拍卖/点券拍卖 | TCP/UDP 33803、33603 | `auction`、`point` cfg |
 | CORE | community | TCP 33100 | `community/cfg/server.cfg` |
 | CORE | 内部 dbmw/manager | 20203、20303、20403、40403 | 相应 cfg；不映射到宿主机 |
-| CORE/ALL | 旧网关 | TCP 7600、881 | `init/Config.ini`；onlyGuo 流程不默认映射 |
 | CORE/GAME/ALL | 本地数据库代理 | TCP 127.0.0.1:3306、3307 | mysql_proxy；不映射到宿主机 |
 | 全部 | Supervisor 管理 | 容器内 127.0.0.1:180 / Unix socket | supervisord；不映射到宿主机 |
 | 后台 | HTTP/API | TCP 18080 → 80 | Compose |
@@ -331,7 +331,7 @@ PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh
 新增旧发行版可升级列表时维护 `dnf-game/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
 
 未标记的 CentOS 数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
-首次启动前，数据目录中只可预放经核对的 `Script.pvf`、`publickey.pem` 及需要保留的旧网关 `privatekey.pem`。
+首次启动前，数据目录中预放经核对的 `Script.pvf`、`publickey.pem`，无需旧网关 `privatekey.pem`。
 不要提前放入 `Config.ini`、`dp/` 或其他自定义配置，否则未标记目录检查会拒绝启动。
 完成首次初始化、确认 `.dnf-ubuntu.json` 已生成后，停止对应角色服务，再备份并按需合并必要的自定义配置、
 `dp/` 内容或 `user_daily_script.sh`；不要复制旧 CentOS 的受管 `run/`、`monitor_ip/` 脚本覆盖新版本。
@@ -340,6 +340,13 @@ PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh
 回退时停止 Ubuntu 测试栈，恢复原 CentOS 镜像、配置、独立运行目录和它原来使用的数据库。
 本流程不改动这些资源；不能把 Ubuntu 新写入的测试数据库直接当作原业务数据库回退。
 不要执行会删除业务数据卷的 `down -v`。
+
+从含旧网关的 Ubuntu 版本升级：拉取代码并重建游戏镜像后，执行
+`docker compose up -d --force-recreate game`（拆分 CORE/GAME/P2P 分别使用对应 Compose 文件）。
+仅执行 restart 不会更换镜像；重建容器后旧进程和旧容器配置随之移除。
+已有 `.env` 中的 `GATE_PASSWORD` 可删除。挂载目录里历史 `Config.ini`、`privatekey.pem` 不再读取或生成，
+不会为清理日志而自动删除你的持久化文件。自定义 `/data/conf.d` 若另行定义了旧网关，需要自行移除该自定义启动项。
+CentOS 的旧登录器兼容入口不在本次 Ubuntu 清理范围内。
 
 ## 7. 可重复验收
 

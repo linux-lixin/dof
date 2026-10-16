@@ -18,7 +18,7 @@ def core_env(**overrides):
                      MAIN_MYSQL_ROOT_PASSWORD='DemoRoot', MYSQL_HOST='10.2.4.20',
                      MYSQL_PORT='3306', DNF_DB_ROOT_PASSWORD='DemoRoot',
                      DNF_DB_GAME_PASSWORD='Demo1234', WEB_PASS='DemoWeb',
-                     GM_PASSWORD='DemoGate', GAME_CHANNEL_HOSTS='11=10.2.4.11,52=10.2.4.12'),
+                     GAME_CHANNEL_HOSTS='11=10.2.4.11,52=10.2.4.12'),
                 **overrides)
 
 

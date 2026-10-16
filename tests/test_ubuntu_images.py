@@ -90,7 +90,7 @@ def main(options):
     def api():
         return docker('exec',state['game'],'curl','-fsS','--max-time','3',state['url']+'/api/v1/client/version/1.0.0',check=False).returncode==0
     def service_pids():
-        probe="import sys,json; sys.path.insert(0,'/opt/dnf/ubuntu'); import health; print(json.dumps(sorted((p,n) for p,n,a in health.snapshot()[0] if n.startswith('df_') or n in ('gunnersvr','zergsvr','secagent','DnfGateServer'))))"
+        probe="import sys,json; sys.path.insert(0,'/opt/dnf/ubuntu'); import health; print(json.dumps(sorted((p,n) for p,n,a in health.snapshot()[0] if n.startswith('df_') or n in ('gunnersvr','zergsvr','secagent'))))"
         return {name:docker('exec',name,'python3','-c',probe).stdout for name in state['nodes']}
     def persistent_hashes():
         return docker('exec',state['game'],'bash','-c',
@@ -135,8 +135,8 @@ def main(options):
                  PUBLIC_IP=advertised_core,CORE_PUBLIC_IP='127.0.0.1',MAIN_BRIDGE_IP='127.0.0.1',P2P_PUBLIC_IP=advertised_core,
                  MAIN_MYSQL_HOST=dbip,MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD=state['password'],MAIN_MYSQL_GAME_ALLOW_IP='%',
                  MYSQL_HOST=dbip,MYSQL_PORT='3306',MYSQL_GAME_ALLOW_IP='%',DNF_DB_ROOT_PASSWORD=state['password'],
-                 DNF_DB_GAME_PASSWORD=state['game_password'],WEB_PASS=secrets.token_hex(12),GM_PASSWORD=secrets.token_hex(12),MYSQL_INIT_SSL_MODE='disabled')
-        secrets_to_check.extend([env['WEB_PASS'],env['GM_PASSWORD']])
+                 DNF_DB_GAME_PASSWORD=state['game_password'],WEB_PASS=secrets.token_hex(12),MYSQL_INIT_SSL_MODE='disabled')
+        secrets_to_check.append(env['WEB_PASS'])
         badenv=dict(env,SERVER_TYPE='ALL',MAIN_MYSQL_ROOT_PASSWORD='WrongPassword')
         args=[]
         for key,value in badenv.items(): args+=['-e',key+'='+value]
@@ -178,6 +178,15 @@ def main(options):
         assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
         fingerprints={name:docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0] for name in ('private.key','publickey.pem')}
         pids=wait('real channels, five countries and role health',evidence)
+        for node in state['nodes']:
+            status=docker('exec',node,'supervisorctl','status',check=False).stdout
+            assert 'tongyi_gate' not in status
+            assert docker('exec',node,'pgrep','-x','DnfGateServer',check=False).returncode==1
+            assert docker('exec',node,'test','!','-e','/home/template/root/DnfGateServer').returncode==0
+            sockets=docker('exec',node,'cat','/proc/net/tcp').stdout
+            listening={int(line.split()[1].split(':')[1],16) for line in sockets.splitlines()[1:] if line.split()[3]=='0A'}
+            assert not {7600,881} & listening
+        report['checks'].append('Old unified launcher gateway absent from Supervisor, processes and listening ports')
         # Preserve a real valid PVF override and a harmless user script customization.
         docker('exec',state['game'],'bash','-c','test -s /data/Script.pvf; '
                'if test -f /data/daily_job/user_daily_script.sh; then printf "\\n# acceptance customization\\n" >> /data/daily_job/user_daily_script.sh; fi')

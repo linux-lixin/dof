@@ -12,9 +12,7 @@ DEFAULTS = dict(SERVER_TYPE='ALL', SERVER_GROUP='3', SERVER_GROUP_DB='cain',
                 P2P_PUBLIC_IP='127.0.0.1', OPEN_CHANNEL='11,52', CLIENT_POOL_SIZE='3',
                 GAME_CHANNEL_HOSTS='',
                 AUTO_PUBLIC_IP='false', DDNS_ENABLE='false', DDNS_DOMAIN='', DDNS_INTERVAL='10',
-                STARTUP_TIMEOUT='600', MYSQL_INIT_SSL_MODE='disabled', WEB_USER='admin',
-                GM_ACCOUNT='gate', GM_CONNECT_KEY='763WXRBW3PFTC3IXPFWH',
-                GM_LANDER_VERSION='20180307')
+                STARTUP_TIMEOUT='600', MYSQL_INIT_SSL_MODE='disabled', WEB_USER='admin')
 
 def channels(value):
     result = set()
@@ -87,7 +85,7 @@ def validate(given):
     if role in ('ALL','P2P') and not re.fullmatch(r'[1-9][0-9]{0,2}', env.get('P2P_RELAY_INDEX','')):
         raise ValueError('P2P_RELAY_INDEX must be a positive integer (1..999)')
     if role in ('ALL','CORE'):
-        for key in ('WEB_PASS','GM_PASSWORD'):
+        for key in ('WEB_PASS',):
             if not env.get(key): raise ValueError(key+' is required')
     for key in ('STARTUP_TIMEOUT','DDNS_INTERVAL','CLIENT_POOL_SIZE'):
         if not env[key].isdigit() or not 1 <= int(env[key]) <= 600:
@@ -97,7 +95,7 @@ def validate(given):
     for key in ('AUTO_PUBLIC_IP','DDNS_ENABLE'):
         if env[key] not in ('true','false'):
             raise ValueError(key + ' must be true or false')
-    for key in ('WEB_USER','WEB_PASS','GM_ACCOUNT','GM_PASSWORD','GM_CONNECT_KEY','GM_LANDER_VERSION'):
+    for key in ('WEB_USER','WEB_PASS'):
         if env.get(key) and not re.fullmatch('[A-Za-z0-9_]+',env[key]):
             raise ValueError(key + ' must be alphanumeric/underscore for legacy templates')
     if not env.get('PUBLIC_IP') and env['AUTO_PUBLIC_IP'] != 'true' and env['DDNS_ENABLE'] != 'true':

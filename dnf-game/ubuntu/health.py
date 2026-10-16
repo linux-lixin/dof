@@ -33,7 +33,7 @@ def check():
         tcp.update([int('500'+group),int('3'+group+'303'),int('3'+group+'403'),int('3'+group+'100'),int('3'+group+'603'),int('3'+group+'803')])
         udp.update(int('3'+group+suffix) for suffix in ('303','403','503','703','603','803'))
         if os.environ.get('MAIN_BRIDGE_IP','127.0.0.1')=='127.0.0.1':
-            required+=['df_bridge_r','df_channel_r','DnfGateServer']; tcp.update([7000,7001,7600,881])
+            required+=['df_bridge_r','df_channel_r']; tcp.update([7000,7001])
     if role in ('P2P','ALL'):
         required+=['df_relay_r','df_stun_r']; tcp.add(int('7'+group+'00')); udp.add(int('7'+group+'00'))
         udp.update(int('2'+group+str(x)) for x in (11,12,13))
