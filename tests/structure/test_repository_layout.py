@@ -11,9 +11,21 @@ import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[2]
 
 class RepositoryLayout(unittest.TestCase):
+    def test_retired_runtime_components_are_absent(self):
+        retired=('netbird','tailscale','tailscaled','DnfGateServer','GateRestart','GateStop',
+                 'init_local_db.sh','gate.conf.template','netbird.conf','tailscale.conf',
+                 'openssl-0.9.8zh.tar.gz','libmysqlclient.so.15.0.0')
+        for folder in ('services/game/assets','services/game/runtime','services/game/docker','deploy'):
+            for path in (ROOT/folder).rglob('*'):
+                if path.is_file():
+                    self.assertNotIn(path.name,retired,str(path))
+                    self.assertNotIn('centos',path.relative_to(ROOT).parts,str(path))
+        self.assertFalse((ROOT/'services/game/assets/etc/my.cnf').exists())
+        self.assertFalse((ROOT/'services/game/assets/docker-entrypoint.sh').exists())
+
     def test_locked_game_resources_match(self):
         records=json.loads((ROOT/'metadata/game-assets.lock.json').read_text(encoding='utf8'))['assets']
-        self.assertEqual(len(records),400)
+        self.assertEqual(len(records),394)
         for record in records:
             with self.subTest(path=record['path']):
                 path=ROOT/record['path']
@@ -31,8 +43,7 @@ class RepositoryLayout(unittest.TestCase):
                     self.assertEqual(hashlib.sha256((folder/record['file']).read_bytes()).hexdigest(),record['sha256'])
 
     def test_docker_copy_inputs_exist_inside_correct_context(self):
-        for context,dockerfile in [('services/game','docker/centos/Dockerfile'),
-                                   ('services/game','docker/ubuntu/Dockerfile'),
+        for context,dockerfile in [('services/game','docker/ubuntu/Dockerfile'),
                                    ('services/admin','docker/Dockerfile')]:
             folder=ROOT/context
             for line in (folder/dockerfile).read_text(encoding='utf8').splitlines():
@@ -56,8 +67,7 @@ class RepositoryLayout(unittest.TestCase):
 
     def test_runtime_source_and_compat_archives_are_not_ignored(self):
         paths=['services/game/runtime/ubuntu/entrypoint.sh','services/game/runtime/ubuntu/health.py',
-               'services/game/docker/ubuntu/geoip_1.6.12.orig.tar.gz',
-               'services/game/docker/ubuntu/openssl-0.9.8zh.tar.gz']
+               'services/game/docker/ubuntu/geoip_1.6.12.orig.tar.gz']
         result=subprocess.run(['git','check-ignore','--no-index',*paths],cwd=ROOT,capture_output=True,text=True)
         self.assertEqual(result.returncode,1,result.stdout+result.stderr)
 

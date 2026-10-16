@@ -37,6 +37,7 @@ do
             source /home/template/init/init_sql/taiwan_cain.sql;
             flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
           echo "sg: re-init taiwan_siroco done."
           continue
         fi
@@ -56,6 +57,7 @@ EOF
               source /home/template/init/init_sql/d_channel.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_$SERVER_GROUP_DB" ]; then
@@ -65,6 +67,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_${SERVER_GROUP_DB}_2nd" ]; then
@@ -74,6 +77,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain_2nd.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_${SERVER_GROUP_DB}_log" ]; then
@@ -83,6 +87,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain_log.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_${SERVER_GROUP_DB}_web" ]; then
@@ -92,6 +97,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain_web.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_${SERVER_GROUP_DB}_auction_gold" ]; then
@@ -101,6 +107,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain_auction_gold.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue
           fi
           if [ "$db_name" == "taiwan_${SERVER_GROUP_DB}_auction_cera" ]; then
@@ -110,6 +117,7 @@ EOF
               source /home/template/init/init_sql/taiwan_cain_auction_cera.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
             continue 
           fi
           mysql -h $CUR_SG_DB_HOST -P $CUR_SG_DB_PORT -u root -p$CUR_SG_DB_ROOT_PASSWORD <<EOF
@@ -118,6 +126,7 @@ EOF
               source /home/template/init/init_sql/$db_name.sql;
               flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
       else
           echo "server group db: can not connect to mysql service $CUR_SG_DB_HOST:$CUR_SG_DB_PORT"
           echo $check_result
@@ -134,9 +143,11 @@ flush privileges;
 grant all privileges on *.* to 'game'@'$CUR_SG_DB_GAME_ALLOW_IP' identified by '$DNF_DB_GAME_PASSWORD';
 flush privileges;
 EOF
+[ "$?" -eq 0 ] || exit 1
 # 测试并查询数据库连接设置
 echo "server group db: show db_connect config, server_group is $SERVER_GROUP"
 mysql -h $CUR_SG_DB_HOST -P $CUR_SG_DB_PORT -u game -p$DNF_DB_GAME_PASSWORD <<EOF
 select gc_type, gc_ip, gc_channel from taiwan_$SERVER_GROUP_DB.game_channel where gc_type=$SERVER_GROUP;
 EOF
+[ "$?" -eq 0 ] || exit 1
 echo "server_group_db: init server group-$SERVER_GROUP($SERVER_GROUP_DB) done."

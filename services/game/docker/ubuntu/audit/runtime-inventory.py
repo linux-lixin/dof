@@ -1,10 +1,9 @@
-#!/usr/bin/env python
-"""Read-only trusted-image inventory, compatible with baseline Python 2.7.
+#!/usr/bin/env python3
+"""Read-only Ubuntu trusted-image inventory.
 
 Run in a disposable image container with this directory mounted at /audit.
 No packages are installed and no application services are started.
 """
-from __future__ import print_function
 import argparse
 import hashlib
 import json
@@ -44,7 +43,6 @@ def main():
     for directory, _, names in os.walk('/home/template'):
         files.extend(os.path.join(directory, name) for name in names)
     records, libraries = [], {}
-    rpm = os.path.exists('/bin/rpm') or os.path.exists('/usr/bin/rpm')
     for path in sorted(files):
         if not os.path.isfile(path):
             continue
@@ -69,20 +67,16 @@ def main():
                       needed=re.findall(r'Shared library: \[(.*?)\]', dynamic),
                       symbol_versions=sorted(set(re.findall(r'(?:GLIBCXX|GLIBC|CXXABI|GCC)_[\d.]+', version))),
                       resolution=resolution)
-        if path.endswith('/DnfGateServer'):
-            environment['LD_TRACE_LOADED_OBJECTS'] = '1'
-            record['packed_gateway_loader_trace'] = run([path], env=environment)
-            resolution += '\n' + record['packed_gateway_loader_trace']
         resolved = sorted(set(re.findall(r'(?:=>\s+|^\s*)(/[^\s]+)\s+\(', resolution, re.M)))
         record['resolved_library_paths'] = resolved
         for library in resolved:
             if library in libraries or not os.path.isfile(library):
                 continue
             actual = os.path.realpath(library)
-            owner = run(['rpm', '-qf', actual]) if rpm else run(['dpkg-query', '-S', actual])
+            owner = run(['dpkg-query', '-S', actual])
             libraries[library] = dict(realpath=actual, sha256=digest(actual), package_owner=owner)
         records.append(record)
-    packages = run(['rpm', '-qa', '--qf', '%{NAME}\t%{VERSION}-%{RELEASE}\t%{ARCH}\n']) if rpm else run(['dpkg-query', '-W'])
+    packages = run(['dpkg-query', '-W'])
     output = '/audit/' + args.prefix
     with open(output + '-packages.tsv', 'w') as stream:
         stream.write('\n'.join(sorted(packages.splitlines())) + '\n')

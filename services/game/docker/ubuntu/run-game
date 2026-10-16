@@ -104,7 +104,9 @@ if head[:4] != b'\x7fELF' or head[4] not in (1, 2):
     raise SystemExit(f'not a supported ELF: {binary}')
 arch = 'i386' if head[4] == 1 else 'amd64'
 environment = dict(os.environ)
-environment['LD_LIBRARY_PATH'] = f'/opt/dnf/compat/{arch}'
+environment.pop('LD_LIBRARY_PATH', None)
+if arch == 'i386':
+    environment['LD_LIBRARY_PATH'] = '/opt/dnf/compat/i386'
 # The adapter passes preloads through a neutral name so Python itself never loads them.
 preload = environment.pop('DNF_GAME_PRELOAD', '')
 environment.pop('LD_PRELOAD', None)

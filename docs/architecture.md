@@ -1,6 +1,6 @@
 # 项目结构与维护边界
 
-本仓库把游戏服务、管理后台和 Windows 登录器放在一起维护。按职责分目录，按镜像系统分构建入口，
+本仓库把游戏服务、管理后台和 Windows 登录器放在一起维护。按职责分目录，游戏统一使用 Ubuntu 构建入口，
 按实际节点分部署目录；共享资源和后台只维护一份。目录重组不修改游戏协议、数据库表结构或 Java/C# 业务逻辑。
 
 ```text
@@ -9,7 +9,6 @@ dof/
 ├── CONTRIBUTING.md
 ├── services/
 │   ├── game/
-│   │   ├── docker/centos/       CentOS Dockerfile、软件源
 │   │   ├── docker/ubuntu/       Ubuntu Dockerfile、兼容库源码、来源与许可证
 │   │   ├── assets/              共享游戏程序、模板、种子 SQL、Script.tgz
 │   │   ├── runtime/ubuntu/      Ubuntu 启动适配、健康检查、启动完成提示
@@ -22,7 +21,6 @@ dof/
 ├── clients/launcher/            Windows WPF 工程、源码和编译资源
 ├── deploy/
 │   ├── ubuntu/                 build、all、split、shared
-│   ├── centos/                 build、all、split、legacy
 │   └── shared/                 后台公共定义、管理员 SQL 示例
 ├── scripts/
 │   ├── diagnostics/            端口表生成等只读诊断
@@ -34,7 +32,6 @@ dof/
 ├── metadata/                   上游提交、资源路径和哈希清单
 └── docs/
     ├── ubuntu/                 Ubuntu 运维、兼容性与历史验收
-    ├── centos/                 CentOS 部署及旧镜像方案
     ├── admin/                  后台开发、上游说明和配图
     ├── launcher/               登录器使用说明和配图
     └── history/                早期分析与修复记录
@@ -44,7 +41,7 @@ dof/
 
 登录器调用后台 HTTP API 获取配置、注册/登录及更新信息；后台访问自建 MySQL 并保存自己的 RSA 私钥。
 游戏服务读取对应公钥、PVF、配置并访问同一部署所用的 MySQL。玩家游戏连接和 P2P 流量不经过后台 HTTP 服务。
-Ubuntu 可运行 ALL，也可拆成 CORE/GAME/P2P；后台镜像在 CentOS 和 Ubuntu 部署中共用。
+Ubuntu 可运行 ALL，也可拆成 CORE/GAME/P2P；所有角色复用同一后台镜像。
 
 `services/game/assets` 是构建输入，不能把这里直接当在线运行目录。实际部署配置和数据位于
 所选 `deploy/...` 目录的 `.env`、`runtime/` 中，或者 `.env` 指定的 `RUNTIME_ROOT`。
@@ -55,7 +52,7 @@ Ubuntu 可运行 ALL，也可拆成 CORE/GAME/P2P；后台镜像在 CentOS 和 U
 | 要改什么 | 应修改的目录 |
 |---|---|
 | Ubuntu 参数、启动、健康检查 | `services/game/runtime/ubuntu` |
-| 两个平台共用的初始化/月份表修复 | `services/game/assets/home/template/init` |
+| 初始化/月份表修复 | `services/game/assets/home/template/init` |
 | Ubuntu ABI 兼容与镜像依赖 | `services/game/docker/ubuntu` |
 | 管理后台 API、注册和更新业务 | `services/admin/backend/src` |
 | 后台和门户页面 | `services/admin/frontend/src` |
@@ -64,13 +61,13 @@ Ubuntu 可运行 ALL，也可拆成 CORE/GAME/P2P；后台镜像在 CentOS 和 U
 | 部署节点、端口、数据挂载 | `deploy/<系统>/<方式>` |
 | 来源与资源校验 | `metadata`，Ubuntu 兼容来源另见 `services/game/docker/ubuntu/compat-lock.json` |
 
-不要在两个平台之间复制后台源码或游戏资源；不要把旧镜像 legacy 补丁挂到当前自建镜像上。
+启动脚本直接以 Ubuntu 版本维护，不再维护旧平台生成或补丁覆盖流程。
 发行版本的托管脚本升级规则仍由 `services/game/runtime/ubuntu/releases.json` 管理，目录重排不能绕过用户脚本冲突检查。
 
 ## 入口与输出
 
 游戏构建上下文固定为 `services/game`；后台构建上下文固定为 `services/admin`，分别使用其中的 Dockerfile。
-不能把 `docker/ubuntu`、`docker/centos` 或 `admin/docker` 当成完整构建上下文，资源在它们的上级组件目录中。
+不能把 `docker/ubuntu` 或 `admin/docker` 当成完整构建上下文，资源在它们的上级组件目录中。
 构建命令见 [游戏组件](../services/game/README.md) 与 [后台组件](../services/admin/README.md)。
 
 前端产物为 `services/admin/frontend/dist/`，后端为 `services/admin/backend/target/`，登录器为自身 `bin/`、`obj/`。

@@ -1,5 +1,8 @@
 # Ubuntu 24.04 验收记录
 
+当前单平台清理验收见 [清理记录](cleanup-validation.md)。下面各节为较早版本的历史测试，不代表当前仍携带旧网关、旧库或提供旧平台。
+
+
 ## 整体启动完成提示增量验收
 
 Ubuntu 游戏容器在角色健康和当前频道“五国”连续三次检查通过后，向 Docker 日志打印一次
@@ -73,7 +76,7 @@ PVF、公钥、hook、网关配置和自定义每日脚本，检查原始容器�
 证据保存前脱敏；含临时密码的 state、实际 `.env`、私钥、运行数据、镜像 tar 不提交。
 
 CentOS 基线的初始化/API/后台重启、两个实际频道进程和端口稳定 300 秒通过，
-见 [CentOS 回归记录](../centos/validation/centos-baseline.json)。共享游戏资产、后台业务和默认部署未修改。
+见 [CentOS 回归记录](https://github.com/linux-lixin/dof/blob/1ded8a2/docs/centos/validation/centos-baseline.json)。共享游戏资产、后台业务和默认部署未修改。
 
 ## 集成时实际发现并修复
 

@@ -1,15 +1,12 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 killall -9 df_coserver_r
 rm -rf pid/*.pid
 
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -31,6 +28,6 @@ cp /tmp/coserver_server_config.tbl /home/neople/coserver/table/server_config.tbl
 rm -rf /tmp/coserver_server_config.tbl
 echo "starting coserver..."
 
-LD_PRELOAD=/home/template/init/libhook.so ./df_coserver_r server start
+DNF_GAME_PRELOAD=/home/template/init/libhook.so /opt/dnf/ubuntu/run-game ./df_coserver_r server start
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

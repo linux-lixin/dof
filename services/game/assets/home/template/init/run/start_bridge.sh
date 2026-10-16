@@ -1,3 +1,5 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 # 启动bridge服务
@@ -5,12 +7,7 @@ killall -9 df_bridge_r
 rm -rf pid/*.pid
 
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -25,7 +22,7 @@ cp /tmp/bridge.cfg /home/neople/bridge/cfg/server.cfg
 rm -rf /tmp/bridge.cfg
 echo "starting bridge..."
 # 使用默认的DP降低CPU占用
-LD_PRELOAD=/home/template/init/bridge_hook.so:/home/template/init/libhook.so ./df_bridge_r server start
+DNF_GAME_PRELOAD=/home/template/init/bridge_hook.so:/home/template/init/libhook.so /opt/dnf/ubuntu/run-game ./df_bridge_r server start
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null
 exit -1

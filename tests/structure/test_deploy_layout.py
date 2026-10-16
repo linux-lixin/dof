@@ -26,7 +26,7 @@ def config(folder, overrides=None):
 class DeploymentLayout(unittest.TestCase):
     def test_all_leaf_composes_have_docs_and_resolve_local_mounts(self):
         files=list(DEPLOY.rglob('compose.yaml'))
-        self.assertEqual(len(files),9)
+        self.assertEqual(len(files),5)
         for file in files:
             with self.subTest(file=file.relative_to(ROOT)):
                 self.assertTrue((file.parent/'README.md').is_file())
@@ -34,6 +34,9 @@ class DeploymentLayout(unittest.TestCase):
                 model=config(file.parent)
                 for name,service in model['services'].items():
                     self.assertNotIn('platform',service)
+                    self.assertFalse(service.get('privileged',False))
+                    self.assertNotIn('NET_ADMIN',service.get('cap_add',[]))
+                    self.assertFalse(any('/dev/net/tun' in str(d) for d in service.get('devices',[])))
                     for mount in service.get('volumes',[]):
                         if mount['type']=='bind':
                             source=Path(mount['source']).resolve()
@@ -56,11 +59,10 @@ class DeploymentLayout(unittest.TestCase):
                 self.assertEqual(Path(mount['source']).resolve(),(folder/'runtime'/service/'data').resolve())
                 if role=='P2P':
                     self.assertFalse(any('MYSQL' in k or 'PASSWORD' in k for k in spec['environment']))
-        self.assertEqual(config(DEPLOY/'centos/all')['name'],'dnf-local-images')
 
     def test_runtime_override_reuses_existing_data(self):
         with tempfile.TemporaryDirectory() as old:
-            for relative in ('ubuntu/all','centos/all','ubuntu/split/game','ubuntu/split/core','ubuntu/split/p2p','ubuntu/split/admin','centos/split/admin'):
+            for relative in ('ubuntu/all','ubuntu/split/game','ubuntu/split/core','ubuntu/split/p2p','ubuntu/split/admin'):
                 model=config(DEPLOY/relative,{'RUNTIME_ROOT':Path(old).as_posix()})
                 for service in model['services'].values():
                     for mount in service.get('volumes',[]):
@@ -68,7 +70,7 @@ class DeploymentLayout(unittest.TestCase):
                             self.assertEqual(os.path.commonpath((Path(old).resolve(),Path(mount['source']).resolve())),str(Path(old).resolve()))
 
     def test_independent_admin_requires_no_game_configuration(self):
-        for platform in ('ubuntu','centos'):
+        for platform in ('ubuntu',):
             model=config(DEPLOY/platform/'split/admin')
             self.assertEqual(set(model['services']),{'admin'})
             admin=model['services']['admin']

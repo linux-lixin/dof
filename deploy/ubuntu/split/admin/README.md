@@ -17,5 +17,5 @@ docker compose logs -f --tail 100 admin
 把 `publickey.pem` 安全复制到所有游戏频道节点的 `/data/publickey.pem` 对应宿主机目录，重启游戏节点。
 `private.key` 仅保留在后台；已有部署保留原密钥和 `.db_initialized`，不要把新空目录当作原后台数据。
 管理员初始化 SQL 位于 [共享示例](../../../shared/bootstrap-admin.sql.example)，账号 `admin`，密码由你设置。
-后台地址、注册与更新设置见 [后台和客户端配置](../../../../docs/centos/deployment.md#12-开放端口并配置后台)。
+后台地址、注册与更新设置见 [后台和客户端配置](../../../../docs/launcher/deployment.md#12-开放端口并配置后台)。
 独立后台没有跨主机 `depends_on`；启动顺序由操作者确认。

@@ -1,4 +1,4 @@
-"""Hash-checked managed script updates; never take ownership of CentOS volumes."""
+"""Hash-checked managed script updates; never take ownership of unmarked volumes."""
 import hashlib
 import json
 from pathlib import Path

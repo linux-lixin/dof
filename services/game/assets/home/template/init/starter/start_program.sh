@@ -1,55 +1,37 @@
 #!/bin/bash
-
-# 启动Tailscale
-echo "starting tailscale ..."
-supervisorctl restart tailscaled
-sleep 2
-supervisorctl restart tailscale
-# 启动Netbird
-echo "starting netbird ..."
-supervisorctl restart netbird
-sleep 2
+set -e
+source /opt/dnf/ubuntu/wait.sh
 # 启动monitor_ip
 echo "starting monitor_ip ..."
-supervisorctl restart monitor_ip:*
+supervisorctl -c /etc/supervisord.conf restart monitor_ip:*
 # 这里会一直等PUBLIC_IP设置完成
-while true; do
-  public_ip=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
-  if [ -n "$public_ip" ]; then
-      echo "PUBLIC_IP: $public_ip"
-      break
-  fi
-  echo "wait PUBLIC_IP..."
-  sleep 2
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 
-# 启动CORE[如果配置了MAIN_BRIDGE_IP则不启动bridge、Gate以及channel]只有CORE需要初始化数据库
+# 启动CORE[如果配置了MAIN_BRIDGE_IP则不启动bridge以及channel]只有CORE需要初始化数据库
 if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
   echo "starting mysql_proxy ..."
-  supervisorctl restart mysql_proxy:main_mysql_proxy
-  supervisorctl restart mysql_proxy:sg_mysql_proxy
+  supervisorctl -c /etc/supervisord.conf restart mysql_proxy:main_mysql_proxy
+  supervisorctl -c /etc/supervisord.conf restart mysql_proxy:sg_mysql_proxy
   echo "starting core ..."
-  supervisorctl restart core:relay_config_server
-  supervisorctl restart core:daily_job
-  supervisorctl restart core:monitor
-  supervisorctl restart core:manager
+  supervisorctl -c /etc/supervisord.conf restart core:relay_config_server
+  supervisorctl -c /etc/supervisord.conf restart core:daily_job
+  supervisorctl -c /etc/supervisord.conf restart core:monitor
+  supervisorctl -c /etc/supervisord.conf restart core:manager
   if [ -z "$MAIN_BRIDGE_IP" ] || [ "$MAIN_BRIDGE_IP" = "127.0.0.1" ]; then
     echo "starting bridge ..."
-    supervisorctl restart core:bridge
-    echo "starting tongyi_gate ..."
-    supervisorctl restart tongyi_gate
+    supervisorctl -c /etc/supervisord.conf restart core:bridge
     echo "starting channel ..."
-    supervisorctl restart core:channel
+    supervisorctl -c /etc/supervisord.conf restart core:channel
   fi
-  supervisorctl restart core:dbmw_guild
-  supervisorctl restart core:dbmw_mnt
-  supervisorctl restart core:dbmw_stat
-  supervisorctl restart core:auction
-  supervisorctl restart core:point
-  supervisorctl restart core:guild
-  supervisorctl restart core:statics
-  supervisorctl restart core:coserver
-  supervisorctl restart core:community
+  supervisorctl -c /etc/supervisord.conf restart core:dbmw_guild
+  supervisorctl -c /etc/supervisord.conf restart core:dbmw_mnt
+  supervisorctl -c /etc/supervisord.conf restart core:dbmw_stat
+  supervisorctl -c /etc/supervisord.conf restart core:auction
+  supervisorctl -c /etc/supervisord.conf restart core:point
+  supervisorctl -c /etc/supervisord.conf restart core:guild
+  supervisorctl -c /etc/supervisord.conf restart core:statics
+  supervisorctl -c /etc/supervisord.conf restart core:coserver
+  supervisorctl -c /etc/supervisord.conf restart core:community
 fi
 
 # 启动P2P
@@ -57,7 +39,7 @@ if [ "$SERVER_TYPE" = "P2P" ] || [ "$SERVER_TYPE" = "ALL" ]; then
   # P2P服务必须配置P2P_RELAY_INDEX
   if [ -n "$P2P_RELAY_INDEX" ]; then
     echo "starting p2p[stun & relay] ..."
-    supervisorctl restart p2p:*
+    supervisorctl -c /etc/supervisord.conf restart p2p:*
   else
     echo "WARNING: empty P2P_RELAY_INDEX"
   fi
@@ -66,15 +48,15 @@ fi
 # 启动GAME
 if [ "$SERVER_TYPE" = "GAME" ] || [ "$SERVER_TYPE" = "ALL" ]; then
   echo "starting security system ..."
-  supervisorctl restart tss:gunnersvr
-  supervisorctl restart tss:zergsvr_secagent
-  supervisorctl restart tss:zergsvr
+  supervisorctl -c /etc/supervisord.conf restart tss:gunnersvr
+  supervisorctl -c /etc/supervisord.conf restart tss:zergsvr_secagent
+  supervisorctl -c /etc/supervisord.conf restart tss:zergsvr
   echo "starting mysql_proxy ..."
-  supervisorctl restart mysql_proxy:main_mysql_proxy
-  supervisorctl restart mysql_proxy:sg_mysql_proxy
+  supervisorctl -c /etc/supervisord.conf restart mysql_proxy:main_mysql_proxy
+  supervisorctl -c /etc/supervisord.conf restart mysql_proxy:sg_mysql_proxy
   sleep 2
   echo "starting game ..."
-  supervisorctl restart game:*
+  supervisorctl -c /etc/supervisord.conf restart game:*
 fi
 
 # 退出前sleep 5秒

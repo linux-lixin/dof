@@ -37,6 +37,7 @@ do
           source /home/template/init/init_sql/$db_name.sql;
           flush PRIVILEGES;
 EOF
+[ "$?" -eq 0 ] || exit 1
       else
           echo "main db: can not connect to mysql service $CUR_MAIN_DB_HOST:$CUR_MAIN_DB_PORT"
           echo $check_result
@@ -53,6 +54,7 @@ flush privileges;
 grant all privileges on *.* to 'game'@'$CUR_MAIN_DB_GAME_ALLOW_IP' identified by '$DNF_DB_GAME_PASSWORD';
 flush privileges;
 EOF
+[ "$?" -eq 0 ] || exit 1
 echo "main db: flush privileges done."
 # 重置当前大区的主数据库d_taiwan.db_connect表配置
 echo "main_db: reset db_connect config, server_group is $SERVER_GROUP"
@@ -74,9 +76,11 @@ update db_connect set db_ip="127.0.0.1", db_port="3306", db_name="taiwan_${SERVE
 update db_connect set db_ip="127.0.0.1", db_port="3306", db_name="taiwan_se_event", db_passwd="$DEC_GAME_PWD" where db_server_group=$SERVER_GROUP and db_type=13;
 update db_connect set db_ip="127.0.0.1", db_port="3306", db_name="taiwan_billing", db_passwd="$DEC_GAME_PWD" where db_server_group=$SERVER_GROUP and db_type=14;
 EOF
+[ "$?" -eq 0 ] || exit 1
 # 测试并查询数据库连接设置
 echo "main_db: show db_connect config, server_group is $SERVER_GROUP"
 mysql -h $CUR_MAIN_DB_HOST -P $CUR_MAIN_DB_PORT -u game -p$DNF_DB_GAME_PASSWORD <<EOF
-select db_name, db_ip, db_port, db_passwd from d_taiwan.db_connect where db_server_group=$SERVER_GROUP;
+select db_name, db_ip, db_port from d_taiwan.db_connect where db_server_group=$SERVER_GROUP;
 EOF
+[ "$?" -eq 0 ] || exit 1
 echo "main_db: init server group-$SERVER_GROUP($SERVER_GROUP_DB) done."

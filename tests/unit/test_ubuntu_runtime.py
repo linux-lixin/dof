@@ -57,14 +57,10 @@ class UbuntuRuntime(unittest.TestCase):
             notice.check_countries(root,{'SERVER_TYPE':'CORE'})
 
     def test_onlyguo_runtime_has_no_legacy_gateway(self):
-        prepare=module('prepare_image')
         base=ROOT/'services/game/assets'
-        entry,init,starter=prepare.remove_legacy_gateway(
-            (base/'docker-entrypoint.sh').read_text(encoding='utf8'),
-            (base/'home/template/init/init.sh').read_text(encoding='utf8'),
-            (base/'home/template/init/starter/start_program.sh').read_text(encoding='utf8'))
-        # Ubuntu only uses the legacy entry after address monitor initialization.
-        entry=entry[entry.index('# 清除MONITOR_PUBLIC_IP文件'):]
+        entry=(ADAPTER/'bootstrap.sh').read_text(encoding='utf8')
+        init=(base/'home/template/init/init.sh').read_text(encoding='utf8')
+        starter=(base/'home/template/init/starter/start_program.sh').read_text(encoding='utf8')
         for text in (entry,init,starter):
             for obsolete in ('tongyi_gate','DnfGateServer','Config.ini','privatekey.pem','GM_PASSWORD'):
                 self.assertNotIn(obsolete,text)
@@ -99,9 +95,8 @@ class UbuntuRuntime(unittest.TestCase):
             self.assertEqual(path.read_bytes(),b'user supplied pvf')
 
     def test_ubuntu_init_cannot_restore_bundled_pvf(self):
-        prepare=module('prepare_image')
         source=(ROOT/'services/game/assets/home/template/init/init.sh').read_text(encoding='utf8')
-        adapted=prepare.require_user_pvf(source)
+        adapted=source
         self.assertNotIn('Script.tgz',adapted)
         self.assertNotIn('cp /home/template/init/Script.pvf',adapted)
         self.assertIn('publickey.pem',adapted)
@@ -214,11 +209,11 @@ class UbuntuRuntime(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td); data = root/'data'; source = root/'source'
             (data/'run').mkdir(parents=True); (source/'run').mkdir(parents=True)
-            (data/'run/start.sh').write_text('old centos')
+            (data/'run/start.sh').write_text('unmarked runtime')
             (source/'run/start.sh').write_text('ubuntu')
             with self.assertRaisesRegex(ValueError, 'unmarked'):
                 manager.synchronize(data, source, {})
-            self.assertEqual((data/'run/start.sh').read_text(), 'old centos')
+            self.assertEqual((data/'run/start.sh').read_text(), 'unmarked runtime')
 
     def test_managed_upgrade_and_user_conflict_are_transactional(self):
         manager = module('managed')

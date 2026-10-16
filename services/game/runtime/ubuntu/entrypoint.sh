@@ -15,4 +15,4 @@ if [ "$SERVER_TYPE" != P2P ]; then
   python3 /opt/dnf/ubuntu/database_preflight.py
 fi
 python3 /opt/dnf/ubuntu/network_config.py
-exec bash /opt/dnf/ubuntu/generated-entrypoint.sh
+exec bash /opt/dnf/ubuntu/bootstrap.sh

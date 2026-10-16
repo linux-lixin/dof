@@ -30,10 +30,6 @@ fi
 # 只有SERVER_TYPE为CORE/ALL时才初始化数据库
 if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
 
-  # 旧版本启用DofSlim需要先删除start_bridge.sh和start_channel.sh
-  [ -f "/data/run/start_bridge.sh" ] && ! grep -q -e "^LD_PRELOAD=.*/home/template/init/bridge_hook.so" "/data/run/start_bridge.sh" && rm -f "/data/run/start_bridge.sh"
-  [ -f "/data/run/start_channel.sh" ] && ! grep -q -e "^LD_PRELOAD=.*/home/template/init/channel_hook.so" "/data/run/start_channel.sh" && rm -f "/data/run/start_channel.sh"
-
   # 解压init_sql
   if [ ! -d "/home/template/init/init_sql" ];then
     mkdir -p /home/template/init/init_sql/
@@ -45,13 +41,6 @@ if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
   # Correct the known bundled log-query seed before any first import.
   bash /home/template/init/prepare_login_seed.sh || exit 1
 
-  # 初始化本地数据库
-  bash /home/template/init/init_local_db.sh
-  error_code=$?
-  if [ ! $error_code -eq 0 ]; then
-    echo "init local db failed!!!!!"
-    exit -1
-  fi
   # 初始化主数据库
   bash /home/template/init/init_main_db.sh
   error_code=$?
@@ -65,15 +54,6 @@ if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
   if [ ! $error_code -eq 0 ]; then
     echo "init server group db failed!!!!!"
     exit -1
-  fi
-
-  # 判断Config.ini文件是否初始化过
-  if [ ! -f "/data/Config.ini" ];then
-    # 拷贝版本文件到持久化目录
-    cp /home/template/init/Config.ini /data/
-    echo "init Config.ini success"
-  else
-    echo "Config.ini have already inited, do nothing!"
   fi
 
   # 判断每日脚本是否初始化
@@ -105,21 +85,6 @@ if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
     fi
   done
 
-  # 入口在其他大区CORE服务,没有bridge服务无需启动gate,无需拷贝文件
-  if [ -z "$MAIN_BRIDGE_IP" ] || [ "$MAIN_BRIDGE_IP" = "127.0.0.1" ]; then 
-    # 判断privatekey.pem文件是否初始化过,core服务不需要publickey.pem
-    if [ ! -f "/data/privatekey.pem" ];then
-      # 拷贝版本文件到持久化目录
-      cp /home/template/init/privatekey.pem /data/
-      echo "init privatekey.pem success"
-    else
-      echo "privatekey.pem have already inited, do nothing!"
-    fi
-    
-    # 拷贝gate服务supervisor配置文件
-    cp /etc/supervisor/conf.d/gate.conf.template /etc/supervisor/conf.d/gate.conf
-  fi
-
   # 拷贝core服务supervisor配置文件
   cp /etc/supervisor/conf.d/core.conf.template /etc/supervisor/conf.d/core.conf
   # 拷贝mysql_proxy服务supervisor配置文件
@@ -129,14 +94,7 @@ fi
 
 # 只有SERVER_TYPE为GAME/ALL时才初始化Script.pvf以及df_game_r
 if [ "$SERVER_TYPE" = "GAME" ] || [ "$SERVER_TYPE" = "ALL" ]; then
-  if [ ! -f "/data/Script.pvf" ];then
-    tar -zxvf /home/template/init/Script.tgz -C /home/template/init/
-    # 拷贝版本文件到持久化目录
-    cp /home/template/init/Script.pvf /data/
-    echo "init Script.pvf success"
-  else
-    echo "Script.pvf have already inited, do nothing!"
-  fi
+  python3 /opt/dnf/ubuntu/pvf.py || exit 1
 
   # 判断publickey.pem文件是否初始化过
   if [ ! -f "/data/publickey.pem" ];then

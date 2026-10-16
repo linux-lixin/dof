@@ -1,3 +1,5 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 old_pid=$(pgrep -f "df_dbmw_r server_02 start")
@@ -11,12 +13,7 @@ fi
 rm -rf pid/*.pid
 
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -39,6 +36,6 @@ cp /tmp/dbmw_guild_server_config.tbl /home/neople/dbmw_guild/table/server_config
 rm -rf /tmp/dbmw_guild_server_config.tbl
 echo "starting dbmw_guild..."
 
-LD_PRELOAD=/home/template/init/libhook.so ./df_dbmw_r server_02 start
+DNF_GAME_PRELOAD=/home/template/init/libhook.so /opt/dnf/ubuntu/run-game ./df_dbmw_r server_02 start
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

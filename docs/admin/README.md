@@ -1,7 +1,6 @@
 # 后台开发与使用
 
-源码入口：[services/admin](../../services/admin/README.md)。日常部署按 [Ubuntu](../../deploy/ubuntu/all/README.md)
-或 [CentOS](../centos/deployment.md) 文档操作；后台生成密钥、初始化标记和现有数据库保护规则不变。
+源码入口：[services/admin](../../services/admin/README.md)。日常部署按 [Ubuntu 完整流程](../../deploy/ubuntu/all/README.md) 操作；后台生成密钥、初始化标记和现有数据库保护规则不变。
 
 | 内容 | 位置 |
 |---|---|

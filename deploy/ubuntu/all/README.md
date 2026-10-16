@@ -1,6 +1,6 @@
 # Ubuntu 24.04 整体部署（ALL + 后台）
 
-Ubuntu 是可选版本，原 `deploy/centos/all` 的 CentOS 默认部署不变。
+本项目仅提供 Ubuntu 游戏镜像。
 仅支持 amd64 和外部 MySQL；本轮验收基线为 MySQL 5.6.51。后台与登录器沿用现有版本。
 实际测试范围和未验收项见 [Ubuntu 验收报告](../../../docs/ubuntu/validation.md)，
 依赖来源见 [兼容库审计](../../../docs/ubuntu/compatibility.md)。
@@ -49,7 +49,7 @@ Ubuntu 使用 onlyGuo 后台登录流程，已移除旧统一登录器网关 `to
 ALL/CORE 使用的数据库 root 需要全局权限及 GRANT OPTION。按实际容器出口 IP 授权，
 不要把 `127.0.0.1` 当作容器可达的宿主机数据库地址。同机原生 MySQL 使用宿主机内网 IP。
 MySQL 监听、防火墙、用户 host 授权必须允许所有游戏节点与后台节点连接。
-不要同时让 CentOS 和 Ubuntu 测试栈初始化同一个业务数据库。
+不要让两套独立测试栈同时初始化同一个业务数据库。
 
 `MYSQL_INIT_SSL_MODE=disabled` 为旧数据库 CLI 关闭 TLS；`auto` 保留 MariaDB 客户端默认行为。
 后台 JDBC 的 `useSSL=false` 是独立选项。这里使用 MariaDB **客户端**连接外部 MySQL，镜像中没有数据库服务端。
@@ -66,7 +66,7 @@ docker compose run --rm --no-deps --entrypoint bash game -c \
 
 ## 2. ALL 单机启动
 
-始终使用新的 `deploy/ubuntu/all/runtime/`，不要复制整个旧 CentOS `/data` 进来。
+始终使用新的 `deploy/ubuntu/all/runtime/`，不要复制未标记的旧运行目录进来。
 ALL/GAME 首次启动前必须手动放置与客户端匹配的 `Script.pvf`，文件名大小写必须一致。
 镜像不再自动提供默认 PVF；缺少文件、文件为空或误建成目录时，会在连接和修改数据库之前退出。
 CORE/P2P 不需要该文件。现有数据目录中的 PVF 会保留，不自动覆盖。
@@ -203,7 +203,7 @@ curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 ```
 
 确认返回的“服务器地址”为自己的玩家入口，且玩家可访问后台 API 和[角色端口表](../../../docs/ubuntu/ports.md)列出的游戏端口。
-完整的后台配置、客户端包、登录器配置和更新发布步骤见 [完整部署文档第 12–15 步](../../../docs/centos/deployment.md#12-开放端口并配置后台)。
+完整的后台配置、客户端包、登录器配置和更新发布步骤见 [完整部署文档第 12–15 步](../../../docs/launcher/deployment.md#12-开放端口并配置后台)。
 本轮没有验证真实 Windows 客户端注册、登录、进副本、组队与自动更新下载。
 
 

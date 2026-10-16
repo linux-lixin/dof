@@ -1,3 +1,5 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 killall -9 df_stun_r
@@ -11,11 +13,11 @@ sed -i "s/SERVER_GROUP/$SERVER_GROUP/g" /tmp/stun.cfg
 cp /tmp/stun.cfg /home/neople/stun/cfg/server.cfg
 # 清理cfg文件
 rm -rf /tmp/stun.cfg
-echo "compiling stun_hook.so..."
-gcc -shared -fPIC -o stun_hook.so stun_hook.c -ldl -Wall -O2
+
+
 chmod +x stun_hook.so
 echo "starting stun..."
-LD_PRELOAD=/home/neople/stun/stun_hook.so ./df_stun_r start
+DNF_GAME_PRELOAD=/home/neople/stun/stun_hook.so /opt/dnf/ubuntu/run-game ./df_stun_r start
 netstat -tulpn | grep stun
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

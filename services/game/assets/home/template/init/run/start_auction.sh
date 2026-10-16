@@ -1,15 +1,12 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 killall -9 df_auction_r
 rm -rf pid/*.pid
 
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -25,6 +22,6 @@ cp /tmp/auction.cfg /home/neople/auction/cfg/server.cfg
 rm -rf /tmp/auction.cfg
 echo "starting auction..."
 
-./df_auction_r ./cfg/server.cfg start ./df_auction_r
+/opt/dnf/ubuntu/run-game ./df_auction_r ./cfg/server.cfg start ./df_auction_r
 sleep 5
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

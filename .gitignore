@@ -31,7 +31,6 @@
 *.code-workspace
 
 # Public upstream template keys required by the game image (not production secrets)
-!/services/game/assets/home/template/init/privatekey.pem
 !/services/game/assets/home/template/init/publickey.pem
 !/services/game/assets/home/template/neople/game/HSPub.key
 

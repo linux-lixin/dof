@@ -5,7 +5,7 @@
 | 目录 | 范围 | 环境 |
 |---|---|---|
 | `unit/` | 启动、配置、SQL 修复的离线回归 | Python、Bash；Windows 可用 Git for Windows |
-| `structure/` | 资源哈希、构建输入、文档链接、9 个部署模板 | Python、Git、Docker Compose；不启动服务 |
+| `structure/` | 资源哈希、构建输入、文档链接、5 个部署模板 | Python、Git、Docker Compose；不启动服务 |
 | `integration/` | 真实数据库及镜像启动验收 | Docker、被测镜像和固定 MySQL 测试镜像 |
 
 ## 离线和结构检查
@@ -19,25 +19,17 @@ python -m unittest discover -s tests/structure -p "test_*.py"
 
 ```sh
 python tests/integration/test_mysql56_fixes.py
-python tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
-python tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
+python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
+python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
 ```
 
 每次镜像验收使用独立网络、卷、容器名称和测试凭据；测试 MySQL 仅模拟外部数据库。完成后按对应状态文件清理：
 
 ```sh
-python tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-all-state.json --cleanup
-python tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-split-state.json --cleanup
-```
-
-CentOS 保留默认测试参数：
-
-```sh
-python tests/integration/test_built_images.py
-python tests/integration/verify_game_ready.py
-python tests/integration/test_built_images.py --cleanup
+python tests/integration/test_built_images.py --state-file dist/ubuntu-all-state.json --cleanup
+python tests/integration/test_built_images.py --state-file dist/ubuntu-split-state.json --cleanup
 ```
 
 `dist/` 中的状态文件和原始日志可能包含测试凭据，禁止提交。清理仅针对状态文件记录的测试资源；不要用于生产实例。自动化通过不代表真实 Windows 客户端登录、进图、组队或更新已经验收。
 
-初始化测试共用 `deploy/shared/bootstrap-admin.sql.example`。旧部署覆盖脚本的副本同步要求见[贡献说明](../CONTRIBUTING.md)。
+初始化测试共用 `deploy/shared/bootstrap-admin.sql.example`。维护要求见[贡献说明](../CONTRIBUTING.md)。

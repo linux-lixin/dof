@@ -1,3 +1,5 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 # 获得频道传入参数
@@ -8,45 +10,13 @@ channel_name="$SERVER_GROUP_NAME$channel_no"
 echo "channel_name is $channel_name"
 echo "prepare to start ch.$channel_no, process_sequence is $process_sequence"
 # 等待bridge启动,最多等待30秒
-counter=0
-while [ $counter -lt 30 ]
-do
-  if nc -zv $MAIN_BRIDGE_IP 7000 2>&1 | grep succeeded >/dev/null ; then
-    echo "bridge 7000 port ready"
-    break
-  fi
-  sleep 2
-  ((counter++))
-done
+wait_tcp "$MAIN_BRIDGE_IP" 7000 core-service || exit 1
 # 等待monitor启动,最多等待30秒
-counter=0
-while [ $counter -lt 30 ]
-do
-  if nc -zv $CORE_PUBLIC_IP "3${SERVER_GROUP}303" 2>&1 | grep succeeded >/dev/null ; then
-    echo "monitor $CORE_PUBLIC_IP:3${SERVER_GROUP}303 port ready"
-    break
-  fi
-  sleep 2
-  ((counter++))
-done
+wait_tcp "$CORE_PUBLIC_IP" "3${SERVER_GROUP}303" core-service || exit 1
 # 等待guild启动,最多等待30秒
-counter=0
-while [ $counter -lt 30 ]
-do
-  if nc -zv $CORE_PUBLIC_IP "3${SERVER_GROUP}403" 2>&1 | grep succeeded >/dev/null ; then
-    echo "guild $CORE_PUBLIC_IP:3${SERVER_GROUP}403 port ready"
-    break
-  fi
-  sleep 2
-  ((counter++))
-done
+wait_tcp "$CORE_PUBLIC_IP" "3${SERVER_GROUP}403" core-service || exit 1
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 echo "MONITOR_PUBLIC_IP is $MONITOR_PUBLIC_IP"
@@ -118,7 +88,7 @@ else
         echo "✅ Patch 成功！函数已被强制返回 true"
         # 验证 patch 结果
         echo "📜 Patch 后反汇编:"
-        sync
+        timeout 30 sync df_game_r || exit 1
         objdump -d --start-address=$START_ADDR_HEX --stop-address=$END_ADDR_HEX df_game_r | head -30
     else
         echo "❌ Patch 失败"
@@ -126,7 +96,8 @@ else
 fi
 
 # 加载DP并启动[确保DP路径已经被正确映射]
-LD_PRELOAD=/dp2/libhook.so ./df_game_r $channel_name start
+python3 /opt/dnf/ubuntu/channel_logs.py "$channel_name" || exit 1
+DNF_GAME_PRELOAD=/dp2/libhook.so /opt/dnf/ubuntu/run-game ./df_game_r $channel_name start
 sleep 5
 pid=$(cat pid/$channel_name.pid 2>/dev/null || true)
 cat pid/$channel_name.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

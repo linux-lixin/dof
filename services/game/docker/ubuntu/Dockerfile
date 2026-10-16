@@ -24,11 +24,6 @@ RUN echo '99b119f8e21e94f1dfd6d49fbeed29a70df1544896e76cd456f25e397b07d476  /tmp
  && cd /tmp/geoip && autoreconf -fi \
  && CC='gcc -m32' ./configure --host=i686-linux-gnu --prefix=/opt/dnf/compat/i386 --disable-static \
  && make -j2 && make install
-COPY docker/ubuntu/openssl-0.9.8zh.tar.gz /tmp/openssl.tar.gz
-COPY docker/ubuntu/build-openssl.sh /tmp/build-openssl.sh
-RUN echo 'f1d9f3ed1b85a82ecf80d0e2d389e1fda3fca9a4dba0bf07adbf231e1a5e2fd6  /tmp/openssl.tar.gz' | sha256sum -c - \
- && mkdir /tmp/openssl && tar -xzf /tmp/openssl.tar.gz -C /tmp/openssl --strip-components=1 \
- && sed -i 's/\r$//' /tmp/build-openssl.sh && sh /tmp/build-openssl.sh
 COPY docker/ubuntu/audit/geoip-probe.c /tmp/geoip-probe.c
 RUN gcc -m32 -I/tmp/geoip/libGeoIP -L/opt/dnf/compat/i386/lib -o /tmp/geoip-probe /tmp/geoip-probe.c -lGeoIP
 COPY docker/ubuntu/legacy-shm.c /tmp/legacy-shm.c
@@ -52,19 +47,12 @@ COPY --from=hooks /tmp/shm-probe /opt/dnf/audit/shm-probe
 COPY docker/ubuntu/SHM-COMPAT-LICENSE /opt/dnf/licenses/SHM-COMPAT-LICENSE
 COPY docker/ubuntu/GeoIP.dat /opt/dnf/compat/i386/share/GeoIP/GeoIP.dat
 COPY docker/ubuntu/GEOIP-DATA-README /opt/dnf/licenses/GeoIP-DATA-README
-COPY --from=hooks /tmp/openssl/libssl.so.6 /tmp/openssl/libcrypto.so.6 /opt/dnf/compat/amd64/
-COPY --from=hooks /tmp/openssl/LICENSE /opt/dnf/licenses/OpenSSL-0.9.8-LICENSE
-COPY docker/ubuntu/libmysqlclient.so.15.0.0 /opt/dnf/compat/amd64/libmysqlclient.so.15
-COPY docker/ubuntu/MYSQL-COPYING /opt/dnf/licenses/MySQL-COPYING
 COPY docker/ubuntu/compat-lock.json /opt/dnf/audit/compat-lock.json
 COPY docker/ubuntu/run-game /opt/dnf/ubuntu/run-game
 COPY docker/ubuntu/audit/elf-audit.py /opt/dnf/audit/elf-audit.py
-RUN mkdir -p /opt/dnf/compat/i386 /opt/dnf/compat/amd64 \
- && rm -rf /home/template/init/netbird /home/template/init/tailscale \
- && rm -rf /home/template/root \
+RUN mkdir -p /opt/dnf/compat/i386 \
  && cp /home/template/neople/game/libnxencryption.so /opt/dnf/compat/i386/ \
  && echo 'cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76  /opt/dnf/compat/i386/libnxencryption.so' | sha256sum -c - \
- && echo 'c9fc03966602b5072775cfba906a141565e48c9baf1c531db6669fcc5695de0f  /opt/dnf/compat/amd64/libmysqlclient.so.15' | sha256sum -c - \
  && echo '58fcdeaac15e222a744b27333a776a2b91dc493d212acbe971ba6b987265a73c  /opt/dnf/compat/i386/share/GeoIP/GeoIP.dat' | sha256sum -c - \
  && find /home/template -type f -name '*.sh' -exec sed -i 's/\r$//' {} + \
  && sed -i 's/\r$//' /opt/dnf/ubuntu/run-game \
@@ -79,7 +67,6 @@ RUN mkdir -p /opt/dnf/compat/i386 /opt/dnf/compat/amd64 \
 
 FROM game AS final
 COPY runtime/ubuntu/ /opt/dnf/ubuntu/
-COPY assets/docker-entrypoint.sh /opt/dnf/ubuntu/legacy-entrypoint.sh
 RUN python3 /opt/dnf/ubuntu/prepare_image.py \
  && python3 /opt/dnf/ubuntu/tss_config.py
 WORKDIR /root

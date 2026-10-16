@@ -21,8 +21,6 @@ Dockerfile text eol=lf
 "/services/game/assets/home/template/init/df_game_r" binary
 "/services/game/assets/home/template/init/init_sql.tgz" binary
 "/services/game/assets/home/template/init/libhook.so" binary
-"/services/game/assets/home/template/init/mysql_proxy/forward" binary
-"/services/game/assets/home/template/init/privatekey.pem" binary
 "/services/game/assets/home/template/init/publickey.pem" binary
 "/services/game/assets/home/template/neople/auction/AvatarColorVariation.etc" binary
 "/services/game/assets/home/template/neople/auction/df_auction_r" binary
@@ -410,7 +408,3 @@ Dockerfile text eol=lf
 "/services/game/assets/home/template/neople/secsvr/zergsvr/zergsvr" binary
 "/services/game/assets/home/template/neople/statics/df_statics_r" binary
 "/services/game/assets/home/template/neople/stun/df_stun_r" binary
-"/services/game/assets/home/template/root/DnfGateServer" binary
-"/services/game/assets/usr/bin/netbird" binary
-"/services/game/assets/usr/bin/tailscale" binary
-"/services/game/assets/usr/bin/tailscaled" binary

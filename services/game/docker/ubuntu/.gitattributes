@@ -4,9 +4,7 @@ run-game text eol=lf
 *.tar.xz binary
 *.dsc binary
 GeoIP.dat binary
-libmysqlclient.so.15.0.0 binary
 GEOIP-DATA-README binary
-MYSQL-COPYING binary
 GEOIP-COPYRIGHT text eol=lf
 SHM-COMPAT-LICENSE text eol=lf
 *.tsv text eol=lf

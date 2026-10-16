@@ -1,21 +1,16 @@
 # 文档索引
 
-部署目录选择见 [部署导航](../deploy/README.md)，已有用户先看 [目录迁移](../deploy/MIGRATION.md)。
-项目全貌见 [架构与目录](architecture.md)，开发流程见 [CONTRIBUTING](../CONTRIBUTING.md)。
-
-| 系统/范围 | 文档 |
+| 需求 | 文档 |
 |---|---|
-| 后台开发及业务入口 | [后台文档](admin/README.md) |
-| Windows 登录器 | [构建与使用](launcher/README.md) |
-| 测试与工具 | [tests](../tests/README.md)、[scripts](../scripts/README.md)、[metadata](../metadata/README.md) |
-| 本轮目录整理验证 | [构建、文件核对与启动回归](project-layout-validation.md) |
-| Ubuntu 整体部署 | [从 Git、构建到启动](../deploy/ubuntu/all/README.md) |
-| Ubuntu 单独部署 | [CORE / GAME / P2P / 后台](../deploy/ubuntu/split/README.md) |
-| Ubuntu 构建与运维 | [平台入口](../deploy/ubuntu/README.md) |
-| Ubuntu 依赖、端口、验证 | [兼容性](ubuntu/compatibility.md)、[端口](ubuntu/ports.md)、[验收记录](ubuntu/validation.md) |
-| CentOS 整体部署 | [完整流程](centos/deployment.md)、[镜像验收](centos/validation.md) |
-| CentOS 旧镜像维护 | [外置 MySQL](centos/legacy/external-mysql.md)、[内置 MySQL](centos/legacy/bundled-mysql.md) |
-| 共同背景 | [兼容性分析](history/compatibility-audit.md)、[早期修复记录](history/deployment-fixes-2026-10-15.md) |
+| Ubuntu 单机完整流程 | [拉取、构建、外置 MySQL、启动](../deploy/ubuntu/all/README.md) |
+| 跨主机分角色部署 | [CORE / GAME / P2P / 后台](../deploy/ubuntu/split/README.md) |
+| 所有部署入口 | [部署导航](../deploy/README.md) |
+| 已有数据与升级 | [迁移说明](../deploy/MIGRATION.md) |
+| 后台开发 | [后台文档](admin/README.md) |
+| 登录器与自动更新 | [客户端配置](launcher/deployment.md)、[工程说明](launcher/README.md) |
+| Ubuntu 依赖与端口 | [兼容说明](ubuntu/compatibility.md)、[端口表](ubuntu/ports.md) |
+| 当前验证范围 | [Ubuntu 验收](ubuntu/validation.md) |
+| 源码和开发 | [项目结构](architecture.md)、[贡献说明](../CONTRIBUTING.md) |
+| 测试、工具、来源 | [tests](../tests/README.md)、[scripts](../scripts/README.md)、[metadata](../metadata/README.md) |
 
-`ubuntu/validation/`、`centos/validation/` 保留各自历史测试报告。历史报告中的提交与镜像 ID 对应测试时版本，
-目录整理不代表重新执行整套游戏运行验收。真实 Windows 客户端体验尚未完成端到端验收。
+`history/`、`admin/upstream/` 和旧 JSON 审计记录只作为历史依据保留。历史记录里的平台、网关、库或镜像 ID 不代表当前还支持这些功能；旧版本完整文件可通过 Git 历史查看。当前仅提供 Ubuntu 部署，不提供隧道服务。

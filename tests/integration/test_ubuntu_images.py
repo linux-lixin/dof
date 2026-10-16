@@ -102,6 +102,13 @@ def main(options):
                          'cat /etc/os-release; for p in python2 python2.7 mysqld mariadbd netbird tailscale tailscaled; do command -v "$p" && exit 1; done; '
                          'test -z "$(find /home/template /opt/dnf -type f \\( -name netbird -o -name tailscale -o -name tailscaled -o -name mysqld \\) -print)"').stdout
         assert 'VERSION_ID="24.04"' in inventory
+        absent_paths=('/home/template/init/netbird','/home/template/init/tailscale',
+                      '/home/template/root','/home/template/init/init_local_db.sh',
+                      '/etc/supervisor/conf.d/netbird.conf','/etc/supervisor/conf.d/tailscale.conf',
+                      '/etc/supervisor/conf.d/gate.conf.template','/opt/dnf/compat/amd64',
+                      '/opt/dnf/ubuntu/legacy-entrypoint.sh')
+        check="from pathlib import Path; paths="+repr(absent_paths)+"; assert not [p for p in paths if Path(p).exists()]"
+        docker('run','--rm','--read-only','--network','none','--entrypoint','python3',options.game_image,'-c',check)
         report['checks'].append('Ubuntu24; no Python2, database server or VPN binaries')
         for bad,word in [({'SERVER_TYPE':'INVALID'},'SERVER_TYPE'),({'SERVER_TYPE':'ALL'},'MAIN_MYSQL_HOST'),
                          ({'SERVER_TYPE':'P2P','TS_AUTH_KEY':'test-token'},'TS_AUTH_KEY')]:

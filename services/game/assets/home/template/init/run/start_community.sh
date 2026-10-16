@@ -1,15 +1,12 @@
+#!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
 # /bin/bash
 
 killall -9 df_community_r
 rm -rf pid/*.pid
 
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -23,6 +20,6 @@ cp /tmp/community.cfg /home/neople/community/cfg/server.cfg
 rm -rf /tmp/community.cfg
 echo "starting community..."
 # 这里配置文件ip必须为0.0.0.0
-./df_community_r server start
+/opt/dnf/ubuntu/run-game ./df_community_r server start
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

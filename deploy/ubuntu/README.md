@@ -15,7 +15,7 @@ Ubuntu 镜像仅连接自建外部 MySQL，使用 onlyGuo 后台；不含内置 
 | shared | 共享游戏 Compose 定义，不直接启动 |
 
 每个实际部署目录都自带 `.env.example`。把它复制为该目录的 `.env`，填写后在同一目录运行
-`docker compose config --quiet` 和 `docker compose up`。后台镜像与 CentOS 共用，无需再做一套后台源码。
+`docker compose config --quiet` 和 `docker compose up`。所有角色复用同一后台镜像。
 
 旧版直接在 `deploy/ubuntu` 运行的用户，先看 [目录迁移说明](../MIGRATION.md)。
 不要在新目录直接启动空数据栈。这里按**镜像系统**分类，宿主机同样可以是 Ubuntu。
@@ -74,14 +74,14 @@ Ubuntu `/data/.dnf-ubuntu.json` 记录平台与受管脚本哈希。升级仅覆
 PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh` 不参与自动脚本升级。
 新增旧发行版可升级列表时维护 `services/game/runtime/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
 
-未标记的 CentOS 数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
+未标记的旧数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
 首次启动前，数据目录中预放经核对的 `Script.pvf`、`publickey.pem`，无需旧网关 `privatekey.pem`。
 不要提前放入 `Config.ini`、`dp/` 或其他自定义配置，否则未标记目录检查会拒绝启动。
 完成首次初始化、确认 `.dnf-ubuntu.json` 已生成后，停止对应角色服务，再备份并按需合并必要的自定义配置、
-`dp/` 内容或 `user_daily_script.sh`；不要复制旧 CentOS 的受管 `run/`、`monitor_ip/` 脚本覆盖新版本。
+`dp/` 内容或 `user_daily_script.sh`；不要复制旧部署的受管 `run/`、`monitor_ip/` 脚本覆盖新版本。
 重新启动并验收后再决定切换。自定义 DP 插件需另行测试其 ABI；后台 RSA 私钥对仍按[整体部署第 3 节](all/README.md#3-启动后台初始化管理员配对密钥)单独保留和配对。
 
-回退时停止 Ubuntu 测试栈，恢复原 CentOS 镜像、配置、独立运行目录和它原来使用的数据库。
+回退时使用此前已保存的 Ubuntu 镜像与对应配置、运行目录及数据库，不从当前仓库重建已移除的平台。
 本流程不改动这些资源；不能把 Ubuntu 新写入的测试数据库直接当作原业务数据库回退。
 不要执行会删除业务数据卷的 `down -v`。
 
@@ -90,7 +90,7 @@ PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh
 仅执行 restart 不会更换镜像；重建容器后旧进程和旧容器配置随之移除。
 已有 `.env` 中的 `GATE_PASSWORD` 可删除。挂载目录里历史 `Config.ini`、`privatekey.pem` 不再读取或生成，
 不会为清理日志而自动删除你的持久化文件。自定义 `/data/conf.d` 若另行定义了旧网关，需要自行移除该自定义启动项。
-CentOS 的旧登录器兼容入口不在本次 Ubuntu 清理范围内。
+旧登录器兼容入口及其专用依赖已从源码和构建流程删除。
 
 ## 可重复验收
 

@@ -51,20 +51,6 @@
       "executable": true
     },
     {
-      "path": "services/game/assets/home/template/init/mysql_proxy/forward",
-      "bytes": 2901515,
-      "sha256": "0b50b209dce40716b19aa27a821aa6a5230e6789da2a466c01c3b48bd4c0694e",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/mysql_proxy/forward",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/home/template/init/privatekey.pem",
-      "bytes": 1674,
-      "sha256": "5ec8bf8b113682e18483d4676e514a2c2c9fa40a9ab7dc12865e8bd9b9d5999b",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/privatekey.pem",
-      "executable": true
-    },
-    {
       "path": "services/game/assets/home/template/init/publickey.pem",
       "bytes": 451,
       "sha256": "42d1a646178dbda9f4e67171cb326aec838d8d42bc3672b85fa56f0f4d91a2cf",
@@ -2771,34 +2757,6 @@
       "bytes": 131126,
       "sha256": "63d94ee108d3f0b2f0f6aa433a2b97c96438da66447117b66d106750efb97528",
       "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/stun/df_stun_r",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/home/template/root/DnfGateServer",
-      "bytes": 2055004,
-      "sha256": "088c6f284b092cde60f118260ce0e1129c0e38ef2d32958bafaf55cf89feb1f5",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/root/DnfGateServer",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/usr/bin/netbird",
-      "bytes": 29093888,
-      "sha256": "e9beed54a8e439bb8405581dbb614f87a0ddfbd783c0ca1daa92d50bfc9c29fa",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/usr/bin/netbird",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/usr/bin/tailscale",
-      "bytes": 26332525,
-      "sha256": "3a6e457c73e59c31cf1f8911e81636e63f7b87918168c5dc5bd9f587698ab6f7",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/usr/bin/tailscale",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/usr/bin/tailscaled",
-      "bytes": 38569712,
-      "sha256": "e36c9a269920afebc5c23f9e841bc9110d12fd338109a28b4cc1142cda77b9ab",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/usr/bin/tailscaled",
       "executable": true
     }
   ]

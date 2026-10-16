@@ -1,24 +1,12 @@
 #!/bin/bash
+source /opt/dnf/ubuntu/wait.sh
+#!/bin/bash
 killall -9 df_relay_r
 rm -rf pid/*.pid
 # 等待CORE_PUBLIC_IP的monitor服务启动,最多等待20秒
-counter=0
-while [ $counter -lt 20 ]
-do
-  if nc -zv $MAIN_BRIDGE_IP 7000 2>&1 | grep succeeded >/dev/null ; then
-    echo "bridge 7000 port ready"
-    break
-  fi
-  sleep 2
-  ((counter++))
-done
+wait_tcp "$MAIN_BRIDGE_IP" 7000 core-service || exit 1
 # 等待MONITOR_PUBLIC_IP设置
-while [ -z "$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)" ];
-do
-  echo "wait set MONITOR_PUBLIC_IP, sleep 5s"
-  # 等待5秒钟
-  sleep 5
-done
+wait_file /data/monitor_ip/MONITOR_PUBLIC_IP || exit 1
 # 获取IP
 MONITOR_PUBLIC_IP=$(cat /data/monitor_ip/MONITOR_PUBLIC_IP 2>/dev/null || true)
 # 生成配置文件
@@ -34,6 +22,6 @@ cp /tmp/relay.cfg /home/neople/relay/cfg/relay.cfg
 rm -rf /tmp/relay.cfg
 # 启动服务
 echo "starting relay..."
-./df_relay_r relay start
+/opt/dnf/ubuntu/run-game ./df_relay_r relay start
 sleep 2
 cat pid/*.pid |xargs -n1 -I{} tail --pid={} -f /dev/null

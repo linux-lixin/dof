@@ -31,28 +31,6 @@
       "build": "autoreconf -fi; CC='gcc -m32' ./configure --host=i686-linux-gnu --disable-static; make"
     },
     {
-      "file": "openssl-0.9.8zh.tar.gz",
-      "sha256": "f1d9f3ed1b85a82ecf80d0e2d389e1fda3fca9a4dba0bf07adbf231e1a5e2fd6",
-      "source": "https://www.openssl.org/source/old/0.9.x/openssl-0.9.8zh.tar.gz",
-      "license": "OpenSSL and original SSLeay dual license, included source LICENSE",
-      "build": "./config shared no-ssl2 no-ssl3; build-openssl.sh sets genuine 0.9.8 library SONAME to 6; make -j1",
-      "scope": "Private amd64 game-process directory; never replaces system OpenSSL"
-    },
-    {
-      "file": "libmysqlclient.so.15.0.0",
-      "sha256": "c9fc03966602b5072775cfba906a141565e48c9baf1c531db6669fcc5695de0f",
-      "package": "MySQL-shared-compat-5.0.95-1.rhel5.x86_64.rpm",
-      "package_sha256": "91038bf4d37aaded051f094fc5a2f767017211cfdc6197ad72748db2df881ce4",
-      "source": "https://raw.githubusercontent.com/1995chen/dnf_util/d259833bdf3c7b02d92c01a48ca3d8c23a10f8ac/common_pkgs/MySQL-shared-compat-5.0.95-1.rhel5.x86_64.rpm",
-      "extracted_path": "usr/lib64/libmysqlclient.so.15.0.0",
-      "extracted_from_image": "sha256:b78167ea228e3a3f028827dadd0d2e075e70d2afa8e92db3f46e4f2d609b1ec1",
-      "license": "GPL-2.0, MYSQL-COPYING; retain corresponding source obligations on redistribution",
-      "source_package": "MySQL-shared-compat-5.0.95-1.rhel5.nosrc.rpm",
-      "corresponding_source": "https://downloads.mysql.com/archives/get/p/23/file/mysql-5.0.95.tar.gz",
-      "corresponding_source_sha256": "3796783758b67b6b37771b397cb082642afbd0ac5004abf4c68f358a8e84ada8",
-      "verification": "Downloaded pinned RPM, rpm2cpio extracted library SHA matches vendored bytes; source archive downloaded and hashed"
-    },
-    {
       "file": "../../assets/home/template/neople/game/libnxencryption.so",
       "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
       "source": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libnxencryption.so",
