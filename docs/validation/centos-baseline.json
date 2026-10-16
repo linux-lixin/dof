@@ -1,0 +1,37 @@
+{
+  "started_at": "2026-10-16 16:41:14",
+  "file_hashes": {
+    "dnf-game:local-fix-20261015": [
+      "76c37aa2470dd9780391b55de235c4935cd61c6b834a49175eae38629cb8a342  /home/template/init/prepare_login_seed.sh",
+      "c209c6878d7f8862eae966066e986bd02c86948d545fcf5e126c016c1780222b  /home/template/init/repair_existing_log_ref.sh",
+      "f412ac6ab4331134e8bee96a3341d797053a11eeec427a942497302a51163aa3  /home/template/init/daily_job/response_time_tables.sh",
+      "572bd428d5a0644ea3282e9fa8623e2f7521cdb84dec4100be0d77aa423c87c9  /home/template/init/daily_job/daily_job.sh",
+      "9fbd493897f77bf47552c85bcc002427f82c968a697e110772681ff18122cba6  /home/template/init/init.sh",
+      "3fb59b1cd1874ce3fdcf941f7450b3faf2401aca2effd674f3a8177bd80a1527  /docker-entrypoint.sh"
+    ],
+    "dnf-admin:local-fix-20261015": [
+      "44dff1fbc1d8f0f845aa728029937bdd568891bde178fe3202ae4d8b96930453  /app/entrypoint.sh",
+      "331a1931355141754d0f932cc7d118c3e0c6db9bc171538e10eae0eeb532eaa3  /app/init.sql.template"
+    ]
+  },
+  "checks": [
+    "Fresh game import remapped known seed q_id to 50939; no exhausted counter",
+    "New log_query_ref INSERT succeeded on fresh imported database",
+    "Current and next month response log tables exist",
+    "Backend fresh initialization with MYSQL_INIT_SSL_MODE=disabled; marker, account columns, HTTP frontend/API pass",
+    "Separate bootstrap-admin.sql.example creates test administrator and authorization row",
+    "Backend restart skips destructive SQL and preserves administrator",
+    "Both channel supervisor PIDs stable for 300 seconds"
+  ],
+  "newline_normalized_files": [
+    "/app/init.sql.template"
+  ],
+  "dnf-game:local-fix-20261015": "sha256:b78167ea228e3a3f028827dadd0d2e075e70d2afa8e92db3f46e4f2d609b1ec1",
+  "dnf-admin:local-fix-20261015": "sha256:46ae9003db8b1e6131900e13c71d11c652fb009b63ab7e237ca9b8a1297003f4",
+  "mysql_version": "5.6.51",
+  "backend_table_count": "7",
+  "supervisor_status": "core:auction                     RUNNING   pid 736, uptime 0:09:16\ncore:bridge                      RUNNING   pid 1388, uptime 0:08:50\ncore:channel                     RUNNING   pid 580, uptime 0:09:20\ncore:community                   RUNNING   pid 3545, uptime 0:06:20\ncore:coserver                    RUNNING   pid 861, uptime 0:09:11\ncore:daily_job                   RUNNING   pid 430, uptime 0:09:25\ncore:dbmw_guild                  RUNNING   pid 589, uptime 0:09:19\ncore:dbmw_mnt                    RUNNING   pid 639, uptime 0:09:18\ncore:dbmw_stat                   RUNNING   pid 689, uptime 0:09:17\ncore:guild                       RUNNING   pid 800, uptime 0:09:13\ncore:manager                     RUNNING   pid 476, uptime 0:09:23\ncore:monitor                     RUNNING   pid 1012, uptime 0:09:08\ncore:point                       RUNNING   pid 768, uptime 0:09:15\ncore:relay_config_server         RUNNING   pid 420, uptime 0:09:26\ncore:statics                     RUNNING   pid 829, uptime 0:09:12\ngame:game_siroco11               RUNNING   pid 1336, uptime 0:08:53\ngame:game_siroco52               RUNNING   pid 1335, uptime 0:08:53\nmonitor_ip                       EXITED    Oct 16 04:42 PM\nmysql_proxy:main_mysql_proxy     RUNNING   pid 1233, uptime 0:08:58\nmysql_proxy:sg_mysql_proxy       RUNNING   pid 1264, uptime 0:08:56\nnetbird                          EXITED    Oct 16 04:41 PM\np2p:relay                        RUNNING   pid 989, uptime 0:09:09\np2p:relay_config_client          RUNNING   pid 952, uptime 0:09:09\np2p:stun                         RUNNING   pid 951, uptime 0:09:09\nstarter                          EXITED    Oct 16 04:42 PM\ntailscale                        EXITED    Oct 16 04:41 PM\ntailscaled                       EXITED    Oct 16 04:41 PM\ntongyi_gate                      RUNNING   pid 538, uptime 0:09:21\ntss:gunnersvr                    RUNNING   pid 1100, uptime 0:09:05\ntss:zergsvr                      EXITED    Oct 16 04:42 PM\ntss:zergsvr_secagent             RUNNING   pid 1133, uptime 0:09:03\n",
+  "game_processes": " 3834       05:53 ./df_game_r siroco11 start\n 3835       05:53 ./df_game_r siroco52 start\n",
+  "status": "passed",
+  "finished_at": "2026-10-16 16:51:34"
+}

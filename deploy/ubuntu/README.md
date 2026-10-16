@@ -5,6 +5,11 @@ Ubuntu 是可选版本，原 `deploy/local-images` 的 CentOS 默认部署不变
 实际测试范围和未验收项见 [Ubuntu 验收报告](../../docs/ubuntu-validation.md)，
 依赖来源见 [兼容库审计](../../docs/ubuntu-compatibility.md)。
 
+Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的多个旧服务进程。
+日常用 `docker compose up/stop/logs`，排障或单独重启内部服务时才用容器内的 `supervisorctl`。
+宿主机不需要安装 Supervisor。子进程退出由 Supervisor 恢复；健康检查失败本身不会触发 Docker 重启容器。
+每个内部服务各用一个容器、移除 Supervisor 属于后续架构改造，不在本版范围。
+
 ## 1. 从 Git 获取源码，在服务器构建
 
 准备已安装 Docker Engine/Compose 的 Linux amd64 服务器，以及独立管理的 MySQL 5.6 实例。

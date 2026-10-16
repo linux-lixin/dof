@@ -158,6 +158,17 @@ docker run --rm --read-only --mount "type=bind,source=$audit,target=/audit" --en
 标准 shell `PWD` 误判修复后，共享内存探针的两次通过记录正常保留 `/`。
 当前库存无缺库或未定义符号。完整 ALL/拆分持续验收结果另见部署验收报告。
 
+`audit/ubuntu-live-libraries.json` 补充同一最终镜像的实际进程映射证据：通过只读
+`docker exec` 从 ALL、拆分 CORE/P2P/GAME 节点读取 `/proc/PID/exe` 与 `/proc/PID/maps`，
+覆盖 42 个运行中的 `df_*`、gunnersvr、zergsvr、secagent、DnfGateServer 进程，
+并补采实际数据库代理 `socat1` 的 117 个进程（含连接子进程）。
+记录可执行文件与合计 34 个不同共享库路径的 SHA256，包括运行时加载的
+`libantisvrimport.so`、BIG5 转码模块及实际 hook/私有兼容库。
+相同可执行文件和库集合按数量归组，不保存 PID、环境变量或命令行。
+数据库代理实际调用 socat；`forward` 是未启用的遗留工具，仅有静态 ELF 检查，
+不属于此部署必需运行组件，也没有虚构它的实时映射。
+这是采样时仍映射的库集合，包含实际 dlopen 结果；不声称覆盖此前卸载或未来才加载的库。
+
 ## 来源、许可证与重建限制
 
 `build/Ubuntu24-DNF/compat-lock.json` 固定源码/二进制 URL、版本、SHA256 和提取来源。
