@@ -1,5 +1,21 @@
 # 旧目录迁移到按系统分类的目录
 
+## 本轮完整项目重组
+
+部署目录仍沿用 `deploy/centos`、`deploy/ubuntu`，本轮源码从 `dnf-game` 移到 `services/game`，
+`dnf-server-public` 移到 `services/admin`，`DNFLogin` 移到 `clients/launcher`。
+游戏构建文件为 `services/game/docker/<系统>/Dockerfile`，后台为 `services/admin/docker/Dockerfile`。
+后端、前端分别在 `services/admin/backend`、`services/admin/frontend`；资源清单迁至 `metadata`，测试按用途分组。
+完整结构见 [项目说明](../docs/architecture.md)。
+
+已完成上一轮部署目录迁移的服务器，本轮 `git pull --ff-only` 后继续在原 `deploy/...` 目录管理容器即可。
+运行数据路径、镜像标签、容器内路径不变，单纯目录整理无需重建在运行的容器。
+以后构建镜像使用更新后的 [Ubuntu](ubuntu/build/README.md) / [CentOS](centos/build/README.md) 命令；不要继续使用旧源码目录。
+如果曾把实际文件放在旧源码目录（例如旧后台的 data 或本地客户端产物），Git 不会自动搬走它们；
+按实际配置核对并迁移，不能把残留目录一律删除。
+
+## 上一轮部署入口迁移
+
 这是宿主机部署文件的目录调整，不是 CentOS 数据迁移到 Ubuntu。不要混用两种镜像的数据目录。
 游戏镜像、后台镜像、协议和数据库内容未因本次整理发生变化，已有镜像无需为本次目录调整重新构建。
 Git 不移动被忽略的 `.env`、`runtime/` 或下载包；直接进入新目录启动会得到一个空运行目录。

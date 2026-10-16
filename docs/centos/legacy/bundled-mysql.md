@@ -1,6 +1,6 @@
 # 1995chen + onlyGuo：云服务器公网直连测试部署指南
 
-> 2026-10-15 修订：上传部署目录时必须包含 fixes/，本地初始化与日志修复见 [修复说明](../../deployment-fixes-2026-10-15.md)。
+> 2026-10-15 修订：上传部署目录时必须包含 fixes/，本地初始化与日志修复见 [修复说明](../../history/deployment-fixes-2026-10-15.md)。
 
 日期：2026-10-14。适用目标：先不修改业务代码，在已有 Linux／云服务器上测试注册、登录和进游戏。**不使用隧道。**
 
@@ -96,9 +96,9 @@ Docker 必须有可用 Server，仅有 Client 不够。本指南后续 Linux 命
 
 ~~~text
 D:\Projects\dof
-├─ dnf-game
-├─ dnf-server-public
-├─ DNFLogin
+├─ services/game
+├─ services/admin
+├─ clients/launcher
 ├─ docs
 └─ dnf-stack.code-workspace
 ~~~
@@ -417,7 +417,7 @@ Windows PowerShell：
 
 ~~~powershell
 dotnet --list-sdks
-dotnet publish "D:\Projects\dof\DNFLogin\DNFLogin.csproj" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "D:\Projects\dof\artifacts\launcher"
+dotnet publish "D:\Projects\dof\clients\launcher\DNFLogin.csproj" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "D:\Projects\dof\artifacts\launcher"
 ~~~
 
 使用 WinGet 时对应 SDK 包为 `Microsoft.DotNet.SDK.10`。安装后重新打开终端。

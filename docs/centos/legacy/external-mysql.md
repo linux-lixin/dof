@@ -1,6 +1,6 @@
 # 1995chen + onlyGuo：自建 MySQL 拆分部署
 
-> 2026-10-15 修订：实际联调 MySQL 5.6.50；镜像与源码不同。现使用 fixes/ 覆盖脚本修复已确认问题，详见 [修复说明](../../deployment-fixes-2026-10-15.md)。CLI 的 --skip-ssl 仅用于本方案无 TLS 的旧 MySQL。
+> 2026-10-15 修订：实际联调 MySQL 5.6.50；镜像与源码不同。现使用 fixes/ 覆盖脚本修复已确认问题，详见 [修复说明](../../history/deployment-fixes-2026-10-15.md)。CLI 的 --skip-ssl 仅用于本方案无 TLS 的旧 MySQL。
 
 日期：2026-10-15。用于已有 Linux／云服务器，公网直连，不用隧道，先不修改业务代码。
 

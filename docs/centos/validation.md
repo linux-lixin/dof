@@ -2,7 +2,7 @@
 
 ## 2026-10-15 本地镜像验证
 
-基于 `source-lock.json` 的源码基线和本仓库初始化修复，在 Docker Desktop 的 Linux amd64 环境完成：
+基于 `metadata/source-lock.json` 的源码基线和本仓库初始化修复，在 Docker Desktop 的 Linux amd64 环境完成：
 
 - 游戏、后台镜像均成功构建，关键入口与修复脚本 SHA256 与工作区一致。
 - MySQL 5.6.51 全新数据库导入成功；原始 `log_query_ref` 已知种子编号调整为 50939，后续 INSERT 成功。

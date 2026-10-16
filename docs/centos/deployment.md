@@ -84,7 +84,7 @@ ss -lntp | grep ':3306'
 git clone https://github.com/linux-lixin/dof.git /opt/dof
 cd /opt/dof
 git log -1 --oneline
-ls -lh dnf-game/build/dnf_data/home/template/init/Script.tgz
+ls -lh services/game/assets/home/template/init/Script.tgz
 ```
 
 `Script.tgz` 约 96 MiB。游戏程序、原始初始化 SQL、依赖库和旧配置也随仓库提供。
@@ -96,7 +96,7 @@ cd /opt/dof
 git pull --ff-only
 ```
 
-不要再执行旧的 `scripts/fetch_game_assets.py`，该脚本已经删除。`scripts/game-assets.lock.json` 仅保留资源来源、哈希和权限信息，用于审计。
+不要再执行旧的 `scripts/fetch_game_assets.py`，该脚本已经删除。`metadata/game-assets.lock.json` 仅保留资源来源、哈希和权限信息，用于审计。
 
 ## 5. 在服务器构建镜像
 
@@ -106,13 +106,14 @@ git pull --ff-only
 cd /opt/dof
 
 docker build \
-  -f dnf-game/build/Centos7-DNF/Dockerfile \
+  -f services/game/docker/centos/Dockerfile \
   -t dnf-game:local-fix-20261015 \
-  dnf-game
+  services/game
 
 docker build \
+  -f services/admin/docker/Dockerfile \
   -t dnf-admin:local-fix-20261015 \
-  dnf-server-public
+  services/admin
 
 docker image ls dnf-game
 docker image ls dnf-admin
@@ -349,7 +350,7 @@ WPF 登录器在 Windows 编译。安装 **.NET 10 SDK**，仅安装 Runtime 不
 
 ```powershell
 dotnet --list-sdks
-dotnet publish "D:\VScodeProjects\dof\DNFLogin\DNFLogin.csproj" `
+dotnet publish "D:\VScodeProjects\dof\clients\launcher\DNFLogin.csproj" `
   -c Release `
   -r win-x64 `
   --self-contained true `

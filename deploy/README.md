@@ -45,8 +45,8 @@ Ubuntu 和独立后台模板通过相对路径引用 shared 文件，服务器�
 | CentOS 后台放到单独机器 | [CentOS 独立后台](centos/split/admin/README.md) |
 | 已按旧目录启动过 | [先迁移配置和运行路径](MIGRATION.md) |
 
-源码保持一份：`dnf-game/` 为两个平台的游戏镜像构建及共享资源，`dnf-server-public/` 为共享后台，
-`DNFLogin/` 为 Windows 登录器。后台不因游戏基础镜像不同而复制两套源码。
+源码保持一份：`services/game/` 为两个平台的游戏镜像构建及共享资源，`services/admin/` 为共享后台，
+`clients/launcher/` 为 Windows 登录器。后台不因游戏基础镜像不同而复制两套源码。
 
 CentOS 的 CORE/GAME/P2P 跨主机拆分未提供已验收模板，详见其 split 说明。
 本次整理不改游戏协议、数据库内容、镜像标签或线上服务。玩家客户端实机验收仍是独立步骤。

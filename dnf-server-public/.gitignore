@@ -1,9 +1,0 @@
-
-*.iml
-.idea/
-target/
-*.class
-*.log
-logs/
-/dnf-server-web
-/data/

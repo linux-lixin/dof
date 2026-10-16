@@ -25,8 +25,8 @@ Ubuntu 镜像仅连接自建外部 MySQL，使用 onlyGuo 后台；不含内置 
 
 以下对应示例大区 3、频道 11 和 52，值来源于仓库内各服务 cfg 模板及 relay/网关配置。
 改大区/频道后要同时调整端口映射，不能只改 `OPEN_CHANNEL`。
-在仓库根目录可运行 `python3 scripts/ubuntu_port_matrix.py --group 3 --channels 11,52` 重算；
-若仍位于本指南的 `deploy/ubuntu` 目录，运行 `python3 ../../scripts/ubuntu_port_matrix.py --group 3 --channels 11,52`。
+在仓库根目录可运行 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52` 重算；
+若仍位于本指南的 `deploy/ubuntu` 目录，运行 `python3 ../../scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52`。
 当前生成结果见 [角色端口表](../../docs/ubuntu/ports.md)。
 
 | 角色 | 用途 | 协议/端口 | 来源 |
@@ -72,7 +72,7 @@ ALL 模板的 `P2P_PUBLIC_IP` 当前也引用必填 `PUBLIC_IP`，启用发现�
 Ubuntu `/data/.dnf-ubuntu.json` 记录平台与受管脚本哈希。升级仅覆盖匹配当前或已知旧发行版哈希的脚本。
 用户修改脚本时，启动列出冲突路径并退出，不覆盖修改。升级前先保存自定义改动，再根据新脚本重新合并。
 PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh` 不参与自动脚本升级。
-新增旧发行版可升级列表时维护 `dnf-game/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
+新增旧发行版可升级列表时维护 `services/game/runtime/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
 
 未标记的 CentOS 数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
 首次启动前，数据目录中预放经核对的 `Script.pvf`、`publickey.pem`，无需旧网关 `privatekey.pem`。
@@ -97,9 +97,9 @@ CentOS 的旧登录器兼容入口不在本次 Ubuntu 清理范围内。
 从仓库根目录执行，要求 Python 3.9+、Docker 和足够内存：
 
 ```bash
-python3 tests/test_ubuntu_runtime.py
-python3 tests/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
-python3 tests/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
+python3 tests/unit/test_ubuntu_runtime.py
+python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
+python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
 ```
 
 每个测试使用独立名称、网络、卷和随机凭据，无公网端口、不访问现有服务器。
@@ -107,6 +107,6 @@ python3 tests/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --
 确认结果后只清理该次资源：
 
 ```bash
-python3 tests/test_built_images.py --ubuntu --state-file dist/ubuntu-all-state.json --cleanup
-python3 tests/test_built_images.py --ubuntu --state-file dist/ubuntu-split-state.json --cleanup
+python3 tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-all-state.json --cleanup
+python3 tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-split-state.json --cleanup
 ```

@@ -25,8 +25,8 @@ Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的�
 cd /opt
 git clone https://github.com/linux-lixin/dof.git
 cd dof
-docker build -f dnf-game/build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 dnf-game
-docker build -t dnf-admin:local-fix-20261015 dnf-server-public
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
 cd deploy/ubuntu/all
 cp -n .env.example .env
 chmod 600 .env
@@ -72,13 +72,13 @@ ALL/GAME 首次启动前必须手动放置与客户端匹配的 `Script.pvf`，�
 CORE/P2P 不需要该文件。现有数据目录中的 PVF 会保留，不自动覆盖。
 
 **先测试仓库自带版本：直接使用下面的手动解压命令。** 仓库已经包含
-`/opt/dof/dnf-game/build/dnf_data/home/template/init/Script.tgz`，里面就是 `Script.pvf`，无需额外下载。
+`/opt/dof/services/game/assets/home/template/init/Script.tgz`，里面就是 `Script.pvf`，无需额外下载。
 “手动放置”指启动脚本不会自动解压，并不要求你必须另找一个文件。
 
 ```bash
 cd /opt/dof/deploy/ubuntu/all
 mkdir -p runtime/game/data
-tar -xzkf ../../../dnf-game/build/dnf_data/home/template/init/Script.tgz \
+tar -xzkf ../../../services/game/assets/home/template/init/Script.tgz \
   -C runtime/game/data Script.pvf
 ls -lh runtime/game/data/Script.pvf
 ```

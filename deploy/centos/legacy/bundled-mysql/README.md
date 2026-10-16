@@ -1,6 +1,6 @@
 # DNF 测试部署附件
 
-修复说明：[2026-10-15 部署修复](../../../../docs/deployment-fixes-2026-10-15.md)。
+修复说明：[2026-10-15 部署修复](../../../../docs/history/deployment-fixes-2026-10-15.md)。
 
 必须上传整个目录，包括 fixes/。Compose 通过只读挂载修复固定镜像的入口和日志维护；只上传 compose.yaml 不够。
 

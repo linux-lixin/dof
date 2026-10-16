@@ -6,6 +6,7 @@
 **/.env.*
 !**/.env.example
 **/runtime/
+!/services/game/runtime/
 **/node_modules/
 **/target/
 **/__pycache__/
@@ -21,18 +22,18 @@
 *.p12
 **/.idea/
 **/.vs/
-/DNFLogin/bin/
-/DNFLogin/obj/
-/dnf-server-public/data/
+/clients/launcher/bin/
+/clients/launcher/obj/
+/services/admin/data/
 /dist/
 /artifacts/
 /work/
 *.code-workspace
 
 # Public upstream template keys required by the game image (not production secrets)
-!/dnf-game/build/dnf_data/home/template/init/privatekey.pem
-!/dnf-game/build/dnf_data/home/template/init/publickey.pem
-!/dnf-game/build/dnf_data/home/template/neople/game/HSPub.key
+!/services/game/assets/home/template/init/privatekey.pem
+!/services/game/assets/home/template/init/publickey.pem
+!/services/game/assets/home/template/neople/game/HSPub.key
 
 .download-*
 *.tmp
@@ -47,3 +48,6 @@ Thumbs.db
 **/bootstrap-admin.sql
 **/admin-initial-credentials.txt
 **/packages/
+
+# Checked-in compatibility source archives are build inputs, not output packages.
+!/services/game/docker/ubuntu/*.tar.gz

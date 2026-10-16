@@ -14,6 +14,7 @@
 
 完整目录树见 [部署导航](deploy/README.md)，所有说明见 [文档索引](docs/README.md)。
 每个部署目录各自保存 `.env` 和 `runtime/`；游戏、后台和登录器源码仍各保留一份。
+整个仓库的职责划分见 [项目结构](docs/architecture.md)，开发和检查入口见 [CONTRIBUTING](CONTRIBUTING.md)。
 
 ## 当前完成情况
 
@@ -31,13 +32,13 @@
 git clone https://github.com/linux-lixin/dof.git
 cd dof
 
-docker build -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
-docker build -t dnf-admin:local-fix-20261015 dnf-server-public
+docker build -f services/game/docker/centos/Dockerfile -t dnf-game:local-fix-20261015 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
 ```
 
-构建需要 Docker 和到基础镜像、软件包依赖源的网络连接，不需要先运行 Python 下载脚本。Python 3.9+ 仅用于运行仓库测试。构建还会从基础镜像仓库、CentOS 归档、Maven/npm 等源获取依赖；`source-lock.json` 固定的是集成源码基线，不表示整个依赖链已完全可重现。
+构建需要 Docker 和到基础镜像、软件包依赖源的网络连接，不需要先运行 Python 下载脚本。Python 3.9+ 用于仓库测试和诊断工具。构建还会从基础镜像仓库、CentOS 归档、Maven/npm 等源获取依赖；`metadata/source-lock.json` 固定的是集成源码基线，不表示整个依赖链已完全可重现。
 
-游戏构建所需的 400 个运行资源已直接纳入 Git，包括 PVF、原始 SQL 压缩包、游戏程序、库和旧配置。普通 `git clone` 后即可构建，无需 Git LFS 或额外资源下载步骤；仓库会比纯源码版本大约增加 410 MiB 未压缩文件。`scripts/game-assets.lock.json` 保留上游固定 commit、路径、大小、SHA256 和可执行权限记录，便于审计。仓库中的模板密钥是上游公开示例，不能当作生产私密凭据；实际部署应使用自己的密钥，并保持后台私钥与游戏公钥配对。
+游戏构建所需的 400 个运行资源已直接纳入 Git，包括 PVF、原始 SQL 压缩包、游戏程序、库和旧配置。普通 `git clone` 后即可构建，无需 Git LFS 或额外资源下载步骤；仓库会比纯源码版本大约增加 410 MiB 未压缩文件。`metadata/game-assets.lock.json` 保留上游固定 commit、路径、大小、SHA256 和可执行权限记录，便于审计。仓库中的模板密钥是上游公开示例，不能当作生产私密凭据；实际部署应使用自己的密钥，并保持后台私钥与游戏公钥配对。
 
 ## 部署
 
@@ -59,32 +60,33 @@ Ubuntu ALL/GAME 启动前必须自行放入当前部署目录的
 ## 验证
 
 ```bash
-python tests/test_deployment_fixes.py
-python tests/test_mysql56_fixes.py
-python tests/test_built_images.py
-python tests/test_built_images.py --cleanup
+python tests/unit/test_deployment_fixes.py
+python tests/integration/test_mysql56_fixes.py
+python tests/integration/test_built_images.py
+python tests/integration/test_built_images.py --cleanup
 ```
 
-第一项需要 Bash（Windows 使用 Git for Windows）；后两项需要 Docker。完整镜像测试会新建临时 MySQL、游戏和后台容器，不连接已有服务器，不发布主机端口。失败时保留本次资源便于检查，完成后执行清理命令。测试输出写入被 Git 忽略的 `dist/`。
+第一项需要 Bash（Windows 使用 Git for Windows）；其余命令需要 Docker。完整镜像测试会新建临时 MySQL、游戏和后台容器，不连接已有服务器，不发布主机端口。失败时保留本次资源便于检查，完成后执行清理命令。测试输出写入被 Git 忽略的 `dist/`。
 
 ## 目录与发布范围
 
 | 目录 | 内容 |
 |---|---|
-| `dnf-game` | 默认 CentOS 7、可选 Ubuntu 24.04 Dockerfile，共享模板与独立平台适配层 |
-| `dnf-server-public` | 后台 Java/Vue 源码及修复后的镜像入口 |
-| `DNFLogin` | 上游 Windows 登录器源码，尚未修改业务逻辑 |
+| `services/game` | 默认 CentOS 7、可选 Ubuntu 24.04 Dockerfile，共享模板与独立平台适配层 |
+| `services/admin` | 后台 Java/Vue 源码及修复后的镜像入口 |
+| `clients/launcher` | 上游 Windows 登录器源码，尚未修改业务逻辑 |
 | `deploy` | 自建镜像主流程与旧镜像兼容部署附件 |
 | `docs` | 部署指南、兼容性分析、修复记录和验证摘要 |
 | `tests` | 可重复的初始化、数据库及镜像运行验证 |
-| `scripts` | 已纳入仓库的运行资源来源、校验和权限清单 |
+| `scripts` | 诊断工具与交互式镜像发布脚本 |
+| `metadata` | 上游基线、资源来源、哈希及权限清单 |
 
 不提交镜像 tar、构建输出、运行目录、实际 `.env`、生产密钥、数据库数据、原始运行日志、临时测试凭据、私人运维记录、原项目备用插件及等级/登录器补丁集合。
 
 ## 上游来源
 
-- [1995chen/dnf](https://github.com/1995chen/dnf)：游戏部署部分，保留其 [LICENSE](dnf-game/LICENSE)。
+- [1995chen/dnf](https://github.com/1995chen/dnf)：游戏部署部分，保留其 [LICENSE](services/game/LICENSE)。
 - [onlyGuo/dnf-server-public](https://github.com/onlyGuo/dnf-server-public)：后台。
 - [onlyGuo/DNFLogin](https://github.com/onlyGuo/DNFLogin)：登录器。
 
-准确基线见 [source-lock.json](source-lock.json)。保留原作者署名及已有许可文件，不为未提供许可证的上游组件添加新的授权声明。
+准确基线见 [metadata/source-lock.json](metadata/source-lock.json)。保留原作者署名及已有许可文件，不为未提供许可证的上游组件添加新的授权声明。

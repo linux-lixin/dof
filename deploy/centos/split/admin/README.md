@@ -1,7 +1,7 @@
 # 独立 onlyGuo 后台
 
 本目录只启动后台，可放在单独主机。与整体部署或 CORE 目录内的 admin 二选一；不能同时启动两个后台写同一数据库。
-先完成游戏数据库初始化，再从仓库根构建 `docker build -t dnf-admin:local-fix-20261015 dnf-server-public`。
+先完成游戏数据库初始化，再从仓库根构建 `docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin`。
 
 ```bash
 cd /opt/dof/deploy/centos/split/admin

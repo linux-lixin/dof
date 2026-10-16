@@ -1,6 +1,6 @@
 # CentOS 自建镜像整体部署
 
-这套镜像从 `dnf-game` 和 `dnf-server-public` 当前工作区构建，包含本地修复。它不是旧的 `centos7-2.1.9.fix1` 官方镜像改标签；当前游戏源码的 Supervisor 分组、启动脚本和 P2P 配置与旧镜像有区别。
+这套镜像从 `services/game` 和 `services/admin` 当前工作区构建，包含本地修复。它不是旧的 `centos7-2.1.9.fix1` 官方镜像改标签；当前游戏源码的 Supervisor 分组、启动脚本和 P2P 配置与旧镜像有区别。
 
 全新服务器直接拉取 Git、在服务器构建镜像，请按[完整部署步骤](../../../docs/centos/deployment.md)操作。下面的 tar 加载方式仅适用于已有镜像包的情况。
 
@@ -9,7 +9,7 @@
 把 `dist` 中两个 tar 文件传到 Linux 服务器，执行：
 
 ```bash
-docker load -i dnf-game-local-fix-20261015.tar
+docker load -i services/game-local-fix-20261015.tar
 docker load -i dnf-admin-local-fix-20261015.tar
 ```
 
@@ -52,12 +52,12 @@ docker compose restart game
 游戏构建所需资源已随 Git 仓库提供，无需额外下载脚本。在仓库根目录直接执行：
 
 ```bash
-docker build -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
-docker build -t dnf-admin:local-fix-20261015 dnf-server-public
-python tests/test_built_images.py
+docker build -f services/game/docker/centos/Dockerfile -t dnf-game:local-fix-20261015 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
+python tests/integration/test_built_images.py
 # Optional independent process/port observation before cleanup:
-python tests/verify_game_ready.py
-python tests/test_built_images.py --cleanup
+python tests/integration/verify_game_ready.py
+python tests/integration/test_built_images.py --cleanup
 ```
 
 测试仅创建名称以 `dnf-image-test-` 开头的临时资源，数据库和后台均不发布主机端口，HTTP 检查在隔离网络内部进行。失败时保留本次资源以便排查；清理命令仅清理 `dist/image-test-state.json` 记录的资源。该状态文件包含临时测试密码，不属于交付包。

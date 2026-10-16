@@ -1,19 +1,43 @@
-# 部署修复回归测试
+# 测试入口
 
-游戏资源已随仓库提供。在 dof 根目录直接运行：
+在仓库根目录使用 Python 3.9 或更新版本。不要对整个 `tests` 递归执行 discovery：集成脚本有独立参数和容器生命周期，必须显式调用。
 
-```text
-python tests/test_deployment_fixes.py
-python tests/test_mysql56_fixes.py
+| 目录 | 范围 | 环境 |
+|---|---|---|
+| `unit/` | 启动、配置、SQL 修复的离线回归 | Python、Bash；Windows 可用 Git for Windows |
+| `structure/` | 资源哈希、构建输入、文档链接、9 个部署模板 | Python、Git、Docker Compose；不启动服务 |
+| `integration/` | 真实数据库及镜像启动验收 | Docker、被测镜像和固定 MySQL 测试镜像 |
+
+## 离线和结构检查
+
+```sh
+python -m unittest discover -s tests/unit -p "test_*.py"
+python -m unittest discover -s tests/structure -p "test_*.py"
 ```
 
-前者需要 Python 3 和 bash（Windows 使用 Git for Windows），模拟初始化命令，不连接数据库。
-后者需要本地 Docker，拉取固定的 mysql:5.6 digest，在无网络、无公开端口的临时容器内执行实际 SQL，结束删除该测试容器和匿名卷。需要 Docker 能访问该镜像；不连接服务器，不读取实际 .env 或凭据。
+## 数据库与镜像验收
 
-部署覆盖文件与源码保持同步：后台入口复制到 deploy/centos/legacy/*/fixes/admin-entrypoint.sh；游戏 seed/repair/daily_job/response_time 脚本复制到同一 fixes 目录。修改后应复测并核对副本一致性。
+```sh
+python tests/integration/test_mysql56_fixes.py
+python tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
+python tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
+```
 
-## 部署目录检查
+每次镜像验收使用独立网络、卷、容器名称和测试凭据；测试 MySQL 仅模拟外部数据库。完成后按对应状态文件清理：
 
-`python tests/test_deploy_layout.py` 使用 Docker Compose 解析各平台、各节点的实际模板，
-检查服务角色、项目名、运行目录隔离、旧数据路径覆盖和文档链接；不启动容器，不访问数据库。
-初始化测试共用 `deploy/shared/bootstrap-admin.sql.example`。
+```sh
+python tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-all-state.json --cleanup
+python tests/integration/test_built_images.py --ubuntu --state-file dist/ubuntu-split-state.json --cleanup
+```
+
+CentOS 保留默认测试参数：
+
+```sh
+python tests/integration/test_built_images.py
+python tests/integration/verify_game_ready.py
+python tests/integration/test_built_images.py --cleanup
+```
+
+`dist/` 中的状态文件和原始日志可能包含测试凭据，禁止提交。清理仅针对状态文件记录的测试资源；不要用于生产实例。自动化通过不代表真实 Windows 客户端登录、进图、组队或更新已经验收。
+
+初始化测试共用 `deploy/shared/bootstrap-admin.sql.example`。旧部署覆盖脚本的副本同步要求见[贡献说明](../CONTRIBUTING.md)。

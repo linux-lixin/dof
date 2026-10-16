@@ -1,6 +1,6 @@
 # Ubuntu 角色端口表
 
-由 `python3 scripts/ubuntu_port_matrix.py --group 3 --channels 11,52` 从配置生成。
+由 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52` 从配置生成。
 
 节点端口仅向可信节点开放；管理、容器内部端口见部署指南。
 

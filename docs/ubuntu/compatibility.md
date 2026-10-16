@@ -56,13 +56,14 @@ MySQL `.15` 是已有运行镜像中的准确库，已与固定上游 RPM 重新
 
 ## 隔离与构建接口
 
-构建上下文为 `dnf-game`：
+构建上下文为 `services/game`：
 
 ```sh
-docker build -f build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 .
+cd services/game
+docker build -f docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 .
 ```
 
-`--target game` 可只构建基础镜像及 ABI 门禁；最终层复制 `ubuntu/` 到 `/opt/dnf/ubuntu/`，
+`--target game` 可只构建基础镜像及 ABI 门禁；最终层复制 `runtime/ubuntu/` 到 `/opt/dnf/ubuntu/`，
 执行 `prepare_image.py`。启动入口为 `/opt/dnf/ubuntu/entrypoint.sh`。
 运行镜像使用 Python 3、Supervisor、socat、netcat-openbsd、MariaDB 客户端。
 编译器只存在于构建层。不复制旧镜像中的操作系统、Python 2、数据库服务器或 VPN 可执行文件。
@@ -90,7 +91,7 @@ i386 和 amd64 子进程验证两个输出流、分段写、未知口令标签�
 
 ## 可复查证据
 
-`dnf-game/build/Ubuntu24-DNF/audit/` 保留原生依赖缺失的 `native-before.json`、
+`services/game/docker/ubuntu/audit/` 保留原生依赖缺失的 `native-before.json`、
 修复后的 `native-after.json`、逐程序无参数启动日志 `start-proof.json`。
 `image-elf-report.json`、`image-compat-report.json`、`image-gate-start-proof.json` 与
 `image-packages.tsv` 由最终构建镜像导出。
@@ -122,7 +123,7 @@ i386 和 amd64 子进程验证两个输出流、分段写、未知口令标签�
 secagent 输出 `init gamesvr channel succ` 并建立 12 个游戏共享通道。
 证据在 `audit/tss-start-proof.json`；完整 DB/游戏频道通信仍由整体部署验收。
 零间隔并发冷启动曾触发共享 MMAP 初始化竞争；等 relay 初始化后重启 secagent 可恢复，
-部署使用原有 Supervisor 顺序启动和自动重启。`tests/test_ubuntu_tss.py` 覆盖唯一 self 映射、
+部署使用原有 Supervisor 顺序启动和自动重启。`tests/unit/test_ubuntu_tss.py` 覆盖唯一 self 映射、
 无错误自连接、保留安全配置、幂等以及错误 identity 时拒绝写入。
 
 完整服务启动、数据库初始化、拆分部署和持续运行结果由部署验收报告另行记录。
@@ -145,7 +146,7 @@ Ubuntu 使用前述真实 0.9.8zh ABI 专用构建。MySQL 客户端为 5.0.95-1
 这些清单只读取镜像，不安装软件、不启动服务。仓库根目录可复现：
 
 ```sh
-audit="$PWD/dnf-game/build/Ubuntu24-DNF/audit"
+audit="$PWD/services/game/docker/ubuntu/audit"
 centos=$(docker image inspect dnf-game:local-fix-20261015 --format '{{.Id}}')
 ubuntu=$(docker image inspect dnf-game:ubuntu24-v1 --format '{{.Id}}')
 docker run --rm --read-only --mount "type=bind,source=$audit,target=/audit" --entrypoint /usr/local/bin/python2.7 "$centos" /audit/runtime-inventory.py --prefix centos-baseline --image-id "$centos"
@@ -175,10 +176,10 @@ docker run --rm --read-only --mount "type=bind,source=$audit,target=/audit" --en
 
 ## 来源、许可证与重建限制
 
-`build/Ubuntu24-DNF/compat-lock.json` 固定源码/二进制 URL、版本、SHA256 和提取来源。
+`services/game/docker/ubuntu/compat-lock.json` 固定源码/二进制 URL、版本、SHA256 和提取来源。
 GeoIP 与 OpenSSL 源码压缩包随构建资源保存；MySQL 客户端保存经过校验的精确库和 GPL 文本，
 对应 MySQL 5.0.95 官方源码 URL 已实际下载验证 SHA。镜像中的许可证在 `/opt/dnf/licenses/`。
-游戏资产沿用 `scripts/game-assets.lock.json` 的固定上游提交；不增加或假定其再分发授权。
+游戏资产沿用 `metadata/game-assets.lock.json` 的固定上游提交；不增加或假定其再分发授权。
 
 Ubuntu 包仍从签名的 noble/noble-updates/noble-security 仓库安装，包版本清单记录在镜像内。
 基础镜像与兼容资源固定不意味着 apt 仓库永久冻结；如要求逐位可重现，应保存本次构建镜像 digest

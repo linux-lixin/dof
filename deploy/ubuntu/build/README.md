@@ -5,10 +5,10 @@
 ```bash
 git clone https://github.com/linux-lixin/dof.git /opt/dof
 cd /opt/dof
-docker build -f dnf-game/build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 dnf-game
-docker build -t dnf-admin:local-fix-20261015 dnf-server-public
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
 ```
 
 已有仓库时用 `cd /opt/dof` 和 `git pull --ff-only` 代替 clone。构建标签须与部署 `.env` 一致。
-Dockerfile 和共享资源保留在 `dnf-game/`，后台源码保留在 `dnf-server-public/`，不复制两份。
+Dockerfile 和共享资源保留在 `services/game/`，后台源码保留在 `services/admin/`，不复制两份。
 构建完成按 [平台入口](../README.md)选择整体或单独部署目录。

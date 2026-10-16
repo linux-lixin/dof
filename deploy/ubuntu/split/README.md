@@ -85,7 +85,7 @@ cp -n .env.example .env
 chmod 600 .env
 nano .env
 mkdir -p runtime/game/data
-tar -xzkf ../../../../dnf-game/build/dnf_data/home/template/init/Script.tgz -C runtime/game/data Script.pvf
+tar -xzkf ../../../../services/game/assets/home/template/init/Script.tgz -C runtime/game/data Script.pvf
 docker compose config --quiet
 docker compose up -d game
 docker compose exec game python3 /opt/dnf/ubuntu/health.py
