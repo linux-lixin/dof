@@ -2,7 +2,6 @@ name: dnf-ubuntu-p2p
 services:
   p2p:
     image: ${GAME_IMAGE:-dnf-game:ubuntu24-v1}
-    platform: linux/amd64
     pull_policy: never
     restart: unless-stopped
     environment:

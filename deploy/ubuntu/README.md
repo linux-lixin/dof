@@ -17,6 +17,7 @@ Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的�
 自建 MySQL 不代表游戏节点拆分；同一台服务器运行 game/admin 使用第 1–3 节即可。
 
 准备已安装 Docker Engine/Compose 的 Linux amd64 服务器，以及独立管理的 MySQL 5.6 实例。
+构建及 Compose 使用 Docker 默认平台，不再显式指定 `--platform` 或 `platform:`；以下流程用于 x86_64 服务器。
 构建需要访问 Docker 镜像仓库、Ubuntu APT、Maven/npm 源；游戏资源与兼容依赖源码已在 Git 内。
 不需要单独下载游戏资源、运行资源下载脚本或下载源码 ZIP。
 
@@ -24,8 +25,8 @@ Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的�
 cd /opt
 git clone https://github.com/linux-lixin/dof.git
 cd dof
-docker build --platform linux/amd64 -f dnf-game/build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 dnf-game
-docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-public
+docker build -f dnf-game/build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 dnf-game
+docker build -t dnf-admin:local-fix-20261015 dnf-server-public
 cd deploy/ubuntu
 cp -n .env.example .env
 chmod 600 .env

@@ -2,7 +2,6 @@
 services:
   game-base:
     image: ${GAME_IMAGE:-dnf-game:ubuntu24-v1}
-    platform: linux/amd64
     pull_policy: never
     restart: unless-stopped
     shm_size: 8g
@@ -34,7 +33,6 @@ services:
       - ./runtime/game/log:/home/neople/game/log
   admin-base:
     image: ${ADMIN_IMAGE:-dnf-admin:local-fix-20261015}
-    platform: linux/amd64
     pull_policy: never
     restart: "no"
     environment:
