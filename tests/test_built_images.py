@@ -195,7 +195,7 @@ try:
                "AND TABLE_NAME='accounts' AND COLUMN_NAME IN ('admin','parent_uid','isRobot');").stdout.strip()=='3'
     report['backend_table_count']=sql("SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='dnf_service';").stdout.strip()
     report['checks'].append('Backend fresh initialization with MYSQL_INIT_SSL_MODE=disabled; marker, account columns, HTTP frontend/API pass')
-    bootstrap=(ROOT/'deploy/external-mysql/bootstrap-admin.sql.example').read_text(encoding='utf8')
+    bootstrap=(ROOT/'deploy/shared/bootstrap-admin.sql.example').read_text(encoding='utf8')
     bootstrap=bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD',secrets.token_hex(12))
     bootstrap=bootstrap.replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET',secrets.token_hex(12))
     sql(bootstrap)

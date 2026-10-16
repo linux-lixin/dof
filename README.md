@@ -2,6 +2,19 @@
 
 集成 1995chen 游戏部署、onlyGuo 后台和 Windows 登录器，保留本地已验证的数据库与初始化修复。主流程是 **Linux 服务器 + 自建外部 MySQL 5.6 + 两个 Docker 镜像**，公网直连，不使用隧道。
 
+部署文件已按系统和方式分类，先选入口：
+
+| 需求 | 文档与目录 |
+|---|---|
+| Ubuntu 整体部署 | [deploy/ubuntu/all](deploy/ubuntu/all/README.md) |
+| Ubuntu CORE / GAME / P2P 分主机 | [deploy/ubuntu/split](deploy/ubuntu/split/README.md) |
+| CentOS 整体部署 | [deploy/centos/all](deploy/centos/all/README.md) |
+| 后台单独部署 | [Ubuntu](deploy/ubuntu/split/admin/README.md) / [CentOS](deploy/centos/split/admin/README.md) |
+| 已按旧目录运行 | [目录迁移步骤](deploy/MIGRATION.md) |
+
+完整目录树见 [部署导航](deploy/README.md)，所有说明见 [文档索引](docs/README.md)。
+每个部署目录各自保存 `.env` 和 `runtime/`；游戏、后台和登录器源码仍各保留一份。
+
 ## 当前完成情况
 
 - 游戏首次导入时修复 `log_query_ref` 原始种子的编号溢出；包含有条件的旧库修复脚本。
@@ -28,20 +41,20 @@ docker build -t dnf-admin:local-fix-20261015 dnf-server-public
 
 ## 部署
 
-全新服务器从这里开始：[完整部署步骤：Git 拉取、服务器构建、自建 MySQL、登录器与更新](docs/fresh-server-deployment.md)。
+全新服务器从这里开始：[完整部署步骤：Git 拉取、服务器构建、自建 MySQL、登录器与更新](docs/centos/deployment.md)。
 
 可选 Ubuntu 24.04 版使用独立的 [Ubuntu 构建和四角色部署说明](deploy/ubuntu/README.md)，
 仅连接外部 MySQL，不包含 NetBird/Tailscale，已移除旧统一登录器网关 `tongyi_gate`，使用 onlyGuo 后台登录流程。
-Ubuntu ALL/GAME 启动前必须自行放入
-`deploy/ubuntu/runtime/game/data/Script.pvf`，不再自动使用内置 PVF。原 CentOS 入口仍是默认；
-兼容性与实测边界见 [Ubuntu 依赖审计](docs/ubuntu-compatibility.md) 和 [Ubuntu 验收结果](docs/ubuntu-validation.md)。
+Ubuntu ALL/GAME 启动前必须自行放入当前部署目录的
+`runtime/game/data/Script.pvf`（ALL 在 `deploy/ubuntu/all`，GAME 在 `deploy/ubuntu/split/game`），不再自动使用内置 PVF。原 CentOS 入口仍是默认；
+兼容性与实测边界见 [Ubuntu 依赖审计](docs/ubuntu/compatibility.md) 和 [Ubuntu 验收结果](docs/ubuntu/validation.md)。
 
 
-使用 [自建镜像部署说明](deploy/local-images/README.md) 和 `deploy/local-images/compose.yaml`。将 `.env.example` 复制为 `.env` 后填写地址和密码，先启动 game，确认数据库及频道启动，再启动 admin。
+使用 [自建镜像部署说明](deploy/centos/all/README.md) 和 `deploy/centos/all/compose.yaml`。将 `.env.example` 复制为 `.env` 后填写地址和密码，先启动 game，确认数据库及频道启动，再启动 admin。
 
-数据库由用户独立部署；MySQL 5.6.50 曾在服务器验证，5.6.51 用于本地隔离测试。管理员账号 `admin` 按 `bootstrap-admin.sql.example` 注释单独初始化，密码自行设置。当前后台的默认推荐人也为 `admin`；已有 `123123` 的改名步骤见 Ubuntu 部署文档，更新代码不会自动改动已有账号。后台 SSL 初始化选项为 `MYSQL_INIT_SSL_MODE=disabled`，与 JDBC 的 `useSSL=false` 分开配置。
+数据库由用户独立部署；MySQL 5.6.50 曾在服务器验证，5.6.51 用于本地隔离测试。管理员账号 `admin` 按 [共享初始化 SQL](deploy/shared/bootstrap-admin.sql.example) 注释单独初始化，密码自行设置。当前后台的默认推荐人也为 `admin`；已有 `123123` 的改名步骤见 Ubuntu 部署文档，更新代码不会自动改动已有账号。后台 SSL 初始化选项为 `MYSQL_INIT_SSL_MODE=disabled`，与 JDBC 的 `useSSL=false` 分开配置。
 
-旧官方镜像的补丁挂载方案保留在 `deploy/external-mysql`、`deploy/test`，供已有部署参考。**自建镜像流程不要混用旧补丁挂载。** 已有数据卷里的启动脚本和配对密钥需核对后迁移，不能直接把新镜像当旧镜像的无差别替换。
+旧官方镜像的补丁挂载方案保留在 `deploy/centos/legacy/external-mysql`、`deploy/centos/legacy/bundled-mysql`，供已有部署参考。**自建镜像流程不要混用旧补丁挂载。** 已有数据卷里的启动脚本和配对密钥需核对后迁移，不能直接把新镜像当旧镜像的无差别替换。
 
 ## 验证
 

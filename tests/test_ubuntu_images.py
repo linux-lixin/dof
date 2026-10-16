@@ -173,7 +173,7 @@ def main(options):
         adminip=json.loads(docker('inspect',state['admin']).stdout)[0]['NetworkSettings']['Networks'][state['network']]['IPAddress']
         state['url']='http://'+adminip; save()
         wait('backend API',api,180)
-        bootstrap=(ROOT/'deploy/external-mysql/bootstrap-admin.sql.example').read_text()
+        bootstrap=(ROOT/'deploy/shared/bootstrap-admin.sql.example').read_text()
         sql(bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD',secrets.token_hex(12)).replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET',secrets.token_hex(12)))
         assert sql("SELECT admin FROM d_taiwan.accounts WHERE accountname='admin'").stdout.strip()=='1'
         fingerprints={name:docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0] for name in ('private.key','publickey.pem')}

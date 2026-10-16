@@ -42,3 +42,8 @@ Thumbs.db
 # Per-user IDE state
 *.user
 *.suo
+
+# Deployment-local credentials and player distributions
+**/bootstrap-admin.sql
+**/admin-initial-credentials.txt
+**/packages/

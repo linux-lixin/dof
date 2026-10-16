@@ -17,7 +17,7 @@
 
 ## 全新部署
 
-1. 上传整个 `deploy/external-mysql/`（或者内置数据库方案 `deploy/test/`），必须包含 `fixes/` 子目录。已有云服务器使用的目录是 `/opt/dnf`。
+1. 上传整个 `deploy/centos/legacy/external-mysql/`（或者内置数据库方案 `deploy/centos/legacy/bundled-mysql/`），必须包含 `fixes/` 子目录。已有云服务器使用的目录是 `/opt/dnf`。
 2. 根据 `.env.example` 填写 `.env`，准备与游戏端匹配的 RSA 密钥。
 3. 对当前专用旧 MySQL 测试实例保留 `MYSQL_INIT_SSL_MODE=disabled`。这只影响后台命令行初始化的 TLS；JDBC 的 `useSSL=false` 是独立设置。需要客户端默认 TLS 行为时用 `auto`。
 4. `docker compose config --quiet`，然后 `docker compose up -d game`。首次导入前修复原始日志种子：只将已知查询的 ID 65535 改为未占用的 50939，自增起点改为 50940，保留全部 394 条查询及 SMALLINT 类型。
@@ -74,4 +74,4 @@ Supervisor 的 RUNNING 和 Docker 的 healthy 不足以证明进服成功。还�
 
 构建入口为游戏 `build/Centos7-DNF/Dockerfile` 和后台根目录 `Dockerfile`。本次实际构建发现并修复：后台失效的 `COPY libs`、Windows 检出游戏 shell 脚本的 CRLF，以及 CentOS 7 旧 HTTP 软件源。游戏改为官方 7.9.2009 HTTPS 归档，并在更新 centos-release 后恢复归档源，防止 RPM 写回失效源。修复未推送远端。
 
-产物及最终结果见 `dist/README.md`、`dist/build-manifest.json`、`dist/image-test-report.json` 和 `dist/game-readiness-report.json`。自建镜像使用 `deploy/local-images`，不挂载旧镜像专用的 fixes 目录。管理员 SQL 仍需单独执行；现有持久化启动脚本和密钥需要单独核对，不能把换镜像标签等同于已有数据迁移。
+产物及最终结果见 `dist/README.md`、`dist/build-manifest.json`、`dist/image-test-report.json` 和 `dist/game-readiness-report.json`。自建镜像使用 `deploy/centos/all`，不挂载旧镜像专用的 fixes 目录。管理员 SQL 仍需单独执行；现有持久化启动脚本和密钥需要单独核对，不能把换镜像标签等同于已有数据迁移。

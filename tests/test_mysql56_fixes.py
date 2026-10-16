@@ -90,7 +90,7 @@ try:
     sql('USE d_taiwan;\n'+ddl(main,'accounts'))
     backend=(ROOT/'dnf-server-public/init.sql').read_text(encoding='utf8').replace('${DB_NAME}','dnf_service')
     sql(backend)
-    bootstrap=(ROOT/'deploy/external-mysql/bootstrap-admin.sql.example').read_text(encoding='utf8')
+    bootstrap=(ROOT/'deploy/shared/bootstrap-admin.sql.example').read_text(encoding='utf8')
     bootstrap=bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD','localtestonly').replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET','testsecretone')
     sql(bootstrap)
     assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin' AND admin=1;").stdout.strip()=='1'
