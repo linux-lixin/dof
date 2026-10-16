@@ -5,7 +5,6 @@
 | Ubuntu 单机完整流程 | [拉取、构建、外置 MySQL、启动](../deploy/ubuntu/all/README.md) |
 | 跨主机分角色部署 | [CORE / GAME / P2P / 后台](../deploy/ubuntu/split/README.md) |
 | 所有部署入口 | [部署导航](../deploy/README.md) |
-| 已有数据与升级 | [迁移说明](../deploy/MIGRATION.md) |
 | 后台开发 | [后台文档](admin/README.md) |
 | 登录器与自动更新 | [客户端配置](launcher/deployment.md)、[工程说明](launcher/README.md) |
 | Ubuntu 依赖与端口 | [兼容说明](ubuntu/compatibility.md)、[端口表](ubuntu/ports.md) |

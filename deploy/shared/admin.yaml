@@ -1,7 +1,7 @@
 # Shared onlyGuo backend; runtime mounts belong to each deployment leaf.
 services:
   admin-base:
-    image: ${ADMIN_IMAGE:-dnf-admin:local-fix-20261015}
+    image: ${ADMIN_IMAGE:-dnf-admin:latest}
     pull_policy: never
     restart: "no"
     environment:

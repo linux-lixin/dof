@@ -19,7 +19,7 @@
 从仓库根目录执行：
 
 ```sh
-docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
 ```
 
 构建执行 ELF 重定位检查、GeoIP 数据加载和共享内存探针。当前清理后检查覆盖 27 个游戏/模板/工具 ELF 和 3 个私有兼容库，均无未解析依赖。

@@ -6,7 +6,7 @@
 从仓库根目录构建：
 
 ```bash
-docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 ```
 
 Docker 构建包含前端和后端，不要求宿主机另装 Java/Node。不要只把 `docker/` 作为构建上下文。

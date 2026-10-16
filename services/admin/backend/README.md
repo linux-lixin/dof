@@ -5,7 +5,7 @@
 完整后台镜像从仓库根目录构建，包含前端和后端：
 
 ```sh
-docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 ```
 
 单独开发后端时，在本目录使用已安装的 Maven 执行 `mvn package -DskipTests`。详细环境说明见[后台开发与部署](../../../docs/admin/README.md)。不要将真实数据库口令或私钥写入资源文件。

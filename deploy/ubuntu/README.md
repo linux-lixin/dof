@@ -15,10 +15,9 @@ Ubuntu 镜像仅连接自建外部 MySQL，使用 onlyGuo 后台；不含内置 
 | shared | 共享游戏 Compose 定义，不直接启动 |
 
 每个实际部署目录都自带 `.env.example`。把它复制为该目录的 `.env`，填写后在同一目录运行
-`docker compose config --quiet` 和 `docker compose up`。所有角色复用同一后台镜像。
+`docker compose config --quiet` 和 `docker compose up`。CORE/GAME/P2P 复用同一游戏镜像，后台使用独立镜像。
 
-旧版直接在 `deploy/ubuntu` 运行的用户，先看 [目录迁移说明](../MIGRATION.md)。
-不要在新目录直接启动空数据栈。这里按**镜像系统**分类，宿主机同样可以是 Ubuntu。
+默认按全新部署使用各角色独立的 `runtime/`，初始化管理员统一为 `admin`。游戏镜像为 `dnf-game:ubuntu24.04`，后台为 `dnf-admin:latest`，均在服务器从源码构建。
 
 ## 端口与地址
 
@@ -67,30 +66,16 @@ ALL 模板的 `P2P_PUBLIC_IP` 当前也引用必填 `PUBLIC_IP`，启用发现�
 显式 IPv4 始终优先；AUTO 模式获取一次地址，DDNS 模式持续检查。
 `DDNS_DOMAIN` 非空时解析 A 记录；为空时沿用外网地址探测脚本。首次获取有时间上限，运行中变更会触发相关服务重启。
 
-## 更新与回退
+## 首次初始化与运行目录
 
-Ubuntu `/data/.dnf-ubuntu.json` 记录平台与受管脚本哈希。升级仅覆盖匹配当前或已知旧发行版哈希的脚本。
-用户修改脚本时，启动列出冲突路径并退出，不覆盖修改。升级前先保存自定义改动，再根据新脚本重新合并。
-PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh` 不参与自动脚本升级。
-新增旧发行版可升级列表时维护 `services/game/runtime/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
+全新部署使用所选目录下的 `runtime/`。ALL/GAME 首次启动前只需手动准备配套 `Script.pvf`，
+后台首次启动自动创建 RSA 密钥对，再按[整体部署第 3 节](all/README.md#3-启动后台初始化管理员配对密钥)将公钥同步给游戏端。
+不要提前创建受管 `run/` 脚本或未知配置；启动程序会生成本版运行文件及 `/data/.dnf-ubuntu.json` 状态标记。
 
-未标记的旧数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
-首次启动前，数据目录中预放经核对的 `Script.pvf`、`publickey.pem`，无需旧网关 `privatekey.pem`。
-不要提前放入 `Config.ini`、`dp/` 或其他自定义配置，否则未标记目录检查会拒绝启动。
-完成首次初始化、确认 `.dnf-ubuntu.json` 已生成后，停止对应角色服务，再备份并按需合并必要的自定义配置、
-`dp/` 内容或 `user_daily_script.sh`；不要复制旧部署的受管 `run/`、`monitor_ip/` 脚本覆盖新版本。
-重新启动并验收后再决定切换。自定义 DP 插件需另行测试其 ABI；后台 RSA 私钥对仍按[整体部署第 3 节](all/README.md#3-启动后台初始化管理员配对密钥)单独保留和配对。
-
-回退时使用此前已保存的 Ubuntu 镜像与对应配置、运行目录及数据库，不从当前仓库重建已移除的平台。
-本流程不改动这些资源；不能把 Ubuntu 新写入的测试数据库直接当作原业务数据库回退。
-不要执行会删除业务数据卷的 `down -v`。
-
-从含旧网关的 Ubuntu 版本升级：拉取代码并重建游戏镜像后，执行
-`docker compose up -d --force-recreate game`（拆分 CORE/GAME/P2P 分别使用对应 Compose 文件）。
-仅执行 restart 不会更换镜像；重建容器后旧进程和旧容器配置随之移除。
-已有 `.env` 中的 `GATE_PASSWORD` 可删除。挂载目录里历史 `Config.ini`、`privatekey.pem` 不再读取或生成，
-不会为清理日志而自动删除你的持久化文件。自定义 `/data/conf.d` 若另行定义了旧网关，需要自行移除该自定义启动项。
-旧登录器兼容入口及其专用依赖已从源码和构建流程删除。
+正常停止、重启继续使用同一个运行目录，保留 PVF、配置、密钥和数据库初始化标记。
+受管脚本有哈希校验，自定义修改冲突时会列出文件并停止，不会静默覆盖；平台标记不匹配时同样拒绝启动。
+PVF、密钥和自定义 hook 不作为普通脚本覆盖。不要删除标记或清空数据来绕过启动错误。
+后台使用 `restart: "no"`，服务器重启后等待游戏健康，再执行 `docker compose up -d admin`。
 
 ## 可重复验收
 
@@ -98,8 +83,8 @@ PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh
 
 ```bash
 python3 tests/unit/test_ubuntu_runtime.py
-python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
-python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24-v1 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
+python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24.04 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
+python3 tests/integration/test_built_images.py --ubuntu --game-image dnf-game:ubuntu24.04 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
 ```
 
 每个测试使用独立名称、网络、卷和随机凭据，无公网端口、不访问现有服务器。

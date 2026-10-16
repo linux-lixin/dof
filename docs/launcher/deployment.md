@@ -1,8 +1,8 @@
 # 后台配置、客户端与自动更新
 
-先完成 [Ubuntu 游戏和后台部署](../../deploy/ubuntu/all/README.md)，再按本文配置玩家端。以下章节编号保留，便于已有引用定位。拆分部署的端口以各节点 Compose 和端口表为准。
+先完成 [Ubuntu 游戏和后台部署](../../deploy/ubuntu/all/README.md)，再按本文配置玩家端。拆分部署的端口以各节点 Compose 和端口表为准。
 
-## 12. 开放端口并配置后台
+## 1. 开放端口并配置后台
 
 云安全组和宿主机网络规则需要允许以下端口。测试阶段可以把来源限制为测试电脑公网 IP：
 
@@ -31,7 +31,7 @@ curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 
 返回的服务器地址应是你的地址。登录器使用这条匿名配置接口，不能仅因路径里有 `admin` 就在代理层一律禁止访问。
 
-## 13. 在 Windows 编译登录器并配置客户端
+## 2. 在 Windows 编译登录器并配置客户端
 
 WPF 登录器在 Windows 编译。安装 **.NET 10 SDK**，仅安装 Runtime 不够，参见 [微软安装说明](https://learn.microsoft.com/en-us/dotnet/core/install/windows)。
 
@@ -89,7 +89,7 @@ sha256sum /opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf
 
 两边需要使用配套资源，这里的 PVF 内容应一致。服务端能启动不代表任意客户端都能登录；客户端还需要完整的 EXE、DLL、ImagePacks2 等文件。
 
-## 14. 测试注册、登录和进游戏
+## 3. 测试注册、登录和进游戏
 
 运行 `DNFLogin.exe`：
 
@@ -102,7 +102,7 @@ sha256sum /opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf
 
 登录器会从后台获取配置并写入 `DNF.toml`，服务器地址应在后台配置好，不能只改本地 TOML。API 返回凭据不代表游戏端已经接受；失败时检查游戏日志、关联账号表、密钥配对、PVF、IP 和 TCP/UDP 放行情况。
 
-## 15. 配置完整客户端下载与自动更新
+## 4. 配置完整客户端下载与自动更新
 
 先完成正常进游戏测试，再单独启动静态下载容器（首次需要拉取 Nginx 镜像）：
 

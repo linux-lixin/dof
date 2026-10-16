@@ -19,8 +19,8 @@ python -m unittest discover -s tests/structure -p "test_*.py"
 
 ```sh
 python tests/integration/test_mysql56_fixes.py
-python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
-python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24-v1 --admin-image dnf-admin:local-fix-20261015 --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
+python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24.04 --admin-image dnf-admin:latest --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800
+python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24.04 --admin-image dnf-admin:latest --mode split --state-file dist/ubuntu-split-state.json --stable-seconds 1800
 ```
 
 每次镜像验收使用独立网络、卷、容器名称和测试凭据；测试 MySQL 仅模拟外部数据库。完成后按对应状态文件清理：

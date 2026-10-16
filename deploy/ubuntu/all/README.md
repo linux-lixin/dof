@@ -1,5 +1,6 @@
 # Ubuntu 24.04 整体部署（ALL + 后台）
 
+本文默认是全新服务器首次部署：新建运行目录、初始化专用数据库、创建 `admin` 管理员。
 本项目仅提供 Ubuntu 游戏镜像。
 仅支持 amd64 和外部 MySQL；本轮验收基线为 MySQL 5.6.51。后台与登录器沿用现有版本。
 实际测试范围和未验收项见 [Ubuntu 验收报告](../../../docs/ubuntu/validation.md)，
@@ -25,17 +26,17 @@ Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的�
 cd /opt
 git clone https://github.com/linux-lixin/dof.git
 cd dof
-docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
-docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 cd deploy/ubuntu/all
-cp -n .env.example .env
+cp .env.example .env
 chmod 600 .env
 nano .env
 ```
 
-已有 `/opt/dof` 仓库时不要重新克隆，进入仓库执行 `git pull --ff-only`，再执行上面的两个构建命令。
-已有 `.env` 和运行数据保留，不要用示例文件覆盖。构建后的镜像名须与 `.env` 的 `GAME_IMAGE`、`ADMIN_IMAGE` 一致。
-下文文件操作以默认 `./runtime` 为准；若设置了 `RUNTIME_ROOT`，将文件操作中的 `runtime/` 换成该实际目录。
+游戏镜像统一为 `dnf-game:ubuntu24.04`，后台为 `dnf-admin:latest`；两个标签与 `.env.example`、Compose 默认值一致。
+`ubuntu24.04` 标识游戏基础系统，`latest` 表示本次源码构建的后台镜像；Compose 禁止自动拉取同名远端镜像。
+以下全部 Compose 命令都在 `/opt/dof/deploy/ubuntu/all` 执行。默认数据写入该目录的 `runtime/`，全新部署不需要设置 `RUNTIME_ROOT`。
 
 填写真实 `PUBLIC_IP`、`DB_HOST`、`DB_PORT` 和各密码。`203.0.113.*` 仅是文档示例。
 `GAME_DB_PASSWORD` 恰好 8 位字母/数字，可用 `openssl rand -hex 4` 生成。
@@ -66,10 +67,10 @@ docker compose run --rm --no-deps --entrypoint bash game -c \
 
 ## 2. ALL 单机启动
 
-始终使用新的 `deploy/ubuntu/all/runtime/`，不要复制未标记的旧运行目录进来。
+本流程使用 `deploy/ubuntu/all/runtime/` 作为全新运行目录。
 ALL/GAME 首次启动前必须手动放置与客户端匹配的 `Script.pvf`，文件名大小写必须一致。
-镜像不再自动提供默认 PVF；缺少文件、文件为空或误建成目录时，会在连接和修改数据库之前退出。
-CORE/P2P 不需要该文件。现有数据目录中的 PVF 会保留，不自动覆盖。
+镜像不会自动解压 PVF；缺少文件、文件为空或误建成目录时，会在连接和修改数据库之前退出。
+CORE/P2P 不需要该文件。启动过程不会覆盖你放置的 PVF。
 
 **先测试仓库自带版本：直接使用下面的手动解压命令。** 仓库已经包含
 `/opt/dof/services/game/assets/home/template/init/Script.tgz`，里面就是 `Script.pvf`，无需额外下载。
@@ -88,8 +89,7 @@ ls -lh runtime/game/data/Script.pvf
 `/opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf`。两种方式选一种即可。
 确认 `ls` 显示文件且大小不为 0；如果提示 `No such file or directory`，尚未准备好，不能继续启动。
 
-默认挂载关系为 `./runtime/game/data:/data`（可用 `RUNTIME_ROOT` 指向已有运行根目录），无需另外增加单文件挂载。公钥可预放配对版本。
-替换已有 PVF 时先执行 `docker compose stop game`，上传完成后再 `docker compose up -d game`。
+默认挂载关系为 `./runtime/game/data:/data`，无需另外增加单文件挂载。公钥在后台首次启动后按第 3 节同步。
 文件检查只能确认存在且非空，版本是否匹配仍需实际启动和客户端验证。
 
 ```bash
@@ -135,17 +135,17 @@ docker compose logs -f --tail 100 admin
 后台正常启动后，按 `Ctrl+C` 退出日志查看。首次启动会自动生成 `/app/data/private.key` 和
 `/app/data/publickey.pem`，宿主机对应 `runtime/admin/data/`。已有完整配对密钥会复用，不需手动重新生成。
 
-管理员仍需单独初始化。先检查 `admin` 与旧版 `123123` 是否已存在：
+后台管理员统一为 `admin`，没有固定默认密码。首次初始化前先查询，防止重复执行创建步骤：
 
 ```bash
 docker compose exec -T game bash -c \
 'MYSQL_PWD="$MAIN_MYSQL_ROOT_PASSWORD" exec mysql -h "$MAIN_MYSQL_HOST" -P "$MAIN_MYSQL_PORT" -uroot' <<'SQL'
 SELECT UID, accountname, admin FROM d_taiwan.accounts
-WHERE accountname IN ('admin', '123123');
+WHERE accountname = 'admin';
 SQL
 ```
 
-已有管理员时跳过新建步骤；旧 `123123` 的改名方法见下文。仅在确认需要新建时准备 SQL：
+查询无记录后准备初始化 SQL；如果已存在 `admin`，说明创建步骤已经执行，不要重复插入：
 
 ```bash
 cp ../../shared/bootstrap-admin.sql.example bootstrap-admin.sql
@@ -154,7 +154,12 @@ nano bootstrap-admin.sql
 ```
 
 初始化账号为 `admin`，普通玩家未填写推荐人时也默认使用 `admin`。管理员密码由你填写，没有固定默认密码。
-先修改 SQL 中两个占位密码，按注释核对已有账号，避免重复创建。不要提交编辑后的 SQL 或把密码粘贴到日志。
+修改 SQL 中两个占位值：
+
+- `CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD`：后台 `admin` 的登录密码。
+- `CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET`：另一个独立随机密串，用于临时授权，可用 `openssl rand -hex 16` 生成。
+
+两者使用字母、数字，不能保留占位文本。不要提交编辑后的 SQL 或把密码粘贴到日志。
 保存后通过游戏容器自带客户端执行，不要求宿主机额外安装 mysql 命令：
 
 ```bash
@@ -164,22 +169,6 @@ docker compose exec -T game bash -c \
 
 确认执行成功后再 `rm bootstrap-admin.sql`。此账号用于后台管理及默认推荐关系，不是完整游戏账号。
 
-已有库升级不会自动改名。如果之前创建了 `123123`，先查询：
-
-```sql
-SELECT UID, accountname, admin FROM d_taiwan.accounts
-WHERE accountname IN ('123123', 'admin');
-```
-
-仅当 `admin` 不存在且 `123123` 确为需要改名的管理员时，执行：
-
-```sql
-UPDATE d_taiwan.accounts SET accountname = 'admin'
-WHERE accountname = '123123' AND admin = 1;
-```
-
-这会保留 UID、密码和基于 UID 的推荐关系；若 `admin` 已存在，应先核对其身份，不能覆盖或重复插入。
-重建并更新后台镜像后，玩家未填推荐人才会使用新的默认值。已有库不要重放后台初始化 SQL。
 后台生成自己的 RSA 密钥对后，将公钥同步给游戏端：
 
 ```bash
@@ -189,7 +178,7 @@ docker compose restart game
 
 重启后等待游戏重新变为 healthy，再执行 `docker compose exec game python3 /opt/dnf/ubuntu/health.py`。
 后台 `/app/data/private.key` 保持私密。所有 GAME 节点都需要与后台私钥对应的公钥。
-旧统一登录器的 `privatekey.pem` 不再使用；后台的 `private.key` 和游戏的 `publickey.pem` 仍必须配对。
+后台的 `private.key` 和游戏的 `publickey.pem` 必须配对。
 
 浏览器打开 `http://服务器公网IP:18080/login`，使用 `admin` 和 SQL 中自行设置的管理员密码登录。
 确保云安全组和主机防火墙允许 TCP 18080；游戏所需端口见 [端口与运维说明](../README.md#端口与地址)。
@@ -203,9 +192,9 @@ curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 ```
 
 确认返回的“服务器地址”为自己的玩家入口，且玩家可访问后台 API 和[角色端口表](../../../docs/ubuntu/ports.md)列出的游戏端口。
-完整的后台配置、客户端包、登录器配置和更新发布步骤见 [完整部署文档第 12–15 步](../../../docs/launcher/deployment.md#12-开放端口并配置后台)。
+完整的后台配置、客户端包、登录器配置和更新发布步骤见 [客户端部署文档](../../../docs/launcher/deployment.md#1-开放端口并配置后台)。
 本轮没有验证真实 Windows 客户端注册、登录、进副本、组队与自动更新下载。
 
 
-拆分部署见 [CORE / GAME / P2P](../split/README.md)；升级、回退和测试见 [Ubuntu 目录说明](../README.md)。
-目录升级见 [旧目录迁移](../../MIGRATION.md)。
+拆分部署见 [CORE / GAME / P2P](../split/README.md)；端口、运行目录和测试见 [Ubuntu 目录说明](../README.md)。
+后台使用 `restart: "no"`，服务器重启后等待游戏健康，再执行 `docker compose up -d admin`。

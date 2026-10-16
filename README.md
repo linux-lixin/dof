@@ -8,16 +8,19 @@
 | CORE、GAME、P2P 分主机 | [拆分部署](deploy/ubuntu/split/README.md) |
 | 后台单独部署 | [独立后台](deploy/ubuntu/split/admin/README.md) |
 | 登录器、客户端和更新包 | [客户端配置](docs/launcher/deployment.md) |
-| 已有部署升级 | [迁移说明](deploy/MIGRATION.md) |
+
+默认按全新服务器、全新运行目录和专用数据库部署，管理员账号统一为 `admin`，密码在初始化时自行设置。
 
 ## 拉取和构建
 
 ```bash
 git clone https://github.com/linux-lixin/dof.git /opt/dof
 cd /opt/dof
-docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
-docker build -f services/admin/docker/Dockerfile -t dnf-admin:local-fix-20261015 services/admin
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
+docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 ```
+
+镜像命名统一为 `dnf-game:ubuntu24.04` 和 `dnf-admin:latest`：前者标识游戏基础系统，后者表示本次源码构建的后台镜像。部署使用本地镜像，不会自动拉取同名远端镜像。
 
 Git 已包含游戏资源和必要兼容源码，无需额外下载脚本或 Git LFS。构建仍需连接镜像仓库、APT、Maven/npm 软件源。
 接着按完整部署文档配置 `.env`、手动放置 `Script.pvf`、检查数据库连接，再启动游戏和后台。仓库里的 `services/game/assets/home/template/init/Script.tgz` 可手动解压用于配套测试，不会在启动时自动覆盖你的 PVF。

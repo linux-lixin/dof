@@ -11,7 +11,7 @@
 在仓库根目录构建：
 
 ```bash
-docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24-v1 services/game
+docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
 ```
 
 启动脚本已直接保存为 Ubuntu 版本，不再依靠构建时剪裁旧平台脚本。

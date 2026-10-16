@@ -1,7 +1,7 @@
 # Shared service definitions; leaf deployment directories own their runtime mounts.
 services:
   game-base:
-    image: ${GAME_IMAGE:-dnf-game:ubuntu24-v1}
+    image: ${GAME_IMAGE:-dnf-game:ubuntu24.04}
     pull_policy: never
     restart: unless-stopped
     shm_size: 8g
