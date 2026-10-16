@@ -1,0 +1,12 @@
+[program:tongyi_gate]
+command=/bin/bash -c "./DnfGateServer"
+directory=/root
+user=root
+autostart=false
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stdout_logfile=/dev/fd/1
+redirect_stderr=true
+stdout_logfile_maxbytes=0
+stderr_logfile_maxbytes=0
