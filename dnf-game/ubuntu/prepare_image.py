@@ -24,6 +24,11 @@ def main():
     write(BASE/'mysql',(BASE/'mysql').read_text())
     shutil.copyfile(BASE/'mysql','/usr/local/bin/mysql')
     Path('/usr/local/bin/mysql').chmod(0o755)
+    # These two daemons actually bind this_ip; advertised public/NAT addresses
+    # do not belong to a bridge-network container. Game routes use CORE_PUBLIC_IP.
+    for service in ('auction','point'):
+        path=Path('/home/template/neople')/service/'cfg/server.cfg'
+        write(path,replace(path.read_text(),'this_ip = PUBLIC_IP','this_ip = 0.0.0.0'))
     legacy=(BASE/'legacy-entrypoint.sh').read_text()
     entry='#!/bin/bash\n'+legacy[legacy.index('# 清除MONITOR_PUBLIC_IP文件'):]
     entry=replace(entry,'mkdir -p /data/log/netbird\n','')

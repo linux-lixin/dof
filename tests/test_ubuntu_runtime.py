@@ -12,8 +12,8 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 ADAPTER = ROOT / 'dnf-game/ubuntu'
 
-def module(name):
-    path = ADAPTER / (name + '.py')
+def module(name, directory=ADAPTER):
+    path = directory / (name + '.py')
     if not path.exists():
         raise AssertionError('Ubuntu adapter missing: ' + name)
     spec = importlib.util.spec_from_file_location(name, path)
@@ -22,6 +22,25 @@ def module(name):
     return result
 
 class UbuntuRuntime(unittest.TestCase):
+    def test_game_password_is_never_silently_truncated(self):
+        config=module('config')
+        env=dict(SERVER_TYPE='ALL',PUBLIC_IP='127.0.0.1',P2P_RELAY_INDEX='1',WEB_PASS='testweb',GM_PASSWORD='testgate',
+                 MAIN_MYSQL_HOST='192.0.2.20',MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD='RootTest',
+                 MYSQL_HOST='192.0.2.20',MYSQL_PORT='3306',DNF_DB_ROOT_PASSWORD='RootTest')
+        for password in ('Short77','Long99999','BadPass!'):
+            with self.assertRaisesRegex(ValueError,'exactly 8 alphanumeric'):
+                config.validate(dict(env,DNF_DB_GAME_PASSWORD=password))
+
+    def test_cleanup_does_not_claim_success_when_docker_retains_container(self):
+        harness=module('test_ubuntu_images',ROOT/'tests')
+        state={'network':'isolated','containers':['stuck'],'volumes':[]}
+        def fake(*args,**kwargs):
+            return subprocess.CompletedProcess(args,1 if args[0]=='rm' else 0,stdout='',stderr='')
+        with patch.object(harness,'docker',side_effect=fake):
+            harness.cleanup(state)
+        self.assertFalse(state['cleaned_up'])
+        self.assertIn('stuck',state['cleanup_errors'])
+
     def test_ddns_restarts_every_address_dependent_service(self):
         monitor=module('monitor_ip')
         core={'core:'+name for name in ('monitor','manager','bridge','channel','dbmw_guild','dbmw_mnt','dbmw_stat','auction','point','guild','statics','coserver','community')}

@@ -10,6 +10,7 @@ import sys
 DEFAULTS = dict(SERVER_TYPE='ALL', SERVER_GROUP='3', SERVER_GROUP_DB='cain',
                 CORE_PUBLIC_IP='127.0.0.1', MAIN_BRIDGE_IP='127.0.0.1',
                 P2P_PUBLIC_IP='127.0.0.1', OPEN_CHANNEL='11,52', CLIENT_POOL_SIZE='3',
+                GAME_CHANNEL_HOSTS='',
                 AUTO_PUBLIC_IP='false', DDNS_ENABLE='false', DDNS_DOMAIN='', DDNS_INTERVAL='10',
                 STARTUP_TIMEOUT='600', MYSQL_INIT_SSL_MODE='disabled', WEB_USER='admin',
                 GM_ACCOUNT='gate', GM_CONNECT_KEY='763WXRBW3PFTC3IXPFWH',
@@ -28,6 +29,25 @@ def channels(value):
     if not result or not result <= ({1,6,7} | set(range(11,40)) | set(range(52,57))):
         raise ValueError('OPEN_CHANNEL contains unsupported channels')
     return sorted(result)
+
+def channel_hosts(value, expected_channels):
+    """Require one explicit IPv4 destination for every configured CORE channel."""
+    result = {}
+    for item in value.split(','):
+        fields = item.strip().split('=')
+        if len(fields) != 2 or not re.fullmatch(r'[0-9]+', fields[0]):
+            raise ValueError('GAME_CHANNEL_HOSTS must be channel=IPv4 pairs')
+        channel = int(fields[0])
+        if channel in result:
+            raise ValueError('GAME_CHANNEL_HOSTS contains duplicate channels')
+        try:
+            result[channel] = str(ipaddress.IPv4Address(fields[1]))
+        except ValueError:
+            raise ValueError('GAME_CHANNEL_HOSTS requires explicit IPv4 destinations')
+    if set(result) != set(expected_channels):
+        raise ValueError('GAME_CHANNEL_HOSTS must cover exactly OPEN_CHANNEL')
+    return result
+
 
 def validate(given):
     env = dict(DEFAULTS, **given)
@@ -57,8 +77,13 @@ def validate(given):
         raise ValueError('SERVER_GROUP must be 1..6')
     if not re.fullmatch('[A-Za-z0-9_]+', env['SERVER_GROUP_DB']):
         raise ValueError('SERVER_GROUP_DB contains invalid characters')
-    if role in ('ALL','GAME'):
+    if role in ('ALL','CORE','GAME'):
         env['OPEN_CHANNEL'] = ','.join(str(x) for x in channels(env['OPEN_CHANNEL']))
+    if role in ('ALL','CORE'):
+        selected = channels(env['OPEN_CHANNEL'])
+        destinations = ({channel: '127.0.0.1' for channel in selected} if role == 'ALL'
+                        else channel_hosts(env['GAME_CHANNEL_HOSTS'], selected))
+        env['GAME_CHANNEL_HOSTS'] = ','.join(str(channel)+'='+destinations[channel] for channel in selected)
     if role in ('ALL','P2P') and not re.fullmatch(r'[1-9][0-9]{0,2}', env.get('P2P_RELAY_INDEX','')):
         raise ValueError('P2P_RELAY_INDEX must be a positive integer (1..999)')
     if role in ('ALL','CORE'):

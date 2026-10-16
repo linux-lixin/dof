@@ -6,6 +6,7 @@ State contains ephemeral credentials and stays in ignored dist/; reports do not.
 import hashlib
 import ipaddress
 import json
+import re
 from pathlib import Path
 import secrets
 import subprocess
@@ -33,16 +34,25 @@ def wait(description, callback, limit=600):
     raise RuntimeError('Timeout: '+description)
 
 def cleanup(state):
-    for name in reversed(state.get('containers',[])): docker('rm','-fv',name,check=False)
-    for name in state.get('volumes',[]): docker('volume','rm',name,check=False)
-    docker('network','rm',state['network'],check=False)
-    state['cleaned_up']=True
+    remaining=[]
+    resources=[('container',n) for n in reversed(state.get('containers',[]))]
+    resources += [('volume',n) for n in state.get('volumes',[])]+[('network',state['network'])]
+    for kind,name in resources:
+        args=['rm','-fv',name] if kind=='container' else [kind,'rm',name]
+        result=docker(*args,check=False)
+        if result.returncode and docker(kind,'inspect',name,check=False).returncode==0:
+            remaining.append(name)
+    state['cleaned_up']=not remaining
+    state['cleanup_errors']=remaining
 
 def main(options):
     statefile=options.state_file.resolve(); statefile.parent.mkdir(parents=True,exist_ok=True)
     if options.cleanup:
         state=json.loads(statefile.read_text()); cleanup(state)
-        statefile.write_text(json.dumps(state,indent=2)); return 0
+        statefile.write_text(json.dumps(state,indent=2))
+        if not state['cleaned_up']:
+            say('Cleanup incomplete: '+', '.join(state['cleanup_errors'])); return 1
+        return 0
     if statefile.exists() and not json.loads(statefile.read_text()).get('cleaned_up'):
         raise RuntimeError('Inspect/cleanup previous test state before reusing '+str(statefile))
     prefix='dnf-ubuntu-test-'+uuid.uuid4().hex[:8]
@@ -50,6 +60,11 @@ def main(options):
                containers=[],volumes=[],password=secrets.token_hex(16),game_password=secrets.token_hex(4),mode=options.mode)
     report=dict(started_at=time.strftime('%Y-%m-%dT%H:%M:%S'),mode=options.mode,checks=[],status='running',
                 real_windows_client='NOT TESTED: registration, gameplay, party, automatic update')
+    secrets_to_check=[state['password'],state['game_password']]
+    def sanitize(text):
+        for value in secrets_to_check:
+            if value: text=text.replace(value,'[REDACTED]')
+        return re.sub(r'\b(?:pw|pwd|password)\s*[:=][^\r\n]*','password=[REDACTED]',text,flags=re.IGNORECASE)
     def save(): statefile.write_text(json.dumps(state,indent=2))
     def sql(query, check=True):
         return docker('exec','-i','-e','MYSQL_PWD='+state['password'],state['db'],'mysql','-uroot','-N',data=query,check=check)
@@ -99,6 +114,8 @@ def main(options):
         subnet=json.loads(docker('network','inspect',state['network']).stdout)[0]['IPAM']['Config'][0]['Subnet']
         network=ipaddress.ip_network(subnet)
         coreip=str(network.network_address+10); gameip=str(network.network_address+11); p2pip=str(network.network_address+12)
+        # Advertised NAT addresses deliberately do not exist on any container NIC.
+        advertised_core='192.0.2.10'; advertised_game='192.0.2.11'; advertised_p2p='192.0.2.12'
         run(state['db'],MYSQL,{'MYSQL_ROOT_PASSWORD':state['password'],'MYSQL_ROOT_HOST':'%'},None)
         wait('external MySQL 5.6',lambda:sql('SELECT 1',False).returncode==0,180)
         report['mysql_version']=sql('SELECT VERSION()').stdout.strip()
@@ -111,10 +128,11 @@ def main(options):
                'openssl genpkey -algorithm RSA -out /app/data/private.key -pkeyopt rsa_keygen_bits:2048 && chmod 600 /app/data/private.key && '
                'openssl rsa -pubout -in /app/data/private.key -out /app/data/publickey.pem && cp /app/data/publickey.pem /game-data/publickey.pem')
         env=dict(SERVER_GROUP='3',SERVER_GROUP_DB='cain',OPEN_CHANNEL='11,52',CLIENT_POOL_SIZE='3',P2P_RELAY_INDEX='1',
-                 PUBLIC_IP=coreip,CORE_PUBLIC_IP='127.0.0.1',MAIN_BRIDGE_IP='127.0.0.1',P2P_PUBLIC_IP=coreip,
+                 PUBLIC_IP=advertised_core,CORE_PUBLIC_IP='127.0.0.1',MAIN_BRIDGE_IP='127.0.0.1',P2P_PUBLIC_IP=advertised_core,
                  MAIN_MYSQL_HOST=dbip,MAIN_MYSQL_PORT='3306',MAIN_MYSQL_ROOT_PASSWORD=state['password'],MAIN_MYSQL_GAME_ALLOW_IP='%',
                  MYSQL_HOST=dbip,MYSQL_PORT='3306',MYSQL_GAME_ALLOW_IP='%',DNF_DB_ROOT_PASSWORD=state['password'],
                  DNF_DB_GAME_PASSWORD=state['game_password'],WEB_PASS=secrets.token_hex(12),GM_PASSWORD=secrets.token_hex(12),MYSQL_INIT_SSL_MODE='disabled')
+        secrets_to_check.extend([env['WEB_PASS'],env['GM_PASSWORD']])
         badenv=dict(env,SERVER_TYPE='ALL',MAIN_MYSQL_ROOT_PASSWORD='WrongPassword')
         args=[]
         for key,value in badenv.items(): args+=['-e',key+'='+value]
@@ -125,16 +143,16 @@ def main(options):
         state['nodes']=[]
         if options.mode=='split':
             state['core']=prefix+'-core'; state['p2p']=prefix+'-p2p'
-            p2penv=dict(SERVER_TYPE='P2P',PUBLIC_IP=p2pip,CORE_PUBLIC_IP=coreip,MAIN_BRIDGE_IP=coreip,SERVER_GROUP='3',P2P_RELAY_INDEX='1')
+            p2penv=dict(SERVER_TYPE='P2P',PUBLIC_IP=advertised_p2p,CORE_PUBLIC_IP=coreip,MAIN_BRIDGE_IP=coreip,SERVER_GROUP='3',P2P_RELAY_INDEX='1')
             run(state['p2p'],options.game_image,p2penv,volume('p2p-data'),p2pip)
             # Deliberately reverse the documented order to exercise delayed dependencies.
             time.sleep(10)
             assert not healthy(state['p2p']), 'P2P cannot be ready before CORE registration'
-            run(state['core'],options.game_image,dict(env,SERVER_TYPE='CORE'),volume('core-data'),coreip)
+            run(state['core'],options.game_image,dict(env,SERVER_TYPE='CORE',GAME_CHANNEL_HOSTS='11='+gameip+',52='+gameip),volume('core-data'),coreip)
             wait('CORE schema',lambda:sql('SELECT 1 FROM taiwan_login.log_query_ref LIMIT 1',False).returncode==0)
             wait('P2P registration and real sockets',lambda:healthy(state['p2p']))
             report['checks'].append('P2P starts before delayed CORE, remains unready, then registers automatically')
-            run(state['game'],options.game_image,dict(env,SERVER_TYPE='GAME',PUBLIC_IP=gameip,CORE_PUBLIC_IP=coreip,MAIN_BRIDGE_IP=coreip,P2P_PUBLIC_IP=p2pip),gamevol,gameip)
+            run(state['game'],options.game_image,dict(env,SERVER_TYPE='GAME',PUBLIC_IP=advertised_game,CORE_PUBLIC_IP=coreip,MAIN_BRIDGE_IP=coreip,P2P_PUBLIC_IP=advertised_p2p),gamevol,gameip)
             state['nodes']=[state['core'],state['p2p'],state['game']]
         else:
             run(state['game'],options.game_image,dict(env,SERVER_TYPE='ALL'),gamevol,coreip)
@@ -161,21 +179,30 @@ def main(options):
                'if test -f /data/daily_job/user_daily_script.sh; then printf "\\n# acceptance customization\\n" >> /data/daily_job/user_daily_script.sh; fi')
         persistent=persistent_hashes()
         assert 'Script.pvf' in persistent and 'publickey.pem' in persistent and 'libhook.so' in persistent
-        relayip=p2pip if options.mode=='split' else coreip
+        relayip=advertised_p2p if options.mode=='split' else advertised_core
         relayhost=coreip if options.mode=='split' else '127.0.0.1'
         response=docker('exec',state['game'],'bash','-c',
                         'printf "%s,1,7300\\n" "$1" | nc -N -w 2 "$2" 5003','relay-probe',relayip,relayhost).stdout
         assert response.strip()=='OK', 'netcat-openbsd relay registration did not receive acknowledgment'
         report['checks'].append('Pinned netcat implementation exchanges legacy relay registration with acknowledgment')
+        route_node=state.get('core',state['game']); expected_target=gameip if options.mode=='split' else '127.0.0.1'
+        for service in ('statics','coserver'):
+            rows=docker('exec',route_node,'cat','/home/neople/'+service+'/table/server_config.tbl').stdout.splitlines()
+            game_rows=[row.split() for row in rows if row.split() and row.split()[0]=='1']
+            assert {int(row[2]) for row in game_rows}=={11,52}
+            assert all(row[3]==expected_target and row[4]=='310'+row[2] for row in game_rows)
+        report['checks'].append('Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes')
         report['startup_seconds']=round(time.time()-time.mktime(time.strptime(report['started_at'],'%Y-%m-%dT%H:%M:%S')))
         stable_processes=service_pids()
         say('Beginning stability observation '+str(options.stable_seconds)+'s')
-        elapsed=0
-        while elapsed<options.stable_seconds:
-            interval=min(10,options.stable_seconds-elapsed); time.sleep(interval); elapsed+=interval
+        stable_started=time.monotonic(); next_notice=60
+        while time.monotonic()-stable_started<options.stable_seconds:
+            time.sleep(max(0,min(10,options.stable_seconds-(time.monotonic()-stable_started))))
             assert evidence()==pids,'Actual game PID/port/role readiness changed during stability window'
             assert service_pids()==stable_processes,'A real CORE/GAME/P2P/TSS process restarted during stability window'
-            if elapsed%60==0: say('Stable: '+str(elapsed)+' seconds')
+            elapsed=int(time.monotonic()-stable_started)
+            if elapsed>=next_notice:
+                say('Stable: '+str(elapsed)+' seconds'); next_notice=elapsed+60
         report['stable_seconds']=options.stable_seconds
         report['checks'].append('Current-run five countries and real PIDs/ports stable')
         # Fault injection is confined to recorded disposable test resources.
@@ -197,12 +224,18 @@ def main(options):
                 assert docker('exec',state['admin'],'sha256sum','/app/data/'+name).stdout.split()[0]==expected
             assert persistent_hashes()==persistent, 'Game PVF, keys, hook or user configuration changed'
         report['checks'].append('Three stop/start cycles preserve database sentinel, admin and RSA pair')
+        encrypted=docker('exec',state['game'],'bash','-c','source /run/dnf/env.sh; printf "%s" "$DEC_GAME_PWD"').stdout.strip()
+        secrets_to_check.append(encrypted)
+        for name in state['nodes']+[state['admin']]:
+            raw=docker('logs',name,check=False)
+            assert not any(value and value in raw.stdout+raw.stderr for value in secrets_to_check), 'Configured credential leaked in raw container logs: '+name
+        report['checks'].append('Raw game and backend logs contain no configured plaintext or encrypted DB credentials')
         report['resources']=docker('stats','--no-stream','--format','{{.Name}} {{.MemUsage}} {{.CPUPerc}}',*state['nodes'],state['admin'],state['db']).stdout.splitlines()
         report['image_bytes']={image:json.loads(docker('image','inspect',image).stdout)[0]['Size'] for image in report['images']}
         report['container_restarts']={name:json.loads(docker('inspect',name).stdout)[0]['RestartCount'] for name in state['nodes']}
         report['status']='passed'; say('Ubuntu '+options.mode+' acceptance PASSED')
     except Exception as exc:
-        report['status']='failed'; report['error']=str(exc); say('FAILED: '+str(exc)); return 1
+        report['status']='failed'; report['error']=sanitize(str(exc)); say('FAILED: '+report['error']); return 1
     finally:
         report['finished_at']=time.strftime('%Y-%m-%dT%H:%M:%S')
         report['node_diagnostics']={}
@@ -217,13 +250,13 @@ def main(options):
         for name in state['containers']:
             result=docker('logs',name,check=False)
             text=result.stdout+result.stderr
-            for value in (state['password'],state['game_password']): text=text.replace(value,'[REDACTED]')
+            text=sanitize(text)
             (folder/(name+'.log')).write_text(text,encoding='utf8')
         for name in state.get('nodes',[]):
             result=docker('exec',name,'bash','-c',
                          'find /home/neople/game/log -type f -name "Log*.init" -exec tail -n 100 {} +',check=False)
             text=result.stdout+result.stderr
-            for value in (state['password'],state['game_password']): text=text.replace(value,'[REDACTED]')
+            text=sanitize(text)
             (folder/(name+'-current-init.log')).write_text(text,encoding='utf8')
         (folder/'report.json').write_text(json.dumps(report,indent=2),encoding='utf8')
         save()

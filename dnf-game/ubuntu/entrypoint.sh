@@ -13,4 +13,5 @@ if [ "$SERVER_TYPE" != P2P ]; then
   MYSQL_PWD="$CUR_SG_DB_ROOT_PASSWORD" mysql -h "$CUR_SG_DB_HOST" -P "$CUR_SG_DB_PORT" -uroot -e 'SELECT 1' >/dev/null
   python3 /opt/dnf/ubuntu/database_preflight.py
 fi
+python3 /opt/dnf/ubuntu/network_config.py
 exec bash /opt/dnf/ubuntu/generated-entrypoint.sh

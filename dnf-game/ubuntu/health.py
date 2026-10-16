@@ -30,7 +30,8 @@ def check():
         required+=['df_monitor_r','df_manager_r','df_guild_r','df_statics_r','df_coserver_r','df_community_r','df_auction_r','df_point_r']
         if len([p for p in processes if p[1]=='df_dbmw_r'])!=3:
             raise ValueError('expected three real df_dbmw_r instances')
-        tcp.update([int('500'+group),int('3'+group+'303'),int('3'+group+'403'),int('3'+group+'100')])
+        tcp.update([int('500'+group),int('3'+group+'303'),int('3'+group+'403'),int('3'+group+'100'),int('3'+group+'603'),int('3'+group+'803')])
+        udp.update(int('3'+group+suffix) for suffix in ('303','403','503','703','603','803'))
         if os.environ.get('MAIN_BRIDGE_IP','127.0.0.1')=='127.0.0.1':
             required+=['df_bridge_r','df_channel_r','DnfGateServer']; tcp.update([7000,7001,7600,881])
     if role in ('P2P','ALL'):

@@ -11,7 +11,7 @@
         "libc.so.6"
       ],
       "path": "/TeaEncrypt",
-      "resolution": "linux-vdso.so.1 (0x00007ffd6c0f8000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f5290142000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5290059000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f529002b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f528fe18000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f52903c5000)",
+      "resolution": "linux-vdso.so.1 (0x00007ffd6372a000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000070dd2928b000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000070dd291a2000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000070dd29174000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070dd28f61000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000070dd2950e000)",
       "resolved_library_paths": [
         "/lib/x86_64-linux-gnu/libc.so.6",
         "/lib/x86_64-linux-gnu/libgcc_s.so.1",
@@ -36,7 +36,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/init/bridge_hook.so",
-      "resolution": "linux-gate.so.1 (0xf7f47000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7eb5000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7eb0000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7eab000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7ea6000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c6b000)\n\t/lib/ld-linux.so.2 (0xf7f49000)",
+      "resolution": "linux-gate.so.1 (0xf7f94000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7f02000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7efd000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ef8000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7ef3000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7cb8000)\n\t/lib/ld-linux.so.2 (0xf7f96000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -71,7 +71,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/init/channel_hook.so",
-      "resolution": "linux-gate.so.1 (0xf7fa2000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7f10000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f0b000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f06000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f01000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7cc6000)\n\t/lib/ld-linux.so.2 (0xf7fa4000)",
+      "resolution": "linux-gate.so.1 (0xf7ed6000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7e44000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7e3f000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7e3a000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7e35000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bfa000)\n\t/lib/ld-linux.so.2 (0xf7ed8000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -108,7 +108,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/init/df_game_r",
-      "resolution": "linux-gate.so.1 (0xf7f08000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7efa000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7ef5000)\n\tlibnxencryption.so => /opt/dnf/compat/i386/libnxencryption.so (0xf7ef2000)\n\tlibGeoIP.so.1 => /opt/dnf/compat/i386/libGeoIP.so.1 (0xf7eb1000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7eac000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7da2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7b67000)\n\t/lib/ld-linux.so.2 (0xf7f0a000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf78e8000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b0000)",
+      "resolution": "linux-gate.so.1 (0xf7fa9000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f9b000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f96000)\n\tlibnxencryption.so => /opt/dnf/compat/i386/libnxencryption.so (0xf7f93000)\n\tlibGeoIP.so.1 => /opt/dnf/compat/i386/libGeoIP.so.1 (0xf7f52000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f4d000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e43000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c08000)\n\t/lib/ld-linux.so.2 (0xf7fab000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7989000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7951000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -141,7 +141,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/init/libhook.so",
-      "resolution": "linux-gate.so.1 (0xf7fa8000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f98000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d5d000)\n\t/lib/ld-linux.so.2 (0xf7faa000)",
+      "resolution": "linux-gate.so.1 (0xf7f6d000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f5d000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d22000)\n\t/lib/ld-linux.so.2 (0xf7f6f000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -162,7 +162,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/init/mysql_proxy/forward",
-      "resolution": "linux-vdso.so.1 (0x00007ffe9b35b000)\n\tlibresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x00007731121be000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007731121b9000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000773111fa6000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007731121d5000)",
+      "resolution": "linux-vdso.so.1 (0x00007ffd6e5bc000)\n\tlibresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x000074cbb0c1f000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x000074cbb0c1a000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000074cbb0a07000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000074cbb0c36000)",
       "resolved_library_paths": [
         "/lib/x86_64-linux-gnu/libc.so.6",
         "/lib/x86_64-linux-gnu/libpthread.so.0",
@@ -187,7 +187,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/auction/df_auction_r",
-      "resolution": "linux-gate.so.1 (0xf7fc6000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d3e000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7d39000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7d34000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7d18000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7c0e000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79d3000)\n\t/lib/ld-linux.so.2 (0xf7fc8000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf799b000)",
+      "resolution": "linux-gate.so.1 (0xf7fb0000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d28000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7d23000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7d1e000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7d02000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7bf8000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79bd000)\n\t/lib/ld-linux.so.2 (0xf7fb2000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7985000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -225,7 +225,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/bridge/df_bridge_r",
-      "resolution": "linux-gate.so.1 (0xf7ede000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ed0000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7ecb000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c4c000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7c30000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b26000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf78eb000)\n\t/lib/ld-linux.so.2 (0xf7ee0000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b3000)",
+      "resolution": "linux-gate.so.1 (0xf7f4e000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f40000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f3b000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cbc000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7ca0000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b96000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf795b000)\n\t/lib/ld-linux.so.2 (0xf7f50000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7923000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -262,7 +262,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/channel/df_channel_r",
-      "resolution": "linux-gate.so.1 (0xf7f6a000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f5c000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f57000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cd8000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7cbc000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7bb2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7977000)\n\t/lib/ld-linux.so.2 (0xf7f6c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf793f000)",
+      "resolution": "linux-gate.so.1 (0xf7f53000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f45000)\n\tlibdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7f40000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cc1000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7ca5000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b9b000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7960000)\n\t/lib/ld-linux.so.2 (0xf7f55000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7928000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libdl.so.2",
@@ -297,7 +297,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/community/df_community_r",
-      "resolution": "linux-gate.so.1 (0xf7f65000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f57000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f52000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e48000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c0d000)\n\t/lib/ld-linux.so.2 (0xf7f67000)",
+      "resolution": "linux-gate.so.1 (0xf7fa0000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f92000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f8d000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e83000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c48000)\n\t/lib/ld-linux.so.2 (0xf7fa2000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -328,7 +328,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/coserver/df_coserver_r",
-      "resolution": "linux-gate.so.1 (0xf7f49000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f3b000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f36000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e2c000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bf1000)\n\t/lib/ld-linux.so.2 (0xf7f4b000)",
+      "resolution": "linux-gate.so.1 (0xf7f8a000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f7c000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f77000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e6d000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c32000)\n\t/lib/ld-linux.so.2 (0xf7f8c000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -358,7 +358,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/dbmw_guild/df_dbmw_r",
-      "resolution": "linux-gate.so.1 (0xf7f71000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f63000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f5e000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e54000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c19000)\n\t/lib/ld-linux.so.2 (0xf7f73000)",
+      "resolution": "linux-gate.so.1 (0xf7ef7000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ee9000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7ee4000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7dda000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7b9f000)\n\t/lib/ld-linux.so.2 (0xf7ef9000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -389,7 +389,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/dbmw_mnt/df_dbmw_r",
-      "resolution": "linux-gate.so.1 (0xf7f38000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f2a000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f25000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e1b000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7be0000)\n\t/lib/ld-linux.so.2 (0xf7f3a000)",
+      "resolution": "linux-gate.so.1 (0xf7f56000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f48000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f43000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e39000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bfe000)\n\t/lib/ld-linux.so.2 (0xf7f58000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -420,7 +420,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/dbmw_stat/df_dbmw_r",
-      "resolution": "linux-gate.so.1 (0xf7f96000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f88000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f83000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e79000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c3e000)\n\t/lib/ld-linux.so.2 (0xf7f98000)",
+      "resolution": "linux-gate.so.1 (0xf7f65000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f57000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f52000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e48000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c0d000)\n\t/lib/ld-linux.so.2 (0xf7f67000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -452,7 +452,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/game/libantisvrimport.so",
-      "resolution": "linux-gate.so.1 (0xf7fad000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c78000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf79f9000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf78ef000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78b7000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf78b2000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7677000)\n\t/lib/ld-linux.so.2 (0xf7faf000)",
+      "resolution": "linux-gate.so.1 (0xf7f53000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c1e000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf799f000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7895000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf785d000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7858000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf761d000)\n\t/lib/ld-linux.so.2 (0xf7f55000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -485,7 +485,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/game/libnxencryption.so",
-      "resolution": "linux-gate.so.1 (0xf7f47000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cbc000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7bb2000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b7a000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf793f000)\n\t/lib/ld-linux.so.2 (0xf7f49000)",
+      "resolution": "linux-gate.so.1 (0xf7ed0000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c45000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b3b000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b03000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf78c8000)\n\t/lib/ld-linux.so.2 (0xf7ed2000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -513,7 +513,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/game/libtss_sdk.so.1.0.394",
-      "resolution": "linux-gate.so.1 (0xf7f97000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c62000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf79e3000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf78d9000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78a1000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf789c000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7661000)\n\t/lib/ld-linux.so.2 (0xf7f99000)",
+      "resolution": "linux-gate.so.1 (0xf7ed9000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7ba4000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7925000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf781b000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf77e3000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf77de000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf75a3000)\n\t/lib/ld-linux.so.2 (0xf7edb000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -547,7 +547,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/guild/df_guild_r",
-      "resolution": "linux-gate.so.1 (0xf7f73000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f65000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f60000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e56000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c1b000)\n\t/lib/ld-linux.so.2 (0xf7f75000)",
+      "resolution": "linux-gate.so.1 (0xf7f47000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f39000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f34000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e2a000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bef000)\n\t/lib/ld-linux.so.2 (0xf7f49000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -578,7 +578,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/manager/df_manager_r",
-      "resolution": "linux-gate.so.1 (0xf7eca000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7ebc000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7eb7000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7dad000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7b72000)\n\t/lib/ld-linux.so.2 (0xf7ecc000)",
+      "resolution": "linux-gate.so.1 (0xf7f3f000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f31000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f2c000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e22000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7be7000)\n\t/lib/ld-linux.so.2 (0xf7f41000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -609,7 +609,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/monitor/df_monitor_r",
-      "resolution": "linux-gate.so.1 (0xf7f2c000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f1e000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f19000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e0f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bd4000)\n\t/lib/ld-linux.so.2 (0xf7f2e000)",
+      "resolution": "linux-gate.so.1 (0xf7f32000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f24000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f1f000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e15000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bda000)\n\t/lib/ld-linux.so.2 (0xf7f34000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -641,7 +641,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/point/df_point_r",
-      "resolution": "linux-gate.so.1 (0xf7efd000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c75000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7c70000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7c6b000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7c4f000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b45000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf790a000)\n\t/lib/ld-linux.so.2 (0xf7eff000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf78d2000)",
+      "resolution": "linux-gate.so.1 (0xf7f60000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7cd8000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7cd3000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7cce000)\n\tlibz.so.1 => /lib/i386-linux-gnu/libz.so.1 (0xf7cb2000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7ba8000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf796d000)\n\t/lib/ld-linux.so.2 (0xf7f62000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7935000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -678,7 +678,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/relay/df_relay_r",
-      "resolution": "linux-gate.so.1 (0xf7f4c000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7f3e000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f39000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e2f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7bf4000)\n\t/lib/ld-linux.so.2 (0xf7f4e000)",
+      "resolution": "linux-gate.so.1 (0xf7fbc000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7fae000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fa9000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7e9f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c64000)\n\t/lib/ld-linux.so.2 (0xf7fbe000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -710,7 +710,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/secsvr/gunnersvr/gunnersvr",
-      "resolution": "linux-gate.so.1 (0xf7fc0000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fb2000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d33000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7c29000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7bf1000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7bec000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79b1000)\n\t/lib/ld-linux.so.2 (0xf7fc2000)",
+      "resolution": "linux-gate.so.1 (0xf7ee2000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7ed4000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c55000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b4b000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b13000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b0e000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf78d3000)\n\t/lib/ld-linux.so.2 (0xf7ee4000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -744,7 +744,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/secsvr/zergsvr/secagent",
-      "resolution": "linux-gate.so.1 (0xf7f33000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f25000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7ca6000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b9c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b64000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b5f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7924000)\n\t/lib/ld-linux.so.2 (0xf7f35000)",
+      "resolution": "linux-gate.so.1 (0xf7f0f000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f01000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c82000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b78000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b40000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b3b000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7900000)\n\t/lib/ld-linux.so.2 (0xf7f11000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -778,7 +778,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/secsvr/zergsvr/zergsvr",
-      "resolution": "linux-gate.so.1 (0xf7f1d000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7f0f000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c90000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b86000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b4e000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7b49000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf790e000)\n\t/lib/ld-linux.so.2 (0xf7f1f000)",
+      "resolution": "linux-gate.so.1 (0xf7fbc000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fae000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7d2f000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7c25000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7bed000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7be8000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf79ad000)\n\t/lib/ld-linux.so.2 (0xf7fbe000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libgcc_s.so.1",
@@ -811,7 +811,7 @@
         "ld-linux.so.2"
       ],
       "path": "/home/template/neople/statics/df_statics_r",
-      "resolution": "linux-gate.so.1 (0xf7fc4000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7fb6000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fb1000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7ea7000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c6c000)\n\t/lib/ld-linux.so.2 (0xf7fc6000)",
+      "resolution": "linux-gate.so.1 (0xf7fc1000)\n\tlibpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0xf7fb3000)\n\tlibrt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0xf7fae000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7ea4000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c69000)\n\t/lib/ld-linux.so.2 (0xf7fc3000)",
       "resolved_library_paths": [
         "/lib/i386-linux-gnu/libc.so.6",
         "/lib/i386-linux-gnu/libm.so.6",
@@ -843,7 +843,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/stun/df_stun_r",
-      "resolution": "linux-vdso.so.1 (0x00007ffcd9a73000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fdbb8296000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007fdbb825c000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fdbb8240000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fdbb7fc2000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fdbb7ed9000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fdbb7ea9000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fdbb7c96000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fdbb82a0000)",
+      "resolution": "linux-vdso.so.1 (0x00007ffd973f6000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x000078faa63c0000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x000078faa6386000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000078faa636a000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000078faa60ec000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000078faa6003000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000078faa5fd3000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000078faa5dc0000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000078faa63ca000)",
       "resolved_library_paths": [
         "/lib/x86_64-linux-gnu/libc.so.6",
         "/lib/x86_64-linux-gnu/libcrypt.so.1",
@@ -868,7 +868,7 @@
         "libc.so.6"
       ],
       "path": "/home/template/neople/stun/stun_hook.so",
-      "resolution": "linux-vdso.so.1 (0x00007ffd44f54000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000728f8471b000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000728f84938000)",
+      "resolution": "linux-vdso.so.1 (0x00007ffeaab74000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007a2c8e174000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a2c8e391000)",
       "resolved_library_paths": [
         "/lib/x86_64-linux-gnu/libc.so.6",
         "/lib64/ld-linux-x86-64.so.2"
@@ -885,7 +885,7 @@
       "architecture": "amd64",
       "interpreter": null,
       "needed": [],
-      "packed_gateway_loader_trace": "linux-vdso.so.1 (0x00007ffef7f82000)\n\tlibssl.so.6 => /opt/dnf/compat/amd64/libssl.so.6 (0x0000733b9d52b000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x0000733b9d38e000)\n\tlibmysqlclient.so.15 => /opt/dnf/compat/amd64/libmysqlclient.so.15 (0x0000733b9ce00000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x0000733b9d386000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000733b9d29d000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000733b9cbed000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000733b9d580000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x0000733b9d261000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x0000733b9d245000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000733b9d229000)",
+      "packed_gateway_loader_trace": "linux-vdso.so.1 (0x00007ffc521f2000)\n\tlibssl.so.6 => /opt/dnf/compat/amd64/libssl.so.6 (0x000071b4ca897000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x000071b4ca6fa000)\n\tlibmysqlclient.so.15 => /opt/dnf/compat/amd64/libmysqlclient.so.15 (0x000071b4ca200000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x000071b4ca6f2000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000071b4ca609000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000071b4c9feb000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000071b4ca8ec000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x000071b4c9fb1000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x000071b4c9f95000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000071b4c9f79000)",
       "path": "/home/template/root/DnfGateServer",
       "resolution": "not a dynamic executable",
       "resolved_library_paths": [
@@ -904,6 +904,6 @@
       "symbol_versions": []
     }
   ],
-  "image_id": "sha256:7d0193826a0557bc8465052d79d92cb742900808129e01d7d63d25e52cce696a",
+  "image_id": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
   "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n"
 }

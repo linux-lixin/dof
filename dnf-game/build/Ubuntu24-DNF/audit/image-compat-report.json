@@ -17,7 +17,7 @@
       "GLIBC_2.4",
       "GLIBC_2.7"
     ],
-    "resolution": "linux-vdso.so.1 (0x00007ffff833a000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ac0f8e7e000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007ac0f9233000)",
+    "resolution": "linux-vdso.so.1 (0x00007fffddb94000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000726c7b828000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000726c7bbdd000)",
     "errors": []
   },
   {
@@ -38,7 +38,7 @@
       "GLIBC_2.3.4",
       "GLIBC_2.4"
     ],
-    "resolution": "linux-vdso.so.1 (0x00007fffcd1a3000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x000076c126ec4000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x000076c126e8a000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x000076c126e6e000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000076c126917000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000076c126e52000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000076c126704000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000076c126ece000)",
+    "resolution": "linux-vdso.so.1 (0x00007ffeb876f000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f5a2e176000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007f5a2e13c000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x00007f5a2e120000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5a2e037000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f5a2e01b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5a2d9ed000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f5a2e180000)",
     "errors": []
   },
   {
@@ -56,7 +56,7 @@
       "GLIBC_2.3.4",
       "GLIBC_2.4"
     ],
-    "resolution": "linux-vdso.so.1 (0x00007ffeaf27e000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x000079c8cf1df000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000079c8cefc9000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000079c8cf3d1000)",
+    "resolution": "linux-vdso.so.1 (0x00007ffc829a5000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x0000776efed81000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000776efeb6b000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000776efef73000)",
     "errors": []
   },
   {
@@ -76,7 +76,7 @@
       "GLIBC_2.33",
       "GLIBC_2.4"
     ],
-    "resolution": "linux-gate.so.1 (0xf7f86000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d01000)\n\t/lib/ld-linux.so.2 (0xf7f88000)",
+    "resolution": "linux-gate.so.1 (0xf7fab000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d26000)\n\t/lib/ld-linux.so.2 (0xf7fad000)",
     "errors": []
   },
   {
@@ -93,7 +93,7 @@
       "GLIBC_2.34",
       "GLIBC_2.4"
     ],
-    "resolution": "linux-gate.so.1 (0xf7f52000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d09000)\n\t/lib/ld-linux.so.2 (0xf7f54000)",
+    "resolution": "linux-gate.so.1 (0xf7ee7000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c9e000)\n\t/lib/ld-linux.so.2 (0xf7ee9000)",
     "errors": []
   },
   {
@@ -113,7 +113,7 @@
       "GLIBC_2.0",
       "GLIBC_2.1.3"
     ],
-    "resolution": "linux-gate.so.1 (0xf7f26000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c9b000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b91000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b59000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf791e000)\n\t/lib/ld-linux.so.2 (0xf7f28000)",
+    "resolution": "linux-gate.so.1 (0xf7f11000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c86000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b7c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b44000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7909000)\n\t/lib/ld-linux.so.2 (0xf7f13000)",
     "errors": []
   }
 ]

@@ -8,6 +8,7 @@ services:
       MAIN_BRIDGE_IP: 127.0.0.1
       MAIN_MYSQL_GAME_ALLOW_IP: ${GAME_DB_ALLOW_IP:?Set a database source IPv4 pattern covering CORE and all GAME nodes}
       MYSQL_GAME_ALLOW_IP: ${GAME_DB_ALLOW_IP:?Set a database source IPv4 pattern covering CORE and all GAME nodes}
+      GAME_CHANNEL_HOSTS: ${GAME_CHANNEL_HOSTS:?Map each channel to its reachable GAME node IPv4}
     ports:
       - "7001:7001/tcp"
       - "7001:7001/udp"

@@ -1,18 +1,19 @@
 {
-  "image_id": "sha256:7d0193826a0557bc8465052d79d92cb742900808129e01d7d63d25e52cce696a",
-  "method": "docker create; docker cp /opt/dnf/audit; SHA256 byte comparison; docker rm (no container start)",
-  "refreshed_report": "image-elf-report.json differed only in ASLR hexadecimal addresses; normalized contents matched before refresh",
+  "image_id": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
+  "method": "docker image inspect immutable ID; docker create; docker cp /opt/dnf/audit; SHA256 byte comparison; docker rm (export container never started)",
+  "refreshed_report": "All seven embedded artifacts are byte-for-byte unchanged from the prior 9b3aaa image after excluding host Python caches. A fresh runtime inventory differs only by image ID and ASLR addresses; package versions, ELF hashes, dependency paths and library hashes are unchanged.",
+  "inventory_result": "29 ELF files; 24 resolved library paths; zero not-found or undefined-symbol entries",
   "files": [
     {
       "image_path": "/opt/dnf/audit/elf-report.json",
       "saved_path": "image-elf-report.json",
-      "sha256": "2104f5fdf851734414b61d8210f6c5ccbbab314cc805b8787bec5fd6bf2da915",
+      "sha256": "3d809e5a55cf14c9859d8d4b7e8aafda1835e045aa72b7a19ce98e15638ad618",
       "exact_match": true
     },
     {
       "image_path": "/opt/dnf/audit/compat-report.json",
       "saved_path": "image-compat-report.json",
-      "sha256": "ad94dc9250445701a02b1e4c8dcb133c76c3c1d3259ad33686ea95c3ca7bad61",
+      "sha256": "973d3f2df16e89cd1c897fda89a2fd1778d28b78e78a788cbe9ba0790df88c58",
       "exact_match": true
     },
     {

@@ -88,7 +88,17 @@ docker compose exec game python3 /opt/dnf/ubuntu/health.py
 后台 `/app/data/private.key` 保持私密。所有 GAME 节点都需要与后台私钥对应的公钥。
 内置旧网关私钥是另一套配置，不能把后台私钥随意复制到旧网关路径。
 
-客户端包、登录器配置、更新包发布沿用 [完整部署文档第 13–15 步](../../docs/fresh-server-deployment.md)。
+用新建的管理员账号登录后台，在辅助配置／内辅管理中设置“服务器地址”：ALL 填玩家可达的本机地址，
+拆分部署填玩家可达的 CORE 频道入口地址。容器的 `PUBLIC_IP` 不会自动写入后台配置；
+不修改时后台仍可能下发上游示例地址。保持本地 GM 关闭，等级等配置与客户端/PVF 一致，首轮更新列表保持为空。
+在后台所在主机核验实际下发内容：
+
+```bash
+curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
+```
+
+确认返回的“服务器地址”为自己的玩家入口，且玩家可访问后台 API 和下文列出的游戏端口。
+完整的后台配置、客户端包、登录器配置和更新发布步骤见 [完整部署文档第 12–15 步](../../docs/fresh-server-deployment.md#12-开放端口并配置后台)。
 本轮没有验证真实 Windows 客户端注册、登录、进副本、组队与自动更新下载。
 
 ## 4. CORE / P2P / GAME 跨主机拆分
@@ -101,6 +111,36 @@ docker compose exec game python3 /opt/dnf/ubuntu/health.py
 留空自动识别只适用于 ALL；拆分模板会拒绝留空，GAME 也会使用 `game` 账号检查实际权限后才启动。
 若节点不在一个可安全授权的网段内，应由数据库管理员逐个建立对应的 `game@host` 授权，
 CORE 中仍填写它自身匹配的授权地址；不要为了省事默认开放 `%`。
+
+CORE 另需设置 `GAME_CHANNEL_HOSTS`，例如 `11=10.2.4.11,52=10.2.4.11`。
+左侧为频道号，右侧为 CORE 能到达的 GAME 主机内网 IPv4；覆盖 CORE 的全部 `OPEN_CHANNEL`，不允许重复或遗漏。
+频道位于不同主机时分别填写地址。该映射用于 statics/coserver 的服务器间 UDP 路由，不能填 CORE 自身地址。
+GAME 主机必须放行并映射对应频道 UDP 端口（例：31011、31052），允许 CORE 访问。
+ALL 自动把自己的频道映射到容器 loopback，无需填写此映射。
+
+多个 GAME 主机必须分别配置自己的频道子集。`common.yaml` 的 `OPEN_CHANNEL` 当前固定为 `11,52`，
+只在 `.env` 添加 `OPEN_CHANNEL` 不会改变它；在每台 GAME 主机的现有 `compose.game.yaml` 中，
+向 `services.game.environment` 添加 `OPEN_CHANNEL` 覆盖继承值，并编辑该服务的 `ports` 列表。
+例如在 `10.2.4.11` 主机上保留其他已有字段，将相应部分设为：
+
+```yaml
+services:
+  game:
+    environment:
+      OPEN_CHANNEL: "11"
+    ports:
+      - "30011:30011/tcp"
+      - "31011:31011/udp"
+```
+
+这是现有服务的局部编辑示例，不是完整 Compose 文件。另一台 `10.2.4.12` 主机设置 `OPEN_CHANNEL: "52"`，
+其端口列表只保留 TCP 30052 和 UDP 31052。CORE 保留全部频道 `OPEN_CHANNEL: "11,52"`，
+并在 CORE 的 `.env` 中设置 `GAME_CHANNEL_HOSTS=11=10.2.4.11,52=10.2.4.12`。
+每个频道只由一台 GAME 主机启动；新增频道时同时更新 CORE 的频道全集、映射及对应 GAME 的频道子集/端口。
+编辑后在各主机运行相应的 `docker compose -f ... config --quiet` 和 `up -d` 使配置生效。
+
+公网通告地址可与容器网卡不同。Ubuntu 为 auction/point 使用 `0.0.0.0` 监听，
+manager/DBMW 的本机 CORE 路由使用 loopback；玩家通告仍使用原 PUBLIC_IP，协议和端口不变。
 
 | 主机 | 启动文件 | 本机 PUBLIC_IP | 其他地址 |
 |---|---|---|---|
@@ -151,7 +191,8 @@ CORE 和 P2P 互通使用内网实际 IP；Docker 服务名不能用于不同主
 
 以下对应示例大区 3、频道 11 和 52，值来源于仓库内各服务 cfg 模板及 relay/网关配置。
 改大区/频道后要同时调整端口映射，不能只改 `OPEN_CHANNEL`。
-可运行 `python3 scripts/ubuntu_port_matrix.py --group 3 --channels 11,52` 重算，
+在仓库根目录可运行 `python3 scripts/ubuntu_port_matrix.py --group 3 --channels 11,52` 重算；
+若仍位于本指南的 `deploy/ubuntu` 目录，运行 `python3 ../../scripts/ubuntu_port_matrix.py --group 3 --channels 11,52`。
 当前生成结果见 [角色端口表](../../docs/ubuntu-ports.md)。
 
 | 角色 | 用途 | 协议/端口 | 来源 |
@@ -174,8 +215,24 @@ CORE 和 P2P 互通使用内网实际 IP；Docker 服务名不能用于不同主
 
 节点间端口绑定 `NODE_BIND_IP`，仅允许可信 GAME/P2P 节点访问；玩家端口按需要放行。
 容器不使用 TUN、NET_ADMIN、privileged；非空 `NB_SETUP_KEY`/`TS_AUTH_KEY` 会被拒绝。
-显式 IPv4 优先；不填 PUBLIC_IP 时可手动通过环境变量启用 AUTO_PUBLIC_IP 或 DDNS_ENABLE。
-DDNS_DOMAIN 非空时解析 A 记录；为空时沿用外网地址探测脚本。首次获取有时间上限，运行中变更会触发相关服务重启。
+默认 Compose 模板要求显式 `PUBLIC_IP`，仅在 `.env` 留空或添加 AUTO/DDNS 参数不能启用地址发现。
+若使用运行时的自动发现功能，须先编辑当前使用的 Compose 文件及其引用的 `common.yaml`：
+移除该节点所有 `${PUBLIC_IP:?…}` 强制非空引用，并将以下变量透传到对应服务的 `environment`：
+
+```yaml
+PUBLIC_IP: ${PUBLIC_IP:-}
+AUTO_PUBLIC_IP: ${AUTO_PUBLIC_IP:-false}
+DDNS_ENABLE: ${DDNS_ENABLE:-false}
+DDNS_DOMAIN: ${DDNS_DOMAIN:-}
+DDNS_INTERVAL: ${DDNS_INTERVAL:-10}
+```
+
+然后在 `.env` 留空 `PUBLIC_IP`，选择 `AUTO_PUBLIC_IP=true` 或 `DDNS_ENABLE=true`，重新解析 Compose 后用 `up -d` 重建服务。
+ALL 模板的 `P2P_PUBLIC_IP` 当前也引用必填 `PUBLIC_IP`，启用发现时还须改为独立、明确的玩家可达 P2P IPv4。
+`CORE_PUBLIC_IP`、`MAIN_BRIDGE_IP`、`P2P_PUBLIC_IP` 及 `GAME_CHANNEL_HOSTS` 仍须按拓扑配置；
+本机 PUBLIC_IP 的发现不会自动更新其他节点的这些地址。
+显式 IPv4 始终优先；AUTO 模式获取一次地址，DDNS 模式持续检查。
+`DDNS_DOMAIN` 非空时解析 A 记录；为空时沿用外网地址探测脚本。首次获取有时间上限，运行中变更会触发相关服务重启。
 
 ## 6. 更新与回退
 
@@ -184,8 +241,12 @@ Ubuntu `/data/.dnf-ubuntu.json` 记录平台与受管脚本哈希。升级仅覆
 PVF、密钥、用户配置、`dp/` 中的自定义 hook、`user_daily_script.sh` 不参与自动脚本升级。
 新增旧发行版可升级列表时维护 `dnf-game/ubuntu/releases.json`，不能把任意未知哈希加入以绕过冲突。
 
-未标记的 CentOS 数据目录会被拒绝。迁移流程为：创建独立 Ubuntu 目录与数据库副本；
-只显式复制经核对的 PVF、公钥及必要自定义配置；先验收再决定切换。自定义 DP 插件需另行测试其 ABI。
+未标记的 CentOS 数据目录会被拒绝。迁移时先创建独立 Ubuntu 目录与数据库副本；
+首次启动前，数据目录中只可预放经核对的 `Script.pvf`、`publickey.pem` 及需要保留的旧网关 `privatekey.pem`。
+不要提前放入 `Config.ini`、`dp/` 或其他自定义配置，否则未标记目录检查会拒绝启动。
+完成首次初始化、确认 `.dnf-ubuntu.json` 已生成后，停止对应角色服务，再备份并按需合并必要的自定义配置、
+`dp/` 内容或 `user_daily_script.sh`；不要复制旧 CentOS 的受管 `run/`、`monitor_ip/` 脚本覆盖新版本。
+重新启动并验收后再决定切换。自定义 DP 插件需另行测试其 ABI；后台 RSA 私钥对仍按第 3 节单独保留和配对。
 
 回退时停止 Ubuntu 测试栈，恢复原 CentOS 镜像、配置、独立运行目录和它原来使用的数据库。
 本流程不改动这些资源；不能把 Ubuntu 新写入的测试数据库直接当作原业务数据库回退。

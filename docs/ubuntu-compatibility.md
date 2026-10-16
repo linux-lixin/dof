@@ -69,6 +69,21 @@ docker build --platform linux/amd64 -f build/Ubuntu24-DNF/Dockerfile -t dnf-game
 hook 通过 `DNF_GAME_PRELOAD` 传给 launcher；它检查 ELF 位数后，在 exec 时转换成 `LD_PRELOAD`。
 Python、Supervisor、socat、系统 openssl/mysql 客户端不使用这些兼容库。
 
+原生游戏进程会直接向 stdout/stderr 输出数据库口令。launcher 在 `execve` 前创建独立
+Python reader，通过两个管道按行脱敏；主进程仍直接替换为游戏 ELF，PID、退出码和信号目标不变。
+reader 不加载游戏兼容库/hook，并在组停止信号时继续排空输出直到 EOF。
+环境中 PASSWORD/PASS/PWD/SECRET/TOKEN/KEY 字段的非空值（包括 `DEC_GAME_PWD`）按字节替换，
+仅排除表示当前工作目录的标准 shell `PWD`；
+即使值不在环境中，`pw=`、`Game DB Password:`、`Auction DB Password:` 等口令字段也隐藏整行尾部。
+跨 write 的完整行缓冲防止片段泄漏，超过 64 KiB 的单行整体抑制；正常日志保持 stdout/stderr 分离。
+此边界只过滤进程标准输出，不改写原生程序自己打开的日志文件。
+
+`audit/run-game-probe.c` 与 `audit/test_run_game_redaction.py` 使用合成凭据，实际编译/运行
+i386 和 amd64 子进程验证两个输出流、分段写、未知口令标签、无换行 EOF、超长行、退出码 37、
+原 PID、直接及进程组 SIGTERM，并检查 reader 内存映射无专用兼容库。
+修复前测试观察到凭据泄漏；修复后全部通过。该测试通过只读 bind mount 使用新 launcher，
+无需修改或重建正在验收的镜像。
+
 ## 可复查证据
 
 `dnf-game/build/Ubuntu24-DNF/audit/` 保留原生依赖缺失的 `native-before.json`、
@@ -134,10 +149,14 @@ docker run --rm --read-only --mount "type=bind,source=$audit,target=/audit" --en
 ```
 
 最终验收镜像
-`sha256:7d0193826a0557bc8465052d79d92cb742900808129e01d7d63d25e52cce696a`
+`sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f`
 的七份内置审计文件/资源锁已用未启动的临时容器导出并逐字节 SHA256 核对。
 `audit/image-audit-verification.json` 保存文件映射与哈希；全部一致。
-此前保存的 ELF 报告仅有 ASLR 地址变化，已刷新为该镜像的原始报告。
+导出前使用只读 inspect 核对真实镜像 ID，并直接按此不可变 ID 生成库存和导出报告。
+此镜像排除了宿主 Python 缓存，七份内置报告/资源锁与前一镜像逐字节不变。
+重新执行库存审计仅产生镜像 ID 和 ASLR 地址变化，ELF/库哈希、解析路径和包版本不变。
+标准 shell `PWD` 误判修复后，共享内存探针的两次通过记录正常保留 `/`。
+当前库存无缺库或未定义符号。完整 ALL/拆分持续验收结果另见部署验收报告。
 
 ## 来源、许可证与重建限制
 
