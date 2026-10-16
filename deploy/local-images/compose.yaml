@@ -2,7 +2,6 @@ name: dnf-local-images
 services:
   game:
     image: ${GAME_IMAGE:?Set GAME_IMAGE in .env}
-    platform: linux/amd64
     pull_policy: never
     hostname: dnf-local-images-game
     restart: unless-stopped
@@ -61,7 +60,6 @@ services:
 
   admin:
     image: ${ADMIN_IMAGE:?Set ADMIN_IMAGE in .env}
-    platform: linux/amd64
     pull_policy: never
     restart: "no"
     depends_on:

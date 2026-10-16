@@ -5,7 +5,7 @@ This directory contains the necessary files to build and run the DNF Server in a
 ## Features
 
 - **All-in-One**: Provides unified GM management services, including GM basic functions (game accounts, roles, mail management, etc.) and game gateways (login, registration), etc.
-- **Multi-Arch Support**: Supports both `linux/amd64` (x86_64) and `linux/arm64` (Apple Silicon/Raspberry Pi).
+- **Default Platform Build**: Uses the current Docker builder's default architecture without an explicit platform override or multi-platform build.
 - **Auto-Initialization**:
     - **Database**: Automatically initializes the database schema on the first run using the provided connection settings.
     - **Keys**: Automatically generates RSA keys (`private.key`, `publickey.pem`) if they are missing.
@@ -74,10 +74,10 @@ If you only need to run the image on your current machine:
 docker build -t dnf-server .
 ```
 
-### 2. Multi-Architecture Build (x64 & ARM64)
+### 2. Build and Push (Default Platform)
 
-To build for both Linux x64 servers and Mac M1/M2/M3 (ARM64), use the provided script.
-**Note**: You must be logged in to a Docker Registry (e.g., Docker Hub) as multi-arch builds require pushing.
+The provided scripts use the current Docker builder's default architecture. They retain the historical `build-multi-arch.sh` / `.ps1` names but no longer build multiple platforms or switch builders.
+**Note**: You must be logged in to a Docker Registry (e.g., Docker Hub) because these scripts push the resulting image.
 
 1.  Login to Docker Hub:
     ```bash

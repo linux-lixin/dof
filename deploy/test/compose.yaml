@@ -2,7 +2,6 @@ name: dnf-test
 services:
   game:
     image: ${GAME_IMAGE:?Set GAME_IMAGE in .env}
-    platform: linux/amd64
     entrypoint: ["/bin/bash", "/opt/dnf-fixes/game-entrypoint.sh"]
     hostname: dnf-test-game
     restart: unless-stopped
@@ -51,7 +50,6 @@ services:
 
   admin:
     image: ${ADMIN_IMAGE:?Set ADMIN_IMAGE in .env}
-    platform: linux/amd64
     entrypoint: ["/bin/sh", "/app/entrypoint.sh"]
     restart: "no"
     depends_on:

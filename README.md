@@ -18,8 +18,8 @@
 git clone https://github.com/linux-lixin/dof.git
 cd dof
 
-docker build --platform linux/amd64 -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
-docker build --platform linux/amd64 -t dnf-admin:local-fix-20261015 dnf-server-public
+docker build -f dnf-game/build/Centos7-DNF/Dockerfile -t dnf-game:local-fix-20261015 dnf-game
+docker build -t dnf-admin:local-fix-20261015 dnf-server-public
 ```
 
 构建需要 Docker 和到基础镜像、软件包依赖源的网络连接，不需要先运行 Python 下载脚本。Python 3.9+ 仅用于运行仓库测试。构建还会从基础镜像仓库、CentOS 归档、Maven/npm 等源获取依赖；`source-lock.json` 固定的是集成源码基线，不表示整个依赖链已完全可重现。

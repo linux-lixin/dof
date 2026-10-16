@@ -59,7 +59,7 @@ MySQL `.15` 是已有运行镜像中的准确库，已与固定上游 RPM 重新
 构建上下文为 `dnf-game`：
 
 ```sh
-docker build --platform linux/amd64 -f build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 .
+docker build -f build/Ubuntu24-DNF/Dockerfile -t dnf-game:ubuntu24-v1 .
 ```
 
 `--target game` 可只构建基础镜像及 ABI 门禁；最终层复制 `ubuntu/` 到 `/opt/dnf/ubuntu/`，

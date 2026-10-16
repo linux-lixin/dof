@@ -105,12 +105,12 @@ git pull --ff-only
 ```bash
 cd /opt/dof
 
-docker build --platform linux/amd64 \
+docker build \
   -f dnf-game/build/Centos7-DNF/Dockerfile \
   -t dnf-game:local-fix-20261015 \
   dnf-game
 
-docker build --platform linux/amd64 \
+docker build \
   -t dnf-admin:local-fix-20261015 \
   dnf-server-public
 

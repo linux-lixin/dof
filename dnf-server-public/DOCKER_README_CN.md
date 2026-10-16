@@ -5,7 +5,7 @@
 ## 功能特性
 
 - **一体化**: 提供统一的GM管理服务, 包括GM基础功能(游戏账号、角色、邮件等管理)以及游戏网关(登录、注册)等。
-- **多架构支持**: 同时支持 `linux/amd64` (x86_64) 和 `linux/arm64` (Apple Silicon/Raspberry Pi)。
+- **默认平台构建**: 使用当前 Docker Builder 的默认架构，不再指定或同时构建多个平台。
 - **自动初始化**:
     - **数据库**: 首次运行时根据提供的连接设置自动初始化数据库结构。
     - **密钥**: 如果缺少 RSA 密钥 (`private.key`, `publickey.pem`)，则会自动生成。
@@ -74,10 +74,10 @@ docker run -d \
 docker build -t dnf-server .
 ```
 
-### 2. 多架构构建 (x64 & ARM64)
+### 2. 构建并推送（默认平台）
 
-要为 Linux x64 服务器和 Mac M1/M2/M3 (ARM64) 构建，请使用提供的脚本。
-**注意**: 多架构构建需要推送镜像，因此您必须登录 Docker Registry (如 Docker Hub)。
+提供的脚本使用当前 Docker Builder 的默认架构。`build-multi-arch.sh` / `.ps1` 保留历史文件名，但不再执行多架构构建或切换 Builder。
+**注意**: 脚本会推送镜像，因此您必须登录 Docker Registry (如 Docker Hub)。
 
 1.  登录 Docker Hub:
     ```bash

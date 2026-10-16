@@ -4,15 +4,14 @@ $DEFAULT_REPO = "your-docker-username/dnf-server"
 $IMAGE_REPO = $DEFAULT_REPO
 $TAG = "latest"
 
-# 目标平台
-$PLATFORMS = "linux/amd64,linux/arm64"
+# 保留历史脚本名；现在使用 Docker 默认平台，不再构建多架构镜像。
 # ===========================================
 
 # 检查是否修改了镜像名，如果没有，则提示输入
 if ($IMAGE_REPO -eq $DEFAULT_REPO) {
     Write-Host "========================================================"
     Write-Host "错误: 你还没有配置镜像仓库地址！"
-    Write-Host "构建多架构镜像必须推送到 Docker Hub 或私有仓库。"
+    Write-Host "本脚本会构建并推送镜像到 Docker Hub 或私有仓库。"
     Write-Host "--------------------------------------------------------"
     $USER_INPUT_REPO = Read-Host "请输入你的镜像仓库地址 (例如: guoshengkai/dnf-server)"
 
@@ -32,15 +31,14 @@ if ($IMAGE_REPO -eq $DEFAULT_REPO) {
     }
 }
 
-Write-Host "准备构建多架构镜像: $PLATFORMS"
+Write-Host "准备使用 Docker 默认平台构建镜像"
 if ([string]::IsNullOrEmpty($TAG)) {
     Write-Host "目标仓库: $IMAGE_REPO"
 } else {
     Write-Host "目标仓库: ${IMAGE_REPO}:${TAG}"
 }
 Write-Host "----------------------------------------------------"
-Write-Host "要实现【对方拉取时自动识别平台】，必须将镜像 Push 到 Docker Registry (如 Docker Hub 或 阿里云)。"
-Write-Host "本地 Docker Daemon 无法同时根据一个 Tag 保存多种架构的镜像。"
+Write-Host "构建结果使用当前 Docker Builder 的默认架构。"
 Write-Host "----------------------------------------------------"
 
 # 确认是否继续
@@ -50,24 +48,7 @@ if ($REPLY -ne "y" -and $REPLY -ne "Y") {
     exit 1
 }
 
-# 1. 准备 Buildx 环境
-# 默认的 builder 可能不支持多架构 docker-container 驱动
-$BUILDER_NAME = "my-multi-arch-builder"
-
-try {
-    docker buildx inspect $BUILDER_NAME 2>&1 | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "使用现有的 Buildx Builder: $BUILDER_NAME"
-        docker buildx use $BUILDER_NAME
-    } else {
-        throw "Builder not found"
-    }
-} catch {
-    Write-Host "创建新的 Buildx Builder: $BUILDER_NAME ..."
-    docker buildx create --name $BUILDER_NAME --use --bootstrap
-}
-
-# 2. 构建并推送
+# 使用当前 Buildx Builder 构建并推送，不切换全局 Builder。
 Write-Host "开始构建并推送..."
 # 构建完整的镜像tag
 if ([string]::IsNullOrEmpty($TAG)) {
@@ -76,9 +57,9 @@ if ([string]::IsNullOrEmpty($TAG)) {
     $FULL_IMAGE_TAG = "${IMAGE_REPO}:${TAG}"
 }
 
-# --push 会自动把构建好的 manifest list 推送到远程仓库
+# --push 会把构建好的镜像推送到远程仓库
 # --no-cache 强制重新构建，避免使用缓存的旧层
-docker buildx build --platform $PLATFORMS `
+docker buildx build `
   -t "$FULL_IMAGE_TAG" `
   --no-cache `
   --push `
@@ -87,7 +68,7 @@ docker buildx build --platform $PLATFORMS `
 if ($LASTEXITCODE -eq 0) {
     Write-Host "=========================================="
     Write-Host "构建并推送成功!"
-    Write-Host "你的朋友现在可以使用以下命令拉取并将自动适配其架构:"
+    Write-Host "同架构主机可使用以下命令拉取:"
     Write-Host "docker pull $FULL_IMAGE_TAG"
     Write-Host "=========================================="
 } else {
