@@ -51,7 +51,7 @@ ENV SERVER_PORT=9001
 # Database Config
 ENV SPRING_DATASOURCE_URL=""
 ENV SPRING_DATASOURCE_USERNAME=""
-ENV SPRING_DATASOURCE_PASSWORD=""
+# Supply SPRING_DATASOURCE_PASSWORD at runtime through Compose or docker run.
 ENV SPRING_DATASOURCE_DRIVER_CLASS_NAME="com.mysql.jdbc.Driver"
 
 # Volume for data with keys

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-# This manifest is pinned; deployments additionally require linux/amd64.
-FROM --platform=linux/amd64 ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55 AS runtime
+# This manifest is pinned; build with --platform linux/amd64 (also set in Compose).
+FROM ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55 AS runtime
 ENV TZ=Asia/Shanghai
 RUN dpkg --add-architecture i386 \
  && apt-get update \
