@@ -14,6 +14,7 @@ Dockerfile text eol=lf
 .dockerignore text eol=lf
 
 # Preserve upstream runtime inputs byte-for-byte, including legacy encodings.
+"/services/game/assets/root/qk_plugin_*.ini" -text
 "/services/game/assets/TeaEncrypt" binary
 "/services/game/assets/home/template/init/Script.tgz" binary
 "/services/game/assets/home/template/init/bridge_hook.so" binary

@@ -110,12 +110,12 @@ if arch == 'i386':
 # The adapter passes preloads through a neutral name so Python itself never loads them.
 preload = environment.pop('DNF_GAME_PRELOAD', '')
 environment.pop('LD_PRELOAD', None)
-# User-supplied DP2 is optional and belongs only to the game process.
-dp2_loader = Path('/dp2/libdp2pre.so')
-if binary.name == 'df_game_r' and dp2_loader.is_file():
+# Optional plugin loaders belong only to the game process, in DP2/QK order.
+if binary.name == 'df_game_r':
     entries = [name for name in preload.split(':') if name]
-    if str(dp2_loader) not in entries:
-        entries.append(str(dp2_loader))
+    for loader in (Path('/dp2/libdp2pre.so'), Path('/root/qk_plugin.so')):
+        if loader.is_file() and str(loader) not in entries:
+            entries.append(str(loader))
     preload = ':'.join(entries)
 if arch == 'i386':
     shim = '/opt/dnf/compat/i386/liblegacy-shm.so'

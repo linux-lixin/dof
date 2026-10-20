@@ -20,8 +20,7 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 
 ## 内置 QK 配置
 
-`assets/home/template/neople/game/` 中的三个配置随游戏模板打入镜像，启动时由现有 `bootstrap.sh`
-复制到容器 `/home/neople/game/`，无需额外挂载：
+`assets/root/` 中的三个配置直接打入镜像的 `/root/`，无需额外挂载：
 
 | 文件 | 用途 |
 |---|---|
@@ -30,17 +29,23 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 | `qk_plugin_config.ini` | 镶嵌、装备解锁等通用功能配置 |
 
 这些文件保留提供时的配置值。部署前按实际账号和 PVF 修改 GM UID、NPC、地图及奖励道具等参数。
-`init.sh` 生成的 Supervisor 配置指定游戏工作目录为 `/home/neople/game`，`start_game.sh`
-在此启动 `./df_game_r`。因此这些配置与游戏程序放在一起，供按工作目录或程序目录读取配置的插件使用。
-这确认了项目中的放置位置；插件是否按此规则读取、功能是否生效仍需运行验证。
+晴空 2.8 的 `qk_plugin.so` 使用硬编码绝对路径 `/root/qk_plugin_*.ini`。
+这里是**容器内部的 `/root`**，与宿主机项目放在哪里、游戏进程的工作目录无关。
+只放 INI 或只安装 DP2 都不会实现晴空团本。
 
 文件路径：
 
 ```text
-源码 assets/home/template/neople/game/qk_plugin_*.ini
-  → 镜像 /home/template/neople/game/qk_plugin_*.ini
-  → 启动后 /home/neople/game/qk_plugin_*.ini
+源码 assets/root/qk_plugin_*.ini
+  → 容器 /root/qk_plugin_*.ini
 ```
+
+有配套晴空服务端插件时，可将 `qk_plugin.so` 放入构建输入 `assets/root/`。
+启动器检测到容器 `/root/qk_plugin.so` 后，仅为 `df_game_r` 追加加载；
+与 DP2 同时存在时按 DP2、QK 的顺序追加，并保留原兼容库和 hook。
+插件必须为匹配该游戏版本的 32 位 Linux ELF。
+晴空总包还包含 `QK` 网关、配套库及后台配置流程；插件加载、INI 读取和实际团本功能须分别验收。
+不要把客户端的 `qingkong.dll` 当成 Linux 服务端插件。
 
 修改后，在仓库根目录重新构建镜像，再进入所使用的部署目录重建游戏容器。例如一体部署：
 

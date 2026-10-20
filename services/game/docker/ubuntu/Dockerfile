@@ -34,6 +34,7 @@ RUN echo 'd8fb57b31d9b29ad576e0100d6fa67e71aa19c3e6d994e5e0a5957e41caec772  /tmp
 
 FROM runtime AS game
 COPY assets/home/template/ /home/template/
+COPY assets/root/ /root/
 COPY assets/TeaEncrypt /TeaEncrypt
 COPY assets/etc/supervisor/ /etc/supervisor/
 COPY assets/etc/supervisord.conf /etc/supervisord.conf
