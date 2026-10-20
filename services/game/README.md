@@ -90,7 +90,8 @@ sudo cp runtime/admin/data/publickey.pem runtime/game/data/publickey.pem
 提供的插件使用旧数据库密码。`qk-db-adapter.js` 在现有 `df_game_r.js` 前只安装一次：
 仅拦截调用方为 `qk_plugin.so`、账号为 `game`、目标库为 `qk` 或
 `taiwan_cain_2nd` 的 `MySQL_open`，从进程环境读取现有密码并在内存中替换参数，
-以及配套 `libantisvrinline.so` 使用 `game` 账号连接 `qk` 库的调用，
+以及配套 `libantisvrinline.so` 使用 `game` 账号连接
+`qk`、`taiwan_cain`、`taiwan_cain_2nd` 三个库的调用，
 不输出或保存该密码。其他调用原样执行。版本哈希、i386 架构和目标函数机器码均受检查；
 更换游戏或插件版本时必须重新验证，不能直接改掉检查值。
 

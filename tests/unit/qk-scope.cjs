@@ -19,7 +19,7 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,
 });
 for (const module of [{name: 'qk_plugin.so'}, {name: 'libantisvrinline.so'},
                      {name: 'libdp2.so'}, null]) {
-  for (const database of ['qk', 'taiwan_cain_2nd', 'd_taiwan']) {
+  for (const database of ['qk', 'taiwan_cain', 'taiwan_cain_2nd', 'd_taiwan']) {
     for (const account of ['game', 'root']) {
       const original = pointer('original-test-value');
       const args = [null, null, null, pointer(database), pointer(account), original];
@@ -27,7 +27,8 @@ for (const module of [{name: 'qk_plugin.so'}, {name: 'libantisvrinline.so'},
       interceptor.onEnter.call(context, args);
       const allowed = account === 'game' && (
         (module?.name === 'qk_plugin.so' && ['qk', 'taiwan_cain_2nd'].includes(database))
-        || (module?.name === 'libantisvrinline.so' && database === 'qk'));
+        || (module?.name === 'libantisvrinline.so'
+          && ['qk', 'taiwan_cain', 'taiwan_cain_2nd'].includes(database)));
       assert.equal(args[5] !== original, allowed);
       interceptor.onLeave.call(context, { toInt32: () => 1 });
     }
@@ -36,5 +37,7 @@ for (const module of [{name: 'qk_plugin.so'}, {name: 'libantisvrinline.so'},
 assert(logs.includes('[QK DB adapter] qk_plugin.so/qk connected'));
 assert(logs.includes('[QK DB adapter] qk_plugin.so/taiwan_cain_2nd connected'));
 assert(logs.includes('[QK DB adapter] libantisvrinline.so/qk connected'));
+assert(logs.includes('[QK DB adapter] libantisvrinline.so/taiwan_cain connected'));
+assert(logs.includes('[QK DB adapter] libantisvrinline.so/taiwan_cain_2nd connected'));
 assert(logs.every(text => !text.includes('test-only-credential')));
-console.log('24 caller/database/account combinations passed; no credential logged');
+console.log('32 caller/database/account combinations passed; no credential logged');

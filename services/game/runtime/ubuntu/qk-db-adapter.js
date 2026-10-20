@@ -16,7 +16,8 @@
             if (args[4].readUtf8String() !== 'game') return;
             if (caller.name === 'qk_plugin.so' &&
                 ['qk', 'taiwan_cain_2nd'].indexOf(database) === -1) return;
-            if (caller.name === 'libantisvrinline.so' && database !== 'qk') return;
+            if (caller.name === 'libantisvrinline.so' &&
+                ['qk', 'taiwan_cain', 'taiwan_cain_2nd'].indexOf(database) === -1) return;
             args[5] = password;
             this.qkDatabase = caller.name + '/' + database;
         },

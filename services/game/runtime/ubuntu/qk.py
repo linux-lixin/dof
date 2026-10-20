@@ -17,12 +17,23 @@ READY = Path('/run/dnf/qk-ready')
 PLUGIN_SHA256 = '33cd006a364d4c3e0b8738fb2333cf16771fb796443368be4eee7105e40aadfa'
 GATEWAY_SHA256 = '67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b'
 INLINE_SHA256 = 'd413b7df6c928b519986a9ceb3dbed4c78148564cca352d579f18e3650819da8'
+PREVIOUS_ADAPTERS = {
+    '8e156b2825fef49be702262a39c4360b93b897ce0f70808f490ee5cbee5c50d7',
+    '13959cf52ad1aa5b04ec064eb0c57533312e5c7126c5f9e448e356e990ce6b81',
+}
 
 
 def add_adapter(script, adapter):
     """Preserve the user's DP2 script verbatim and install our prefix once."""
     if script.startswith(adapter + b'\n'):
         return script
+    end_marker = b'\n})();\n'
+    end = script.find(end_marker)
+    if end >= 0:
+        boundary = end + len(end_marker)
+        if (hashlib.sha256(script[:boundary]).hexdigest() in PREVIOUS_ADAPTERS
+                and script[boundary:boundary + 1] == b'\n'):
+            return adapter + b'\n' + script[boundary + 1:]
     if b'installQkDatabaseCredentials' in script:
         raise ValueError('different QK adapter already installed; inspect before updating')
     return adapter + b'\n' + script
