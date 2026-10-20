@@ -42,6 +42,11 @@ def check():
             raise ValueError('relay registration not current')
     if role in ('GAME','ALL'):
         required+=['gunnersvr','zergsvr','secagent']
+        if Path('/etc/supervisor/conf.d/qk.conf').exists():
+            required.append('QK')
+            tcp.add(8887)
+            if not Path('/run/dnf/qk-ready').exists():
+                raise ValueError('QK gateway not ready')
         names=('cain','diregie','siroco','prey','casillas','hilder')
         for channel in channels(os.environ.get('OPEN_CHANNEL','11,52')):
             name=names[int(group)-1]+f'{channel:02d}'

@@ -72,6 +72,8 @@ if [ -f "/data/publickey.pem" ];then
 fi
 # 为DP目录赋予权限[为了支持更多未知场景, 这里直接给整个目录777权限]
 chmod 777 -R /data/dp
+# Optional supplied QK binaries are image inputs; private settings use existing /data.
+python3 /opt/dnf/ubuntu/qk.py prepare || exit 1
 # 重设supervisor web网页密码
 sed -i "s/^username=.*/username=$WEB_USER/" /etc/supervisord.conf
 sed -i "s/^password=.*/password=$WEB_PASS/" /etc/supervisord.conf

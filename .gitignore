@@ -43,6 +43,13 @@ Thumbs.db
 *.user
 *.suo
 
+# Operator-supplied optional QK binaries, copied into the image locally.
+/services/game/assets/root/QK
+/services/game/assets/root/qk_plugin.so
+/services/game/assets/root/qingkong/
+/services/game/assets/root/dungeon.lst
+/services/game/assets/home/template/neople/game/libantisvrinline.so
+
 # Deployment-local credentials and player distributions
 **/bootstrap-admin.sql
 **/admin-initial-credentials.txt

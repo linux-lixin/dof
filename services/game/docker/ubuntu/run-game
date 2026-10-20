@@ -6,6 +6,7 @@ import re
 import selectors
 import signal
 import sys
+import time
 
 
 def redact_output():
@@ -98,6 +99,19 @@ def redact_output():
 if len(sys.argv) < 2:
     raise SystemExit('usage: run-game ELF [arguments...]')
 binary = Path(sys.argv[1]).resolve(strict=True)
+# QK patches the game file during gateway startup; wait before opening/executing it.
+if binary.name == 'df_game_r' and Path('/etc/supervisor/conf.d/qk.conf').exists():
+    deadline = time.monotonic() + 120
+    while True:
+        try:
+            gateway_pid = int(Path('/run/dnf/qk-ready').read_text())
+            if os.readlink(f'/proc/{gateway_pid}/exe') == '/root/QK':
+                break
+        except (OSError, ValueError):
+            pass
+        if time.monotonic() > deadline:
+            raise SystemExit('QK gateway is not ready')
+        time.sleep(0.5)
 with binary.open('rb') as stream:
     head = stream.read(20)
 if head[:4] != b'\x7fELF' or head[4] not in (1, 2):
